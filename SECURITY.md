@@ -1,0 +1,87 @@
+# Security Policy
+
+This is the security policy for **Scientific Agent Skills**, maintained by [K-Dense](https://www.k-dense.ai).
+
+GitHub surfaces this file as the repository's security policy. It is hand-authored. The output of our automated skill scanning is a separate document — see [Automated skill scanning](#automated-skill-scanning) below.
+
+---
+
+## Reporting a vulnerability
+
+**Please do not open a public issue for a security vulnerability.**
+
+Use GitHub's private vulnerability reporting, which keeps the report confidential until a fix is available:
+
+> **Security** tab → **Report a vulnerability**
+
+<!-- TODO(maintainers): add a monitored security contact address here as a second channel,
+     or delete this comment if private vulnerability reporting is the only intended route. -->
+
+Please include, as far as you are able:
+
+- The affected skill (or repository tooling) and the version or commit you observed it on
+- What an attacker could achieve, and what access they would need to achieve it
+- The steps to reproduce, ideally with the smallest input that triggers it
+- Any agent host and model you reproduced it on, since skill behavior varies by host
+
+We will acknowledge your report and tell you whether we consider it in scope. If we accept it, we will keep you informed as we work on a fix and will credit you in the release notes unless you ask us not to.
+
+---
+
+## Supported versions
+
+| Version | Supported |
+|---|---|
+| `main` | ✅ |
+| Latest tagged release | ✅ |
+| Earlier tagged releases | ❌ — fixes land in a new release rather than being backported |
+
+If you pin skills to a tag or commit (see the version-pinning section of the [README](README.md#version-pinning)), you are responsible for moving that pin forward to receive fixes.
+
+---
+
+## What is in scope
+
+This repository distributes **Agent Skills**: instructions, reference material, and bundled scripts that an AI agent reads and may execute on your machine. In-scope reports concern content in this repository that could harm someone who installs it:
+
+- A bundled script that reads credentials, files, or environment variables it has no reason to read, or that transmits data to an unexpected destination
+- Instructions in a `SKILL.md` that steer an agent toward destructive, exfiltrating, or unauthorized action
+- Prompt-injection vectors — including content in `references/` or `assets/` that an agent is instructed to treat as authoritative
+- A skill whose documented behavior materially misrepresents what its bundled code does
+- Unsafe credential handling, such as instructions to place secrets where they will be committed or logged
+- Vulnerabilities in this repository's own tooling (`scan_skills.py`, `scan_pr_skills.py`) or its GitHub Actions workflows
+
+## What is out of scope
+
+- **Vulnerabilities in the third-party libraries and services a skill documents.** A flaw in RDKit, Scanpy, or a public API belongs to that project — please report it upstream. A skill that *instructs users to use a library unsafely* is in scope here.
+- **Vulnerabilities in agent hosts.** Issues in Claude Code, Cursor, Codex, and similar belong to those vendors.
+- **The inherent capability of skills.** Skills are instructions for an agent that can execute code; a skill performing the work it documents is not a vulnerability. See the [Security Disclaimer](README.md#%EF%B8%8F-security-disclaimer) in the README.
+- **Missing version pins on documented dependencies**, unless you can show a concrete exploitation path.
+
+---
+
+## Before you install
+
+Skills execute code and influence your agent's behavior. Review what you install, and prefer installing the subset of skills you actually need. Bundled scripts that reach the network or read credentials are documented as such in the relevant `SKILL.md`. Treat skill content from any source — including this repository — as code review material, not as trusted input.
+
+---
+
+## Automated skill scanning
+
+Skills in this repository are scanned using [`cisco-ai-skill-scanner`](https://pypi.org/project/cisco-ai-skill-scanner/), which combines static behavioral analysis, trigger analysis, and LLM-assisted review. Changed skills are scanned on every pull request.
+
+The scheduled scan runs weekly and is incremental: a skill whose package contents are unchanged since the last scan carries its previous findings forward rather than being rescanned. Every skill is rescanned in full whenever the scanner version or the model changes, when a maintainer triggers a full run, and at least every 30 days regardless. Each skill's `last_scanned` date is recorded in the JSON report, so you can always see when a given finding was actually produced.
+
+- **Report:** [`docs/security-report.md`](docs/security-report.md) (machine-readable companion: [`docs/security-report.json`](docs/security-report.json))
+- **Triage:** [`docs/security-triage.md`](docs/security-triage.md) — maintainer verdicts on the current report: what was verified and fixed, and which rules are systematic false positives, each with the check that decides it
+- **Workflow:** [`.github/workflows/security-scan.yml`](.github/workflows/security-scan.yml)
+
+**How to read the report.** It is generated by automated tooling, including a language model, and is published to be useful rather than authoritative. It is not an audit, a certification, or a guarantee. Each scan is published automatically, with no pre-publication check that its claims are consistent with the contents of `skills/`, so verify a finding against the skill itself before acting on it. A finding in the report is a prompt to review a skill, not a determination that the skill is malicious.
+
+**If you believe a finding is wrong**, open a regular issue (false positives are not sensitive) with the skill name, the rule ID, and why the finding cannot hold. If a class of false positive originates in the scanner rather than in our configuration, we will also raise it upstream.
+
+---
+
+## Reporting a malicious skill elsewhere
+
+If you find a skill published *outside* this repository that impersonates Scientific Agent Skills or K-Dense, please tell us through the private reporting channel above so we can respond and warn users.

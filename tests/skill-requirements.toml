@@ -1,0 +1,111 @@
+# Per-skill test environments.
+#
+# `python tests/run_all.py --isolated` builds one throwaway uv environment per
+# skill from this file, so a skill whose upstream pins conflict with another's
+# never has to share an interpreter. Nothing here is installed into the project
+# environment, and `uv sync` is unaffected.
+#
+# Each skill's `packages` list is the set the skill's SKILL.md, references, and
+# scripts actually name -- transitive dependencies are left to the resolver.
+# Skills whose bundled tooling is standard-library only have `packages = []`;
+# they still get a clean environment with just pytest.
+#
+# `python` overrides the interpreter for that skill alone. This is the reason
+# per-skill environments are worth the trouble: opentrons pins numpy<2 (no
+# cp313 wheels), PyTDC needs 3.11, molfeat caps at 3.10. uv downloads the
+# interpreter on demand.
+#
+# Packages listed under [unavailable] are documented by a skill but cannot be
+# installed here at all; the reason is recorded so nobody re-derives it.
+
+[defaults]
+python = "3.13"
+
+# --- output formats and writing -------------------------------------------
+
+[skills.ncats-arax]
+packages = []
+
+[skills.depmap]
+packages = ["numpy", "pandas", "requests", "scipy"]
+
+[skills.primekg]
+packages = ["pandas"]
+
+# --- genomics and sequence analysis ---------------------------------------
+
+[skills.glycoengineering]
+packages = ["glycoshield", "pandas", "requests"]
+
+[skills.esm]
+packages = ["esm", "torch", "matplotlib", "numpy", "scikit-learn", "requests", "tqdm"]
+
+[skills.diffdock]
+packages = ["torch", "rdkit", "openmm", "esm", "pandas"]
+
+# --- chemistry and materials ----------------------------------------------
+
+[skills.rdkit]
+packages = ["rdkit"]
+
+[skills.datamol]
+packages = ["datamol", "rdkit", "s3fs", "gcsfs"]
+
+[skills.medchem]
+packages = ["medchem", "datamol", "rdkit", "pandas", "tqdm"]
+
+[skills.molfeat]
+python = "3.10"
+packages = ["molfeat", "datamol", "torch"]
+
+[skills.molecular-dynamics]
+packages = ["mdanalysis", "openmm", "matplotlib", "numpy", "pandas", "scipy"]
+
+[skills.rowan]
+packages = ["rowan-python", "rdkit", "pandas"]
+
+[skills.deepchem]
+python = "3.11"
+# torch is what the skill's own `compatibility` line and the `deepchem[torch]`
+# install command require: without a backend, dc.models.GCNModel and friends do
+# not exist, so no model path is reachable at all.
+packages = ["deepchem", "torch", "numpy", "scikit-learn"]
+
+[skills.pytdc]
+python = "3.11"
+packages = ["pytdc", "setuptools"]
+
+[skills.tamarind]
+packages = ["tamarind", "requests"]
+
+[skills.adaptyv]
+packages = []
+
+[skills.torchdrug]
+python = "3.10"
+packages = ["torch"]
+
+# --- packages a skill documents that cannot be installed here -------------
+#
+# The runner prints these when it sets up the skill, so the gap is visible in
+# the test output rather than rediscovered each time.
+
+[unavailable]
+adaptyv-sdk = "adaptyv skill: distributed from GitHub only, not on PyPI"
+tiledbvcf = "tiledbvcf skill: not published to PyPI; conda-forge or a source build only"
+matlabengine = "matlab skill: requires a local MATLAB installation to build against"
+pufferlib = "pufferlib skill: source-only native archive, no wheel builds on 3.13"
+hypogenic = "hypogenic skill: pins torch<=2.4.1, which has no cp313 wheels"
+torchdrug = "torchdrug skill: torch-scatter 2.1.2 sdist needs torch present at build time"
+pathml = "pathml skill: python-javabridge needs a JDK, plus OpenSlide and Bio-Formats"
+omero-py = "omero-integration skill: zeroc-ice 3.6.5 has no wheels and needs a C++ build"
+bids-validator-deno = "bids skill: Deno tool, installed with npm/deno rather than pip"
+rsgislib = "geomaster skill: conda-forge only"
+pdal = "geomaster skill: conda-forge only, needs the PDAL C++ library"
+open3d = "geomaster skill: no cp313 wheels"
+mpi4py = "fluidsim skill: needs a site MPI implementation and compilers"
+dgl = "molfeat skill: no cp313 wheels"
+"flash-attn" = "esm skill: needs a CUDA toolchain to build"
+deepspeed = "pytorch-lightning skill: needs a CUDA toolchain to build"
+bitsandbytes = "transformers skill: CUDA-only, Linux wheels"
+"cudf-cu12" = "optimize-for-gpu skill: RAPIDS wheels are Linux + CUDA only (whole group)"
