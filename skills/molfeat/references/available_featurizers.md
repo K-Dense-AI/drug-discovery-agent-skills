@@ -1,335 +1,197 @@
 # Available Featurizers in Molfeat
 
-This document provides a comprehensive catalog of all featurizers available in molfeat, organized by category.
+Catalog for **molfeat 0.11.0**. Every width below was measured by calling the featurizer with
+default parameters on Python 3.10 (RDKit 2026.03.5) — not copied from documentation.
 
-## Transformer-Based Language Models
+Two different name spaces exist and they do not match:
 
-Pre-trained transformer models for molecular embeddings using SMILES/SELFIES representations.
+- **Calculator names** passed to `get_calculator()` / `MoleculeTransformer("...")` —
+  `desc2D`, `cats2D`, `pharm2D`, `ecfp`, ...
+- **Model-store card names** returned by `ModelStore().available_models` —
+  `pharm2D-gobbi`, `gin_supervised_masking`, `ChemBERTa-77M-MLM`, ... (underscores and
+  hyphens are literal; `gin-supervised-masking` is not a valid name).
 
-### RoBERTa-style Models
-- **Roberta-Zinc480M-102M** - RoBERTa masked language model trained on ~480M SMILES strings from ZINC database
-- **ChemBERTa-77M-MLM** - Masked language model based on RoBERTa trained on 77M PubChem compounds
-- **ChemBERTa-77M-MTR** - Multitask regression version trained on PubChem compounds
+## Model store contents (44 cards)
 
-### GPT-style Autoregressive Models
-- **GPT2-Zinc480M-87M** - GPT-2 autoregressive language model trained on ~480M SMILES from ZINC
-- **ChemGPT-1.2B** - Large transformer (1.2B parameters) pretrained on PubChem10M
-- **ChemGPT-19M** - Medium transformer (19M parameters) pretrained on PubChem10M
-- **ChemGPT-4.7M** - Small transformer (4.7M parameters) pretrained on PubChem10M
+`ModelStore()` in 0.11.0 serves exactly 44 cards, grouped as follows.
 
-### Specialized Transformer Models
-- **MolT5** - Self-supervised framework for molecule captioning and text-based generation
+| Group | Cards | Artifact |
+|---|---|---|
+| `huggingface` | `ChemBERTa-77M-MLM`, `ChemBERTa-77M-MTR`, `ChemGPT-1.2B`, `ChemGPT-19M`, `ChemGPT-4.7M`, `GPT2-Zinc480M-87M`, `MolT5`, `Roberta-Zinc480M-102M` | directory — **not downloadable from the store**, see below |
+| `dgllife` | `gin_supervised_contextpred`, `gin_supervised_edgepred`, `gin_supervised_infomax`, `gin_supervised_masking`, `jtvae_zinc_no_kl` | file |
+| `graphormer` | `pcqm4mv2_graphormer_base` | file |
+| `rdkit` | `ecfp`, `ecfp-count`, `fcfp`, `fcfp-count`, `atompair-count`, `topological`, `topological-count`, `avalon`, `pattern`, `rdkit`, `maccs`, `estate`, `erg`, `desc2D`, `desc3D` | file |
+| `fp` | `map4`, `secfp` | file |
+| `pharmacophore` | `pharm2D-cats`, `pharm2D-default`, `pharm2D-gobbi`, `pharm2D-pmapper`, `pharm3D-cats`, `pharm3D-gobbi`, `pharm3D-pmapper` | file |
+| `shape` | `usr`, `usrcat`, `electroshape` | file |
+| `all` | `cats2d`, `cats3d`, `scaffoldkeys` | file |
 
-## Graph Neural Networks (GNNs)
+The 8 HuggingFace cards fail to download in 0.11.0 (`IsADirectoryError` →
+`ModelStoreError: Can't retrieve model ... from the store !`) because the store now serves
+directory artifacts over plain HTTP. Load them from the HuggingFace Hub with
+`HFModel.from_pretrained` instead — see the pretrained section of the main `SKILL.md`. The 36
+single-file cards download normally.
 
-Pre-trained graph neural network models operating on molecular graph structures.
+Cards carry `inputs` (`smiles`, `selfies`, or `mol`), `require_3D`, `description`, `authors`,
+`reference`, and `usage()`, which returns the canonical snippet as a string.
 
-### GIN (Graph Isomorphism Network) Variants
-All pre-trained on ChEMBL molecules with different objectives:
-- **gin-supervised-masking** - Supervised with node masking objective
-- **gin-supervised-infomax** - Supervised with graph-level mutual information maximization
-- **gin-supervised-edgepred** - Supervised with edge prediction objective
-- **gin-supervised-contextpred** - Supervised with context prediction objective
+## Fingerprints
 
-### Other Graph-Based Models
-- **JTVAE_zinc_no_kl** - Junction-tree VAE for molecule generation (trained on ZINC)
-- **Graphormer-pcqm4mv2** - Graph transformer pretrained on PCQM4Mv2 quantum chemistry dataset for HOMO-LUMO gap prediction
+All 19 methods accepted by `FPCalculator`, with measured default widths.
 
-## Molecular Descriptors
+| Name | Width | Notes |
+|---|---|---|
+| `ecfp` | 2048 | Circular; **default radius 2** (= ECFP4). `radius`, `fpSize`, `includeChirality` |
+| `ecfp-count` | 2048 | Count version |
+| `fcfp` / `fcfp-count` | 2048 | Feature-class circular (pharmacophoric atom invariants) |
+| `maccs` | 167 | 166 MACCS keys plus an unused index-0 bit |
+| `avalon` / `avalon-count` | 512 | Avalon toolkit |
+| `rdkit` / `rdkit-count` | 2048 | Path-based topological |
+| `pattern` | 2048 | Substructure-screening fingerprint |
+| `layered` | 2048 | Layered substructure |
+| `atompair` / `atompair-count` | 2048 | `minDistance=1`, `maxDistance=30`, `use2D=True` |
+| `topological` / `topological-count` | 2048 | Topological torsions |
+| `erg` | 315 | Extended reduced graph, pharmacophore nodes |
+| `estate` | 79 | E-state indices |
+| `secfp` | 2048 | SMILES extended connectivity, `radius=3`, `n_permutations=128` |
+| `map4` | — | Requires the external [map4](https://github.com/reymond-group/map4) package; defaults `dimensions=2048`, `radius=2` |
 
-Calculators for physico-chemical properties and molecular characteristics.
+Set a custom width with `FPCalculator(method, length=1024)`; the per-method key (`fpSize`,
+`nBits`, `dimensions`) also works, but a wrong key is logged and ignored rather than raising.
 
-### 2D Descriptors
-- **desc2D** / **rdkit2D** - 200+ RDKit 2D molecular descriptors including:
-  - Molecular weight, logP, TPSA
-  - H-bond donors/acceptors
-  - Rotatable bonds
-  - Ring counts and aromaticity
-  - Molecular complexity metrics
+## Descriptors
 
-### 3D Descriptors
-- **desc3D** / **rdkit3D** - RDKit 3D molecular descriptors (requires conformer generation)
-  - Inertial moments
-  - PMI (Principal Moments of Inertia) ratios
-  - Asphericity, eccentricity
-  - Radius of gyration
+| Name | Class | Width | Notes |
+|---|---|---|---|
+| `desc2D` | `RDKitDescriptors2D` | 223 | Named RDKit 2D descriptors; `.columns` gives names. Args: `replace_nan`, `augment`, `descrs`, `ignore_descrs`, `avg_ipc` |
+| `desc3D` | `RDKitDescriptors3D` | 639 | PMI ratios, asphericity, radius of gyration, autocorrelations — needs conformers |
+| `mordred` | `MordredDescriptors` | 1613 | Broad descriptor sweep; implements `batch_compute`, so `n_jobs` adds little |
+| `estate` | `FPCalculator("estate")` | 79 | E-state indices |
 
-### Comprehensive Descriptor Sets
-- **mordred** - Over 1800 molecular descriptors covering:
-  - Constitutional descriptors
-  - Topological indices
-  - Connectivity indices
-  - Information content
-  - 2D/3D autocorrelations
-  - WHIM descriptors
-  - GETAWAY descriptors
-  - And many more
+`desc2D` is the interpretability workhorse — every column has a name, which is what makes
+coefficient inspection meaningful after a linear model.
 
-### Electrotopological Descriptors
-- **estate** - Electrotopological state (E-State) indices encoding:
-  - Atomic environment information
-  - Electronic and topological properties
-  - Heteroatom contributions
+## Pharmacophores
 
-## Molecular Fingerprints
+| Name | Class | Width | Notes |
+|---|---|---|---|
+| `cats2D` | `CATS(use_3d_distances=False)` | 189 | Topological-distance pharmacophore pair histogram |
+| `cats3D` | `CATS(use_3d_distances=True)` | 126 | Euclidean distances; needs conformers |
+| `pharm2D` | `Pharmacophore2D(factory=...)` | 2048 | `factory` ∈ `default`, `gobbi`, `pmapper`, `cats`; default `pmapper` |
+| `pharm3D` | `Pharmacophore3D(factory=...)` | 2048 | Consensus over conformers |
 
-Binary or count-based fixed-length vectors representing molecular substructures.
+There is no `gobbi2D`, `pmapper2D`, or `cats2D_pharm` calculator — those are `factory` values
+of `Pharmacophore2D` (and `pharm2D-gobbi` / `pharm2D-pmapper` as store card names).
 
-### Circular Fingerprints (ECFP-style)
-- **ecfp** / **ecfp:2** / **ecfp:4** / **ecfp:6** - Extended-connectivity fingerprints
-  - Radius variants (2, 4, 6 correspond to diameter)
-  - Default: radius=3, 2048 bits
-  - Most popular for similarity searching
-- **ecfp-count** - Count version of ECFP (non-binary)
-- **fcfp** / **fcfp-count** - Functional-class circular fingerprints
-  - Similar to ECFP but uses functional groups
-  - Better for pharmacophore-based similarity
+## Shape descriptors
 
-### Path-Based Fingerprints
-- **rdkit** - RDKit topological fingerprints based on linear paths
-- **pattern** - Pattern fingerprints (similar to MACCS but automated)
-- **layered** - Layered fingerprints with multiple substructure layers
+| Name | Class | Width | Notes |
+|---|---|---|---|
+| `usr` | `USRDescriptors(method="usr")` | 12 | Ultrafast shape recognition |
+| `usrcat` | `USRDescriptors(method="usrcat")` | 60 | USR + pharmacophoric channels |
+| `electroshape` | `ElectroShapeDescriptors()` | 15 | Shape, chirality, and partial charges |
 
-### Key-Based Fingerprints
-- **maccs** - MACCS keys (166-bit structural keys)
-  - Fixed set of predefined substructures
-  - Good for scaffold hopping
-  - Fast computation
-- **avalon** - Avalon fingerprints
-  - Similar to MACCS but more features
-  - Optimized for similarity searching
+All three require conformers — pass `Mol` objects with 3D coordinates, not SMILES.
 
-### Atom-Pair Fingerprints
-- **atompair** - Atom pair fingerprints
-  - Encodes pairs of atoms and distance between them
-  - Good for 3D similarity
-- **atompair-count** - Count version of atom pairs
+## Scaffold descriptors
 
-### Topological Torsion Fingerprints
-- **topological** - Topological torsion fingerprints
-  - Encodes sequences of 4 connected atoms
-  - Captures local topology
-- **topological-count** - Count version of topological torsions
+| Name | Class | Width | Notes |
+|---|---|---|---|
+| `scaffoldkeys` | `ScaffoldKeyCalculator()` | 42 | Scaffold-level counts and ratios; aliases `skeys`, `scaffkeys` |
 
-### MinHashed Fingerprints
-- **map4** - MinHashed Atom-Pair fingerprint up to 4 bonds
-  - Combines atom-pair and ECFP concepts
-  - Default: 1024 dimensions
-  - Fast and efficient for large datasets
-- **secfp** - SMILES Extended Connectivity Fingerprint
-  - Operates directly on SMILES strings
-  - Captures both substructure and atom-pair information
+## Pretrained embeddings
 
-### Extended Reduced Graph
-- **erg** - Extended Reduced Graph
-  - Uses pharmacophoric points instead of atoms
-  - Reduces graph complexity while preserving key features
+| Card | Transformer class | Width | Notes |
+|---|---|---|---|
+| `ChemBERTa-77M-MLM` | `PretrainedHFTransformer` | 384 | RoBERTa MLM on 77M PubChem SMILES |
+| `ChemBERTa-77M-MTR` | `PretrainedHFTransformer` | 384 | Multitask-regression pretraining |
+| `Roberta-Zinc480M-102M` | `PretrainedHFTransformer` | — | RoBERTa on ~480M ZINC SMILES |
+| `GPT2-Zinc480M-87M` | `PretrainedHFTransformer` | — | GPT-2 on ~480M ZINC SMILES |
+| `ChemGPT-4.7M` / `-19M` / `-1.2B` | `PretrainedHFTransformer` | — | Autoregressive on PubChem10M; `notation="selfies"` |
+| `MolT5` | `PretrainedHFTransformer` | — | Encoder-decoder, molecule↔text |
+| `gin_supervised_masking` | `PretrainedDGLTransformer` | 300 | GIN pretrained on ChEMBL, masking objective |
+| `gin_supervised_infomax` | `PretrainedDGLTransformer` | 300 | Mutual-information maximization |
+| `gin_supervised_edgepred` | `PretrainedDGLTransformer` | 300 | Edge prediction |
+| `gin_supervised_contextpred` | `PretrainedDGLTransformer` | 300 | Context prediction |
+| `jtvae_zinc_no_kl` | `PretrainedDGLTransformer` | — | Junction-tree VAE latent space |
+| `pcqm4mv2_graphormer_base` | `GraphormerTransformer` | — | Graph transformer, PCQM4Mv2 quantum properties |
+| FCD | `FCDTransformer` | — | ChemNet activations for Fréchet ChemNet Distance |
 
-## Pharmacophore Descriptors
+Widths marked `—` were not executed here (they need the corresponding extra plus a model
+download); read `X.shape` after a first call rather than assuming a hidden size. The commonly
+quoted "768" applies to none of the ChemBERTa-77M checkpoints.
 
-Features based on pharmacologically relevant functional groups and their spatial relationships.
+Pass `notation` matching the card's `inputs` field: `selfies` for ChemGPT, `smiles` elsewhere.
+Pooling defaults to `mean`; `cls` and `max` are also available.
 
-### CATS (Chemically Advanced Template Search)
-- **cats2D** - 2D CATS descriptors
-  - Pharmacophore point pair distributions
-  - Distance based on shortest path
-  - 21 descriptors by default
-- **cats3D** - 3D CATS descriptors
-  - Euclidean distance based
-  - Requires conformer generation
-- **cats2D_pharm** / **cats3D_pharm** - Pharmacophore variants
+## Graph featurizers for GNN input
 
-### Gobbi Pharmacophores
-- **gobbi2D** - 2D pharmacophore fingerprints
-  - 8 pharmacophore feature types:
-    - Hydrophobic
-    - Aromatic
-    - H-bond acceptor
-    - H-bond donor
-    - Positive ionizable
-    - Negative ionizable
-    - Lumped hydrophobe
-  - Good for virtual screening
+Atom- and bond-level calculators, for building your own graph pipelines:
 
-### Pmapper Pharmacophores
-- **pmapper2D** - 2D pharmacophore signatures
-- **pmapper3D** - 3D pharmacophore signatures
-  - High-dimensional pharmacophore descriptors
-  - Useful for QSAR and similarity searching
+```python
+from molfeat.calc.atom import AtomCalculator, AtomMaterialCalculator, DGLCanonicalAtomCalculator, DGLWeaveAtomCalculator
+from molfeat.calc.bond import BondCalculator, EdgeMatCalculator, DGLCanonicalBondCalculator, DGLWeaveEdgeCalculator
+```
 
-## Shape Descriptors
+They are not exported from `molfeat.calc` itself — import from the submodules.
 
-Descriptors capturing 3D molecular shape and electrostatic properties.
+## Optional dependencies
 
-### USR (Ultrafast Shape Recognition)
-- **usr** - Basic USR descriptors
-  - 12 dimensions encoding shape distribution
-  - Extremely fast computation
-- **usrcat** - USR with pharmacophoric constraints
-  - 60 dimensions (12 per feature type)
-  - Combines shape and pharmacophore information
+| Featurizers | Install |
+|---|---|
+| ChemBERTa, ChemGPT, MolT5, Zinc models | `uv pip install "molfeat[transformer]==0.11.0"` |
+| `gin_supervised_*`, `jtvae_zinc_no_kl` | `uv pip install "molfeat[dgl]==0.11.0"` (`dgl>=1.1.1,<=2.0`) |
+| `pcqm4mv2_graphormer_base` | `uv pip install "molfeat[graphormer]==0.11.0"` |
+| FCD | `uv pip install "molfeat[fcd]==0.11.0"` |
+| PyTorch Geometric featurizers | `uv pip install "molfeat[pyg]==0.11.0"` |
+| NGLView widgets | `uv pip install "molfeat[viz]==0.11.0"` |
+| Everything pip-installable | `uv pip install "molfeat[all]==0.11.0"` |
+| MAP4 | external: [reymond-group/map4](https://github.com/reymond-group/map4) |
 
-### Electrostatic Shape
-- **electroshape** - ElectroShape descriptors
-  - Combines molecular shape, chirality, and electrostatics
-  - Useful for protein-ligand docking predictions
+## Choosing by task
 
-## Scaffold-Based Descriptors
+**Traditional ML (RF, SVM, XGBoost)** — `ecfp` or `maccs` first; `desc2D` when you need to
+explain the model; `FeatConcat(["maccs", "ecfp"])` (2167 dims) when you want both.
 
-Descriptors based on molecular scaffolds and core structures.
+**Deep learning** — ChemBERTa embeddings for transfer learning, `gin_supervised_*` for graph
+representations, Graphormer for quantum-property tasks.
 
-### Scaffold Keys
-- **scaffoldkeys** - Scaffold key calculator
-  - 40+ scaffold-based properties
-  - Bioisosteric scaffold representation
-  - Captures core structural features
+**Similarity searching** — `ecfp` for general purpose, `maccs` for scaffold-level similarity,
+`usr`/`usrcat` for 3D shape.
 
-## Graph Featurizers for GNN Input
+**Pharmacophore-driven work** — `fcfp`, `cats2D`, `pharm2D` with the `gobbi` or `pmapper`
+factory.
 
-Atom and bond-level features for constructing graph representations for Graph Neural Networks.
+**Interpretability** — `desc2D` and `mordred` (named columns), `maccs` (defined substructure
+keys), `scaffoldkeys`.
 
-### Atom-Level Features
-- **atom-onehot** - One-hot encoded atom features
-- **atom-default** - Default atom featurization including:
-  - Atomic number
-  - Degree, formal charge
-  - Hybridization
-  - Aromaticity
-  - Number of hydrogen atoms
+## Speed and size at a glance
 
-### Bond-Level Features
-- **bond-onehot** - One-hot encoded bond features
-- **bond-default** - Default bond featurization including:
-  - Bond type (single, double, triple, aromatic)
-  - Conjugation
-  - Ring membership
-  - Stereochemistry
+Measured wall-clock, single process, 12-core machine:
 
-## Integrated Pretrained Model Collections
+| Featurizer | 300 molecules | 10,272 molecules |
+|---|---|---|
+| `ecfp` | <0.05 s | 0.43 s |
+| `desc2D` | 0.96 s | — |
+| `mordred` | 4.83 s | — |
 
-Molfeat integrates models from various sources:
+3D featurizers (`desc3D`, `usr`, `cats3D`, `pharm3D`, `electroshape`) are dominated by
+conformer generation, not by the descriptor itself. Pretrained models are dominated by the
+first-run download and then by batch inference.
 
-### HuggingFace Models
-Access to transformer models through HuggingFace hub:
-- ChemBERTa variants
-- ChemGPT variants
-- MolT5
-- Custom uploaded models
+Width bands: shape descriptors 12–60; `maccs` 167; `cats2D` 189; `desc2D` 223;
+GIN 300; `erg` 315; ChemBERTa-77M 384; `avalon` 512; `desc3D` 639; `mordred` 1613;
+most fingerprints 2048; concatenations whatever their parts add up to.
 
-### DGL-LifeSci Models
-Pre-trained GNN models from DGL-Life:
-- GIN variants with different pre-training tasks
-- AttentiveFP models
-- MPNN models
-
-### FCD (Fréchet ChemNet Distance)
-- **fcd** - Pre-trained CNN for molecular generation evaluation
-
-### Graphormer Models
-- Graph transformers from Microsoft Research
-- Pre-trained on quantum chemistry datasets
-
-## Usage Notes
-
-### Choosing a Featurizer
-
-**For traditional ML (Random Forest, SVM, etc.):**
-- Start with **ecfp** or **maccs** fingerprints
-- Try **desc2D** for interpretable models
-- Use **FeatConcat** to combine multiple fingerprints
-
-**For deep learning:**
-- Use **ChemBERTa** or **ChemGPT** for transformer embeddings
-- Use **gin-supervised-*** for graph neural network embeddings
-- Consider **Graphormer** for quantum property predictions
-
-**For similarity searching:**
-- **ecfp** - General purpose, most popular
-- **maccs** - Fast, good for scaffold hopping
-- **map4** - Efficient for large-scale searches
-- **usr** / **usrcat** - 3D shape similarity
-
-**For pharmacophore-based approaches:**
-- **fcfp** - Functional group based
-- **cats2D/3D** - Pharmacophore pair distributions
-- **gobbi2D** - Explicit pharmacophore features
-
-**For interpretability:**
-- **desc2D** / **mordred** - Named descriptors
-- **maccs** - Interpretable substructure keys
-- **scaffoldkeys** - Scaffold-based features
-
-### Model Dependencies
-
-Some featurizers require optional dependencies (molfeat 0.11.0):
-
-- **DGL models** (gin-*, jtvae): `uv pip install "molfeat[dgl]==0.11.0"` (upstream recommends `dgl<=2.0`)
-- **Graphormer**: `uv pip install "molfeat[graphormer]==0.11.0"`
-- **Transformers** (ChemBERTa, ChemGPT, MolT5): `uv pip install "molfeat[transformer]==0.11.0"`
-- **FCD**: `uv pip install "molfeat[fcd]==0.11.0"`
-- **PyTorch Geometric**: `uv pip install "molfeat[pyg]==0.11.0"`
-- **Visualization**: `uv pip install "molfeat[viz]==0.11.0"`
-- **MAP4**: external package — see [reymond-group/map4](https://github.com/reymond-group/map4) (not a molfeat PyPI extra)
-- **All pip extras**: `uv pip install "molfeat[all]==0.11.0"`
-
-### Accessing All Available Models
+## Listing everything programmatically
 
 ```python
 from molfeat.store.modelstore import ModelStore
 
 store = ModelStore()
-all_models = store.available_models
+for card in store.available_models:
+    print(f"{card.name:32s} {card.group:14s} {card.type:14s} inputs={card.inputs}")
 
-# Print all available featurizers
-for model in all_models:
-    print(f"{model.name}: {model.description}")
-
-# Search for specific types
-transformers = [m for m in all_models if "transformer" in m.tags]
-gnn_models = [m for m in all_models if "gnn" in m.tags]
-fingerprints = [m for m in all_models if "fingerprint" in m.tags]
+pretrained = [c for c in store.available_models if c.type == "pretrained"]
+needs_3d = [c for c in store.available_models if c.require_3D]
 ```
-
-## Performance Characteristics
-
-### Computational Speed (relative)
-**Fastest:**
-- maccs
-- ecfp
-- rdkit fingerprints
-- usr
-
-**Medium:**
-- desc2D
-- cats2D
-- Most fingerprints
-
-**Slower:**
-- mordred (1800+ descriptors)
-- desc3D (requires conformer generation)
-- 3D descriptors in general
-
-**Slowest (first run):**
-- Pretrained models (ChemBERTa, ChemGPT, GIN)
-- Note: Subsequent runs benefit from caching
-
-### Dimensionality
-
-**Low (< 200 dims):**
-- maccs (167)
-- usr (12)
-- usrcat (60)
-
-**Medium (200-2000 dims):**
-- desc2D (~200)
-- ecfp (2048 default, configurable)
-- map4 (1024 default)
-
-**High (> 2000 dims):**
-- mordred (1800+)
-- Concatenated fingerprints
-- Some transformer embeddings
-
-**Variable:**
-- Transformer models (typically 768-1024)
-- GNN models (depends on architecture)
