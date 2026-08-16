@@ -100,4 +100,7 @@ jobs:
           echo "skills=$SKILLS" >> "$GITHUB_OUTPUT"
 
       - name: Run suites, one environment each
+        # An empty selection means no standard-library-only skills in this
+        # repo; running run_all.py with no names would sweep every suite.
+        if: steps.select.outputs.skills != ''
         run: uv run --python 3.13 python tests/run_all.py --isolated ${{ steps.select.outputs.skills }}
