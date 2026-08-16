@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "drug-discovery-agent-skills",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Agent Skills for small-molecule and protein therapeutics: cheminformatics, molecular ML, docking and dynamics, protein design platforms, and target-discovery knowledge graphs.",
   "author": {
     "name": "K-Dense Inc.",

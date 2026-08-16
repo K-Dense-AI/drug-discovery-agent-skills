@@ -25,6 +25,17 @@ python = "3.13"
 [skills.ncats-arax]
 packages = []
 
+# Standard-library-only API clients: the whole point of these three is that a
+# retrieval layer should not need an install to work.
+[skills.open-targets]
+packages = []
+
+[skills.chembl]
+packages = []
+
+[skills.uniprot-rcsb]
+packages = []
+
 [skills.depmap]
 packages = ["numpy", "pandas", "requests", "scipy"]
 
@@ -41,6 +52,11 @@ packages = ["esm", "torch", "matplotlib", "numpy", "scikit-learn", "requests", "
 
 [skills.diffdock]
 packages = ["torch", "rdkit", "openmm", "esm", "pandas"]
+
+# ANARCI is on PyPI but needs HMMER (hmmscan) as a system binary; without it
+# the numbering tests skip and the standard-library ones still run.
+[skills.antibody-engineering]
+packages = ["anarci"]
 
 # --- small molecules: cheminformatics and molecular ML --------------------
 
@@ -62,6 +78,14 @@ packages = ["mdanalysis", "openmm", "matplotlib", "numpy", "pandas", "scipy"]
 
 [skills.rowan]
 packages = ["rowan-python", "rdkit", "pandas"]
+
+# The bundled helpers are standard-library only; the docking and folding
+# engines themselves are external (see [unavailable]).
+[skills.autodock-vina]
+packages = []
+
+[skills.boltz]
+packages = []
 
 [skills.deepchem]
 python = "3.11"
@@ -95,3 +119,7 @@ torchdrug = "torchdrug skill: torch-scatter 2.1.2 sdist needs torch present at b
 dgl = "molfeat skill: no cp313 wheels"
 "flash-attn" = "esm skill: needs a CUDA toolchain to build"
 "lilly-medchem-rules" = "medchem skill: conda-forge only; the Lilly demerit filter is optional"
+vina = "autodock-vina skill: the docking engine is a binary (conda-forge or a release); the bundled scripts do not import it"
+meeko = "autodock-vina skill: installs from PyPI but is only used through its command-line scripts"
+boltz = "boltz skill: pulls a CUDA torch stack and caps at Python <3.13; the bundled scripts only read and write its files"
+hmmer = "antibody-engineering skill: a system binary (conda-forge/homebrew), not a Python package; ANARCI needs hmmscan on PATH"

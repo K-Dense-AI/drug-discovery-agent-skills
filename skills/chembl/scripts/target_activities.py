@@ -110,13 +110,11 @@ def fetch_activities(args, target_id: str) -> list[dict]:
         "standard_type": args.standard_type,
         "limit": 1000,
     }
-    if args.assay_types:
-        # The API takes one value per parameter, so a multi-type request is
-        # issued once per type and concatenated.
-        pass
     if args.require_pchembl:
         params["pchembl_value__isnull"] = "false"
 
+    # The API takes a single value per query parameter, so several assay types
+    # mean one request per type, concatenated.
     records: list[dict] = []
     assay_types = args.assay_types or [None]
     for assay_type in assay_types:

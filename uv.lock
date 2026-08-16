@@ -503,7 +503,7 @@ wheels = [
 
 [[package]]
 name = "drug-discovery-agent-skills"
-version = "1.0.0"
+version = "1.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "cisco-ai-skill-scanner" },

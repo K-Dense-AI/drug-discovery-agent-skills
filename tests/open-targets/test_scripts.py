@@ -33,7 +33,10 @@ def _load(name: str, filename: str):
     return module
 
 
-common = _load("ot_common", "_common.py")
+# Registered under its own name so the scripts' `from _common import ...`
+# resolves to this same module object -- loading it twice would give two
+# distinct `OpenTargetsError` classes and make `assertRaises` silently miss.
+common = _load("_common", "_common.py")
 ot_query = _load("ot_query_script", "ot_query.py")
 ot_associations = _load("ot_associations_script", "ot_associations.py")
 

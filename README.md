@@ -1,19 +1,22 @@
 # Drug Discovery Agent Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
-[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](pyproject.toml)
-[![Skills](https://img.shields.io/badge/Skills-17-brightgreen.svg)](#whats-included)
+[![Version](https://img.shields.io/badge/Version-1.1.0-blue.svg)](pyproject.toml)
+[![Skills](https://img.shields.io/badge/Skills-23-brightgreen.svg)](#whats-included)
 [![Agent Skills](https://img.shields.io/badge/Standard-Agent_Skills-blueviolet.svg)](https://agentskills.io/)
 [![Agent Plugins](https://img.shields.io/badge/Standard-Agent_Plugins-0A7A72.svg)](https://agent-plugins.org/)
 [![Skill Tests](https://github.com/K-Dense-AI/drug-discovery-agent-skills/actions/workflows/skill-tests.yml/badge.svg)](https://github.com/K-Dense-AI/drug-discovery-agent-skills/actions/workflows/skill-tests.yml)
 [![Skill Spec Validation](https://github.com/K-Dense-AI/drug-discovery-agent-skills/actions/workflows/skill-spec-validation.yml/badge.svg)](https://github.com/K-Dense-AI/drug-discovery-agent-skills/actions/workflows/skill-spec-validation.yml)
 
-Agent Skills for small-molecule and protein therapeutics: cheminformatics, molecular ML, docking and
-dynamics, protein design platforms, and target-discovery knowledge graphs.
+Agent Skills for small-molecule and protein therapeutics: target and bioactivity databases,
+cheminformatics, molecular ML, docking and dynamics, protein and antibody design.
 
-Seventeen skills that teach your coding agent the tools computational chemists and biologists
+Twenty-three skills that teach your coding agent the tools computational chemists and biologists
 actually use — how to install them, which API to call, what the parameters mean, and where each one
-breaks. Every skill follows the open [Agent Skills](https://agentskills.io/) standard, and the
+breaks. The bundle runs end to end: resolve a disease to a validated target, pull the chemistry and
+structures that already exist, dock or cofold against them, and check what you built.
+
+Every skill follows the open [Agent Skills](https://agentskills.io/) standard, and the
 repository is a portable [Agent Plugins](https://agent-plugins.org/) 1.0.0 package
 (`plugin.json` + `skills/`). Works with **Claude Code, Cursor, Codex, Google Antigravity, and more**.
 Created by [K-Dense](https://www.k-dense.ai).
@@ -21,6 +24,21 @@ Created by [K-Dense](https://www.k-dense.ai).
 ## What you can ask your agent
 
 The skills compose — a single request usually pulls in two or three:
+
+> **"Which targets have genetic evidence in asthma, and which of them are small-molecule tractable?"**
+> `open-targets` → `depmap` → `chembl`
+
+> **"Build me a clean EGFR IC50 dataset from ChEMBL and tell me how much of it I had to throw away."**
+> `chembl` → `medchem` → `pytdc`
+
+> **"Find the best EGFR structure with an inhibitor bound, check the ATP site is fully resolved, and dock these 200 compounds into it."**
+> `uniprot-rcsb` → `autodock-vina` → `medchem`
+
+> **"There is no structure of this target — cofold it with my hit series and predict affinity."**
+> `uniprot-rcsb` → `boltz`
+
+> **"Number this antibody, flag the CDR liabilities, and tell me its pI."**
+> `antibody-engineering` → `glycoengineering`
 
 > **"Filter this SDF for PAINS alerts and Lipinski violations, then dock what survives into my receptor PDB."**
 > `medchem` → `rdkit` → `diffdock`
@@ -39,7 +57,7 @@ The skills compose — a single request usually pulls in two or three:
 
 ## Getting Started
 
-The 17 skills install together as one bundle — they cross-reference each other, and the agent
+The 23 skills install together as one bundle — they cross-reference each other, and the agent
 loads only the ones a given task calls for.
 
 ### Option 1: `skills` CLI (npx)
@@ -85,6 +103,14 @@ The **Needs** column is the first thing worth checking: `local` runs on your mac
 account, `key` requires credentials you supply, `GPU` means practical runtimes need one, and a
 Python bound means that tool will not install on a newer interpreter.
 
+### Databases and retrieval
+
+| Skill | Use it for | Needs |
+|---|---|---|
+| [`open-targets`](skills/open-targets) | Target-disease associations, genetic and clinical evidence, tractability buckets, safety liabilities, prioritisation metrics — the question that comes before any modelling | network, no key |
+| [`chembl`](skills/chembl) | Measured bioactivity: curated SAR datasets for a target, compound lookup by structure or name, similarity and substructure search, mechanisms of action | network, no key |
+| [`uniprot-rcsb`](skills/uniprot-rcsb) | Sequences, domains and binding sites, PDB search by accession or sequence, mmCIF and AlphaFold downloads, and the check that a structure is usable before you build on it | network, no key |
+
 ### Target discovery and knowledge graphs
 
 | Skill | Use it for | Needs |
@@ -114,9 +140,18 @@ Python bound means that tool will not install on a newer interpreter.
 
 | Skill | Use it for | Needs |
 |---|---|---|
+| [`autodock-vina`](skills/autodock-vina) | Classical docking: box definition, receptor and ligand preparation through Meeko, batch screening, and pose/affinity interpretation with the box-edge and convergence checks | local, Vina + Meeko binaries |
+| [`boltz`](skills/boltz) | Boltz-2 cofolding with a trained binding-affinity head — structure and potency for a complex with no experimental structure | GPU, `pip install boltz` |
 | [`diffdock`](skills/diffdock) | Protein–ligand pose prediction from PDB + SMILES, batch docking, and reading pose confidence (not affinity) | GPU, repo or Docker install |
 | [`molecular-dynamics`](skills/molecular-dynamics) | OpenMM + MDAnalysis end to end: system setup, minimization, production MD, RMSD/RMSF/contacts/free-energy surfaces | GPU recommended |
 | [`esm`](skills/esm) | ESM3 and ESMC through the `esm` SDK, ESMFold2 folding, and Forge/Biohub inference clients | GPU locally, or `ESM_API_KEY` |
+
+### Biologics
+
+| Skill | Use it for | Needs |
+|---|---|---|
+| [`antibody-engineering`](skills/antibody-engineering) | IMGT/Kabat/Chothia numbering and CDR annotation, sequence-liability scanning weighted by region, pI and charge profiling, and humanisation planning | local; numbering needs ANARCI + HMMER |
+| [`glycoengineering`](skills/glycoengineering) | N-glycosylation sequon scanning, O-glycosylation hotspots, and curated glycoengineering tooling | local |
 
 ### Cloud platforms and wet-lab handoff
 
@@ -125,7 +160,6 @@ Python bound means that tool will not install on a newer interpreter.
 | [`rowan`](skills/rowan) | pKa/macropKa, conformers and tautomers, cofolding, permeability — batch chemistry without local HPC | key (`ROWAN_API_KEY`), Python 3.12+ |
 | [`tamarind`](skills/tamarind) | Cloud runs of AlphaFold, Boltz, RFdiffusion, ProteinMPNN, Vina, and more via REST or MCP — no local GPUs | key |
 | [`adaptyv`](skills/adaptyv) | Designing and submitting real protein experiments (BLI/SPR, thermostability) and pulling results back | key |
-| [`glycoengineering`](skills/glycoengineering) | N-glycosylation sequon scanning, O-glycosylation hotspots, and curated glycoengineering tooling | local |
 
 ## Version pinning
 
@@ -145,7 +179,7 @@ move stops receiving fixes, including security fixes; see [SECURITY.md](SECURITY
 
 Skill instructions rot faster than code, so the repository is set up to catch that:
 
-- **Spec-validated on every pull request.** All 17 skills run through
+- **Spec-validated on every pull request.** All 23 skills run through
   [`skills-ref validate`](https://github.com/agentskills/agentskills/tree/main/skills-ref) against
   the Agent Skills specification, plus repo rules the reference validator does not cover.
   `plugin.json` conforms to Agent Plugins 1.0.0.
@@ -168,9 +202,12 @@ reach over your files, your credentials, and the network.
 
 - **Review the bundle before you install it.** Read the `SKILL.md` files for the tools you expect
   to use, and check [`docs/security-report.md`](docs/security-report.md).
-- Skills here reach external services (Adaptyv, ESM Forge, Rowan, Tamarind, NCATS ARAX, DepMap) and
-  read API keys from your environment. Each `SKILL.md` says which credentials and network access it
-  needs — read that section before supplying a key.
+- Skills here reach external services and read API keys from your environment. Some are
+  unauthenticated public APIs (Open Targets, ChEMBL, UniProt, RCSB PDB, AlphaFold DB, NCATS ARAX,
+  DepMap); others need credentials you supply (Adaptyv, ESM Forge, Rowan, Tamarind). Each
+  `SKILL.md` says which credentials and network access it needs — read that section before
+  supplying a key. Note that a query sent to a public API is not private: `boltz --use_msa_server`
+  sends sequences to the public ColabFold server, and knowledge-graph queries may be logged.
 - Bundled scripts run scientific tooling. Nothing here is validated for clinical, diagnostic, or
   regulatory use; treat every result as a hypothesis to confirm with your own methods.
 - A skill performing the work it documents is not a vulnerability. Something a skill does that its
