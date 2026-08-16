@@ -1,8 +1,8 @@
-# 💊 Drug Discovery Agent Skills
+# Drug Discovery Agent Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 [![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)](pyproject.toml)
-[![Skills](https://img.shields.io/badge/Skills-17-brightgreen.svg)](#-whats-included)
+[![Skills](https://img.shields.io/badge/Skills-17-brightgreen.svg)](#whats-included)
 [![Agent Skills](https://img.shields.io/badge/Standard-Agent_Skills-blueviolet.svg)](https://agentskills.io/)
 [![Agent Plugins](https://img.shields.io/badge/Standard-Agent_Plugins-0A7A72.svg)](https://agent-plugins.org/)
 [![Skill Tests](https://github.com/K-Dense-AI/drug-discovery-agent-skills/actions/workflows/skill-tests.yml/badge.svg)](https://github.com/K-Dense-AI/drug-discovery-agent-skills/actions/workflows/skill-tests.yml)
@@ -18,7 +18,7 @@ repository is a portable [Agent Plugins](https://agent-plugins.org/) 1.0.0 packa
 (`plugin.json` + `skills/`). Works with **Claude Code, Cursor, Codex, Google Antigravity, and more**.
 Created by [K-Dense](https://www.k-dense.ai).
 
-## 💬 What you can ask your agent
+## What you can ask your agent
 
 The skills compose — a single request usually pulls in two or three:
 
@@ -37,7 +37,7 @@ The skills compose — a single request usually pulls in two or three:
 > **"Run 100 ns of MD on this complex and give me RMSD, RMSF, and a contact map."**
 > `molecular-dynamics`
 
-## 🎯 Getting Started
+## Getting Started
 
 The 17 skills install together as one bundle — they cross-reference each other, and the agent
 loads only the ones a given task calls for.
@@ -79,7 +79,7 @@ git clone https://github.com/K-Dense-AI/drug-discovery-agent-skills.git .agents/
 Installing a skill installs instructions, not packages. The agent sets up each tool's environment
 when you first use it, following the requirements in that skill's `SKILL.md`.
 
-## 📦 What's included
+## What's included
 
 The **Needs** column is the first thing worth checking: `local` runs on your machine with no
 account, `key` requires credentials you supply, `GPU` means practical runtimes need one, and a
@@ -127,7 +127,7 @@ Python bound means that tool will not install on a newer interpreter.
 | [`adaptyv`](skills/adaptyv) | Designing and submitting real protein experiments (BLI/SPR, thermostability) and pulling results back | key |
 | [`glycoengineering`](skills/glycoengineering) | N-glycosylation sequon scanning, O-glycosylation hotspots, and curated glycoengineering tooling | local |
 
-## 📌 Version pinning
+## Version pinning
 
 `main` is the development branch: skills change there between releases. For reproducible installs,
 pin to a release tag and move the pin forward deliberately.
@@ -141,7 +141,7 @@ Each skill also carries its own `metadata.version` in its `SKILL.md`, bumped whe
 changes — check it to see whether an upgrade touched the skills you actually use. A pin you never
 move stops receiving fixes, including security fixes; see [SECURITY.md](SECURITY.md).
 
-## 🔬 How these are maintained
+## How these are maintained
 
 Skill instructions rot faster than code, so the repository is set up to catch that:
 
@@ -160,7 +160,7 @@ Skill instructions rot faster than code, so the repository is set up to catch th
   runs on every pull request and weekly; the current report is in
   [`docs/security-report.md`](docs/security-report.md).
 
-## 🔒 Security disclaimer
+## Security disclaimer
 
 Agent Skills are instructions an AI agent reads, plus scripts it may execute on your machine. That
 is what makes them useful, and it is also the risk: installing a skill grants it the agent's
@@ -178,12 +178,12 @@ reach over your files, your credentials, and the network.
 
 Scanning is a prompt to review, not a certification.
 
-## 🤝 Contributing
+## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for skill authoring rules, testing requirements, and the
 pull-request checklist. Report vulnerabilities per [SECURITY.md](SECURITY.md), not in public issues.
 
-## 📜 License
+## License
 
 [MIT](LICENSE.md) — created and maintained by [K-Dense](https://www.k-dense.ai).
 
