@@ -25,19 +25,19 @@ Created by [K-Dense](https://www.k-dense.ai).
 
 The skills compose — a single request usually pulls in two or three:
 
-> **"Which targets have genetic evidence in asthma, and which of them are small-molecule tractable?"**
+> **"Which targets have genetic evidence in asthma, which are small-molecule tractable, and are any of them pan-essential?"**
 > `open-targets` → `depmap` → `chembl`
 
 > **"Build me a clean EGFR IC50 dataset from ChEMBL and tell me how much of it I had to throw away."**
 > `chembl` → `medchem` → `pytdc`
 
 > **"Find the best EGFR structure with an inhibitor bound, check the ATP site is fully resolved, and dock these 200 compounds into it."**
-> `uniprot-rcsb` → `autodock-vina` → `medchem`
+> `uniprot-rcsb` → `medchem` → `autodock-vina`
 
 > **"There is no structure of this target — cofold it with my hit series and predict affinity."**
 > `uniprot-rcsb` → `boltz`
 
-> **"Number this antibody, flag the CDR liabilities, and tell me its pI."**
+> **"Number this antibody, flag its CDR liabilities and glycosylation sequons, and tell me its pI."**
 > `antibody-engineering` → `glycoengineering`
 
 > **"Filter this SDF for PAINS alerts and Lipinski violations, then dock what survives into my receptor PDB."**
@@ -75,7 +75,7 @@ npx skills add K-Dense-AI/drug-discovery-agent-skills
 gh skill install K-Dense-AI/drug-discovery-agent-skills
 
 # Pin to a release tag for reproducible installs
-gh skill install K-Dense-AI/drug-discovery-agent-skills --pin v1.0.0
+gh skill install K-Dense-AI/drug-discovery-agent-skills --pin v1.1.0
 ```
 
 ### Option 3: Agent Plugins (Cursor, Codex, and other plugin clients)
@@ -100,8 +100,9 @@ when you first use it, following the requirements in that skill's `SKILL.md`.
 ## What's included
 
 The **Needs** column is the first thing worth checking: `local` runs on your machine with no
-account, `key` requires credentials you supply, `GPU` means practical runtimes need one, and a
-Python bound means that tool will not install on a newer interpreter.
+account, `network, no key` reaches a public API that needs no credentials, `key` requires
+credentials you supply, `GPU` means practical runtimes need one, and a Python bound means that
+tool will not install on a newer interpreter.
 
 ### Databases and retrieval
 
@@ -167,8 +168,8 @@ Python bound means that tool will not install on a newer interpreter.
 pin to a release tag and move the pin forward deliberately.
 
 ```bash
-gh skill install K-Dense-AI/drug-discovery-agent-skills --pin v1.0.0   # a release tag
-git clone --branch v1.0.0 --depth 1 https://github.com/K-Dense-AI/drug-discovery-agent-skills.git
+gh skill install K-Dense-AI/drug-discovery-agent-skills --pin v1.1.0   # a release tag
+git clone --branch v1.1.0 --depth 1 https://github.com/K-Dense-AI/drug-discovery-agent-skills.git
 ```
 
 Each skill also carries its own `metadata.version` in its `SKILL.md`, bumped whenever that skill
@@ -186,7 +187,8 @@ Skill instructions rot faster than code, so the repository is set up to catch th
 - **Tested in the environment each tool actually needs.** Skills with bundled scripts have pytest
   suites that run in isolated per-skill `uv` environments defined in
   [`tests/skill-requirements.toml`](tests/skill-requirements.toml) — Python 3.10 for `molfeat` and
-  `torchdrug`, 3.11 for `deepchem` and `pytdc` — so one tool's pins never constrain another's. A
+  `torchdrug`, 3.11 for `deepchem` and `pytdc` — so one tool's pins never constrain another's. The
+  database skills ship standard-library-only clients and so have no dependencies to pin at all. A
   repo-wide contract and coverage guard runs alongside them.
 - **Dated version baselines.** `SKILL.md` files record the upstream release they were checked
   against, so you can tell how current the guidance is before trusting it.
