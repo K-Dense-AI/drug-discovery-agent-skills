@@ -153,6 +153,7 @@ Treat agreement with an orthogonal method as the evidence — a docking score fr
 ## Composing with the rest of the bundle
 
 - `uniprot-rcsb` → here: the sequence, and a template CIF if an apo structure exists.
+- `binding-site-analysis` → before: which site to focus on, and whether it is druggable.
 - `chembl` → here: known actives against the target, to calibrate what the affinity head says
   about chemistry you already have data for.
 - `medchem` / `rdkit` → before: triage and standardise the library.

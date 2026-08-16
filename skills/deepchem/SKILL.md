@@ -1,11 +1,11 @@
 ---
 name: deepchem
-description: Molecular ML with diverse featurizers and pre-built datasets. Use for property prediction (ADMET, toxicity) with traditional ML or GNNs when you want extensive featurization options and MoleculeNet benchmarks. Best for quick experiments with pre-trained models, diverse molecular representations. For graph-first PyTorch workflows use torchdrug; for benchmark datasets use pytdc.
+description: Molecular ML with diverse featurizers and pre-built datasets. Use for property prediction (ADMET, toxicity) with traditional ML or GNNs when you want extensive featurization options and MoleculeNet benchmarks. Best for quick experiments with pre-trained models, diverse molecular representations. For ready-made ADMET numbers without training a model use admet-prediction; for benchmark datasets and task-aware splits use pytdc.
 license: MIT license
 allowed-tools: Read Write Edit Bash
 compatibility: Requires Python 3.7–3.11 (PyPI 2.8.0 caps at <3.12). Install PyTorch, TensorFlow, or JAX before the matching deepchem extra. RDKit is a core dependency.
 metadata:
-  version: "1.4"
+  version: "1.5"
   skill-author: K-Dense Inc.
 ---
 
@@ -16,6 +16,13 @@ metadata:
 DeepChem is a comprehensive Python library for applying machine learning to chemistry, materials science, and biology. Enable molecular property prediction, drug discovery, materials design, and biomolecule analysis through specialized neural networks, molecular featurization methods, and pretrained models.
 
 **Version note:** Examples target **deepchem 2.8.0** (PyPI stable, Apr 2024). Requires **Python 3.7–3.11** (`<3.12` on PyPI). Core utilities (loaders, featurizers, MoleculeNet) work without a DL backend; GNN and transformer models need the matching extra (`torch`, `tensorflow`, or `jax`). Install the backend framework first when using GPU builds.
+
+**The release you install is much older than the code you will read about.** The GitHub
+repository is actively developed, but 2.8.0 (April 2024) is still the newest tagged release, so
+`pip install deepchem` gives you code roughly two years behind `master` while the online docs and
+tutorials describe `master`. If an API in the documentation does not exist in your install, that
+gap is the reason. Either pin to 2.8.0 and use the 2.8.0 docs, or install from git
+(`pip install git+https://github.com/deepchem/deepchem.git`) and accept an untagged build.
 
 ## When to Use This Skill
 

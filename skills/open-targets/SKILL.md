@@ -179,6 +179,9 @@ typo — the bundled client raises instead. And the plural root fields (`targets
 - `chembl` — measured bioactivity for the compounds Open Targets names as known drugs.
 - `uniprot-rcsb` — turn `proteinIds` into sequences and structures for modelling.
 - `primekg` / `ncats-arax` — mechanistic paths and provenance for an association worth chasing.
+- `target-safety` — gnomAD constraint, which this API does not carry: whether healthy humans
+  who have lost the protein actually exist.
+- `clinicaltrials` — whether anyone has taken the genetic hypothesis into a trial.
 
 ## Scope and honesty
 

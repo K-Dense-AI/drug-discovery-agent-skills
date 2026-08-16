@@ -5,7 +5,7 @@ license: Apache-2.0 license
 allowed-tools: Read Write Edit Bash
 compatibility: Requires Python 3.9–3.10 (molfeat 0.11.0 declares `requires-python <3.11`). Requires datamol, RDKit, and PyTorch; GNN and transformer featurizers need optional extras. The 8 HuggingFace models in the model store cannot be downloaded from it — see "Pretrained models" below.
 metadata:
-  version: "1.2"
+  version: "1.3"
   skill-author: K-Dense Inc.
 ---
 
@@ -22,6 +22,14 @@ transformer interface with state serialization and caching.
 PyPI and GitHub release; the repository has had no commits since. All examples in this skill
 were executed against 0.11.0 on **Python 3.10** with datamol 0.12.5, RDKit 2026.03.5, numpy
 2.2.6 and torch 2.13.0. Python 3.11+ is not installable (`requires-python = ">=3.9,<3.11"`).
+
+**The Python cap isolates this skill from the rest of the bundle.** Nothing else here needs an
+interpreter below 3.11, so molfeat requires its own environment and cannot share one with
+`admet-prediction` (3.11+), `pytdc`, or `deepchem`. That is manageable for a featurisation step
+that writes a matrix to disk, and painful for anything interactive. For new work where the
+featuriser is not itself the point, RDKit or datamol fingerprints plus a Chemprop or scikit-learn
+model reach the same place without the constraint; use molfeat when you specifically want its
+breadth of featurisers behind one interface.
 0.11.0 loads pretrained models in memory, sets base models to eval mode, and moved the model
 store to a Cloudflare HTTP bucket (PR #115) — that last change broke store downloads for the
 HuggingFace models (see [Pretrained models](#pretrained-models)).

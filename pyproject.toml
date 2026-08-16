@@ -1,6 +1,6 @@
 [project]
 name = "drug-discovery-agent-skills"
-version = "1.1.0"
+version = "1.2.0"
 description = "Agent Skills for small-molecule and protein therapeutics: target and bioactivity databases, cheminformatics, molecular ML, docking and dynamics, protein and antibody design."
 readme = "README.md"
 requires-python = ">=3.13"

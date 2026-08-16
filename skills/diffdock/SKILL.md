@@ -5,7 +5,7 @@ allowed-tools: Read Write Edit Bash Glob Grep
 compatibility: Requires the DiffDock repository, Python 3.9 environment from upstream environment.yml or the official Docker image, RDKit, PyTorch/PyG, and optional CUDA GPU acceleration. Current guidance targets DiffDock v1.1.3 / DiffDock-L.
 license: MIT license
 metadata:
-  version: "1.3"
+  version: "1.4"
   skill-author: K-Dense Inc.
 ---
 
@@ -452,16 +452,26 @@ Read this file when users need:
 
 ## Best Practices
 
-1. **Always verify environment** with `setup_check.py` before starting large jobs
-2. **Validate batch CSVs** with `prepare_batch_csv.py` to catch errors early
-3. **Start with defaults** then tune parameters based on system-specific needs
-4. **Generate multiple samples** (10-40) for robust predictions
-5. **Visual inspection** of top poses before downstream analysis
-6. **Combine with scoring** functions for affinity assessment
-7. **Use confidence scores** for initial ranking, not final decisions
-8. **Pre-compute embeddings** for virtual screening campaigns
-9. **Document parameters** used for reproducibility
-10. **Validate results** experimentally when possible
+1. **Verify the environment** with `setup_check.py`, and **validate batch CSVs** with
+   `prepare_batch_csv.py`, before starting a large job.
+2. **Generate 10-40 samples** per complex; start from defaults and tune per system.
+3. **Use confidence for initial ranking, not final decisions**, and inspect top poses visually.
+4. **Combine with a scoring function** for affinity, which DiffDock does not provide.
+5. **Pre-compute embeddings** for screening campaigns, document parameters, and validate
+   experimentally.
+
+## Composing with the rest of the bundle
+
+- `uniprot-rcsb` → before: find and check the receptor structure before posing anything into it.
+- `binding-site-analysis` → before: DiffDock needs no box, which makes it easy to dock into a site
+  that was never druggable. Check the pocket first.
+- `medchem` / `rdkit` / `datamol` → before: triage and standardise the library.
+- `autodock-vina` → alongside: an orthogonal score, and one that returns an affinity estimate
+  where DiffDock returns only pose confidence.
+- `boltz` → alternative: cofolding when no experimental receptor structure exists.
+- `free-energy-perturbation` → after: rigorous ΔΔG on the few compounds that justify it.
+- `molecular-dynamics` → after: does the predicted pose survive a simulation?
+- `tamarind` → instead: hosted DiffDock when there is no local GPU.
 
 ## Citations
 
@@ -481,8 +491,8 @@ ICLR 2023, arXiv:2210.01776
 
 ## Additional Resources
 
-- **GitHub Repository**: https://github.com/gcorso/DiffDock
-- **Online Demo**: https://huggingface.co/spaces/reginabarzilaygroup/DiffDock-Web
-- **DiffDock-L Paper**: https://arxiv.org/abs/2402.18396
-- **Original Paper**: https://arxiv.org/abs/2210.01776
+[Repository](https://github.com/gcorso/DiffDock) ·
+[demo](https://huggingface.co/spaces/reginabarzilaygroup/DiffDock-Web) ·
+[DiffDock-L paper](https://arxiv.org/abs/2402.18396) ·
+[original paper](https://arxiv.org/abs/2210.01776)
 

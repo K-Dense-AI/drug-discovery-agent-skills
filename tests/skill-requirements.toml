@@ -12,7 +12,8 @@
 #
 # `python` overrides the interpreter for that skill alone. This is the reason
 # per-skill environments are worth the trouble: PyTDC and DeepChem need 3.11,
-# molfeat and torchdrug cap at 3.10. uv downloads the interpreter on demand.
+# molfeat caps at 3.10, and AiZynthFinder will not install above 3.12. uv
+# downloads the interpreter on demand.
 #
 # Packages listed under [unavailable] are documented by a skill but cannot be
 # installed here at all; the reason is recorded so nobody re-derives it.
@@ -104,9 +105,60 @@ packages = ["tamarind", "requests"]
 [skills.adaptyv]
 packages = []
 
-[skills.torchdrug]
-python = "3.10"
-packages = ["torch"]
+# --- design, synthesis, and chemical space ---------------------------------
+#
+# Each of these drives a heavy external tool (REINVENT4, AiZynthFinder, OpenFE,
+# fpocket, admet-ai). The bundled scripts only build its input and parse its
+# output, so the suites stay standard-library-only and run without the tool.
+
+[skills.generative-design]
+packages = []
+
+[skills.retrosynthesis]
+packages = []
+
+[skills.chemical-space]
+packages = []
+
+[skills.admet-prediction]
+packages = []
+
+[skills.free-energy-perturbation]
+packages = []
+
+[skills.binding-site-analysis]
+packages = []
+
+# --- clinical, regulatory, and translational -------------------------------
+
+[skills.clinicaltrials]
+packages = []
+
+[skills.openfda]
+packages = []
+
+[skills.target-safety]
+packages = []
+
+[skills.patent-landscape]
+packages = []
+
+[skills.pkpd-translation]
+packages = []
+
+# --- modalities beyond small molecules -------------------------------------
+
+[skills.protein-binder-design]
+packages = []
+
+[skills.degraders]
+packages = []
+
+[skills.immunogenicity]
+packages = []
+
+[skills.oligonucleotides]
+packages = []
 
 # --- packages a skill documents that cannot be installed here -------------
 #
@@ -115,7 +167,6 @@ packages = ["torch"]
 
 [unavailable]
 adaptyv-sdk = "adaptyv skill: distributed from GitHub only, not on PyPI"
-torchdrug = "torchdrug skill: torch-scatter 2.1.2 sdist needs torch present at build time"
 dgl = "molfeat skill: no cp313 wheels"
 "flash-attn" = "esm skill: needs a CUDA toolchain to build"
 "lilly-medchem-rules" = "medchem skill: conda-forge only; the Lilly demerit filter is optional"

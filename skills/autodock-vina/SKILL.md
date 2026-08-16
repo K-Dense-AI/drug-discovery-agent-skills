@@ -146,6 +146,10 @@ alternatives (smina, gnina, AutoDock-GPU, covalent protocols).
 
 - `uniprot-rcsb` → here: find and check the structure, confirm the site residues are actually
   resolved, and download the coordinates.
+- `binding-site-analysis` → before: is the pocket worth docking into at all, and where exactly
+  is it? `pocket_box.py --format vina` writes this skill's box config directly.
+- `chemical-space` → before: purchasable compounds to dock, and a costed screening cascade.
+- `free-energy-perturbation` → after: rigorous ΔΔG on the tens of compounds worth it.
 - `medchem` / `rdkit` / `datamol` → here: triage and standardise the library first. Docking
   20,000 PAINS wastes the compute and pollutes the hit list.
 - `molecular-dynamics` → after: run the top poses; a pose that leaves the site in 10 ns was not a

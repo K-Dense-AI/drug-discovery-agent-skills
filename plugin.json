@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "drug-discovery-agent-skills",
-  "version": "1.1.0",
-  "description": "Agent Skills for small-molecule and protein therapeutics: target and bioactivity databases, cheminformatics, molecular ML, docking and dynamics, protein and antibody design.",
+  "version": "1.2.0",
+  "description": "Agent Skills for small-molecule and protein therapeutics: target validation and human genetics, bioactivity and chemical space, generative design and retrosynthesis, docking, free energy and dynamics, ADMET and PK translation, protein, antibody, degrader and oligonucleotide design, and the clinical and regulatory record.",
   "author": {
     "name": "K-Dense Inc.",
     "url": "https://k-dense.ai"
@@ -21,6 +21,15 @@
     "admet",
     "bioactivity",
     "structural-biology",
-    "antibody"
+    "antibody",
+    "generative-design",
+    "retrosynthesis",
+    "free-energy",
+    "degraders",
+    "oligonucleotides",
+    "clinical-trials",
+    "regulatory",
+    "pharmacokinetics",
+    "human-genetics"
   ]
 }

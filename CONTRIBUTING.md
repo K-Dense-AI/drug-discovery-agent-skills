@@ -321,7 +321,7 @@ np = pytest.importorskip("numpy", reason="skill-name needs numpy")
 
 ### One environment per skill
 
-Most suites skip on this repository's default environment because their scientific dependencies are not installed (`rdkit`, `medchem`, `deepchem`, `diffdock`, `primekg`), and installing them all into one environment is not possible: the skills' upstream pins contradict each other. `torchdrug` and `molfeat` both cap out at Python 3.10; `pytdc` and `deepchem` need 3.11; `esm` caps `transformers` below the release `diffdock`'s PyG stack expects; and `datamol`, `medchem`, and `rdkit` disagree on the RDKit build.
+Most suites skip on this repository's default environment because their scientific dependencies are not installed (`rdkit`, `medchem`, `deepchem`, `diffdock`, `primekg`), and installing them all into one environment is not possible: the skills' upstream pins contradict each other. `molfeat` caps out at Python 3.10 and `aizynthfinder` will not install above 3.12; `pytdc` and `deepchem` need 3.11; `esm` caps `transformers` below the release `diffdock`'s PyG stack expects; and `datamol`, `medchem`, and `rdkit` disagree on the RDKit build.
 
 `--isolated` therefore gives each skill its own throwaway `uv` environment, built from [`tests/skill-requirements.toml`](tests/skill-requirements.toml):
 

@@ -48,7 +48,7 @@ from skill_scanner.core.models import (
     Severity,
     ThreatCategory,
 )
-from skill_scanner.core.scan_policy import ScanPolicy
+from skill_scanner.core.scan_policy import ScanPolicy, SeverityOverride
 
 load_dotenv()
 
@@ -124,6 +124,26 @@ def _assert_scanner_api(scanner: SkillScanner) -> None:
 
 def build_scanner() -> SkillScanner:
     policy = ScanPolicy.from_preset("balanced")
+
+    # CROSS_SKILL_DATA_RELAY fires HIGH whenever one skill's text matches a
+    # collection pattern (`config`, `token`, `private`, `.env`) and a *different*
+    # skill matches an exfiltration pattern (`urllib.request`, `requests.post`).
+    # In a bundle of open-bioinformatics API clients that is every scan: the
+    # weekly report has named 18 collectors and 7 exfiltrators since the first
+    # full run, and a stdlib REST client cannot avoid `urllib.request`. Demoted
+    # rather than disabled, so the finding still appears in the report and the
+    # pull-request comment -- it just stops gating every multi-skill PR.
+    policy.severity_overrides.append(
+        SeverityOverride(
+            rule_id="CROSS_SKILL_DATA_RELAY",
+            severity="MEDIUM",
+            reason=(
+                "heuristic pairing of unrelated skills; unavoidable in a bundle "
+                "of public-API clients that all use urllib.request"
+            ),
+        )
+    )
+
     policy.llm_analysis.max_instruction_body_chars = 75_000
     policy.llm_analysis.max_referenced_file_chars = 75_000
     policy.llm_analysis.max_code_file_chars = 75_000

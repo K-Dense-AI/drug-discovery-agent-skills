@@ -154,6 +154,14 @@ so their behaviour is inspectable.
   congeneric series from one paper land on both sides.
 - `molfeat` / `deepchem` — featurisation and model fitting once the set is clean.
 - `uniprot-rcsb` — the structure to dock the actives into.
+- `chemical-space` — ChEMBL is what has been *measured*; ZINC-22 and Enamine REAL are what can
+  be *bought*. Different questions, and a hit list needs both.
+- `patent-landscape` — SureChEMBL ids cross-reference through UniChem, joining measured
+  bioactivity to patent chemistry.
+- `clinicaltrials` / `openfda` — what happened to these compounds after the assay.
+
+For bioassay coverage far wider than ChEMBL's curated set, PubChem's PUG-REST is the
+complement — many more assays, much less curation, 5 requests/second and a 30-second timeout.
 
 ## Reporting results honestly
 
