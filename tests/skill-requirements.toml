@@ -11,9 +11,8 @@
 # they still get a clean environment with just pytest.
 #
 # `python` overrides the interpreter for that skill alone. This is the reason
-# per-skill environments are worth the trouble: opentrons pins numpy<2 (no
-# cp313 wheels), PyTDC needs 3.11, molfeat caps at 3.10. uv downloads the
-# interpreter on demand.
+# per-skill environments are worth the trouble: PyTDC and DeepChem need 3.11,
+# molfeat and torchdrug cap at 3.10. uv downloads the interpreter on demand.
 #
 # Packages listed under [unavailable] are documented by a skill but cannot be
 # installed here at all; the reason is recorded so nobody re-derives it.
@@ -21,7 +20,7 @@
 [defaults]
 python = "3.13"
 
-# --- output formats and writing -------------------------------------------
+# --- knowledge graphs and target discovery --------------------------------
 
 [skills.ncats-arax]
 packages = []
@@ -32,7 +31,7 @@ packages = ["numpy", "pandas", "requests", "scipy"]
 [skills.primekg]
 packages = ["pandas"]
 
-# --- genomics and sequence analysis ---------------------------------------
+# --- proteins: design, folding, and docking -------------------------------
 
 [skills.glycoengineering]
 packages = ["glycoshield", "pandas", "requests"]
@@ -43,7 +42,7 @@ packages = ["esm", "torch", "matplotlib", "numpy", "scikit-learn", "requests", "
 [skills.diffdock]
 packages = ["torch", "rdkit", "openmm", "esm", "pandas"]
 
-# --- chemistry and materials ----------------------------------------------
+# --- small molecules: cheminformatics and molecular ML --------------------
 
 [skills.rdkit]
 packages = ["rdkit"]
@@ -92,20 +91,7 @@ packages = ["torch"]
 
 [unavailable]
 adaptyv-sdk = "adaptyv skill: distributed from GitHub only, not on PyPI"
-tiledbvcf = "tiledbvcf skill: not published to PyPI; conda-forge or a source build only"
-matlabengine = "matlab skill: requires a local MATLAB installation to build against"
-pufferlib = "pufferlib skill: source-only native archive, no wheel builds on 3.13"
-hypogenic = "hypogenic skill: pins torch<=2.4.1, which has no cp313 wheels"
 torchdrug = "torchdrug skill: torch-scatter 2.1.2 sdist needs torch present at build time"
-pathml = "pathml skill: python-javabridge needs a JDK, plus OpenSlide and Bio-Formats"
-omero-py = "omero-integration skill: zeroc-ice 3.6.5 has no wheels and needs a C++ build"
-bids-validator-deno = "bids skill: Deno tool, installed with npm/deno rather than pip"
-rsgislib = "geomaster skill: conda-forge only"
-pdal = "geomaster skill: conda-forge only, needs the PDAL C++ library"
-open3d = "geomaster skill: no cp313 wheels"
-mpi4py = "fluidsim skill: needs a site MPI implementation and compilers"
 dgl = "molfeat skill: no cp313 wheels"
 "flash-attn" = "esm skill: needs a CUDA toolchain to build"
-deepspeed = "pytorch-lightning skill: needs a CUDA toolchain to build"
-bitsandbytes = "transformers skill: CUDA-only, Linux wheels"
-"cudf-cu12" = "optimize-for-gpu skill: RAPIDS wheels are Linux + CUDA only (whole group)"
+"lilly-medchem-rules" = "medchem skill: conda-forge only; the Lilly demerit filter is optional"

@@ -1,11 +1,12 @@
 """Session guard for the repo-wide test tree.
 
 Every skill's `scripts/` directory is self-contained and owns plain top-level
-module names -- 32 skills ship a `scripts/_common.py`, and names like
-`cluster.py` or `validate_manifest.py` are shared too. Tests import those
-scripts by putting the skill's `scripts/` directory on `sys.path`, so two
-skills collected into one interpreter would resolve `_common` to whichever
-skill was imported first and silently test the wrong files.
+module names -- `pytdc` already ships a `scripts/_common.py`, and a name like
+`analyze_results.py` or `filter_molecules.py` is the obvious choice for any
+number of skills. Tests import those scripts by putting the skill's `scripts/`
+directory on `sys.path`, so two skills collected into one interpreter would
+resolve such a name to whichever skill was imported first and silently test the
+wrong files.
 
 Each skill therefore gets its own process:
 
@@ -41,7 +42,7 @@ def _install_contract() -> None:
 
     `tests/` must never go on `sys.path`: in prepend/append import mode that
     turns every `tests/<skill>/` directory into an importable namespace
-    package, so `tests/simpy/`, `tests/qutip/` and `tests/neurokit2/` would
+    package, so `tests/rdkit/`, `tests/deepchem/` and `tests/medchem/` would
     shadow the real libraries (see `addopts` in pyproject.toml). Loading the
     package by file location and registering it under a name no skill uses
     gives suites `import skill_contract` without that hazard.

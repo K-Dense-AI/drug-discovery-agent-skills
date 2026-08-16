@@ -16,7 +16,7 @@ from pathlib import Path
 
 try:
     from rdkit import Chem
-    from rdkit.Chem import AllChem, MACCSkeys, rdFingerprintGenerator
+    from rdkit.Chem import MACCSkeys, rdFingerprintGenerator
     from rdkit import DataStructs
 except ImportError:
     print("Error: RDKit not installed. Install with: uv pip install rdkit")
@@ -32,29 +32,42 @@ FINGERPRINT_METHODS = {
 }
 
 
-def generate_fingerprint(mol, method='morgan', radius=2, n_bits=2048):
-    """Generate molecular fingerprint based on specified method."""
-    if mol is None:
-        return None
+def make_fingerprinter(method='morgan', radius=2, n_bits=2048):
+    """Build a reusable `mol -> fingerprint` callable for one method.
 
+    Constructing an rdFingerprintGenerator is not free, so a screen builds one
+    generator here and reuses it for the whole database rather than rebuilding
+    it per molecule. Returns a callable that yields None for a None molecule.
+    """
     method = method.lower()
 
     if method == 'morgan':
         gen = rdFingerprintGenerator.GetMorganGenerator(radius=radius, fpSize=n_bits)
-        return gen.GetFingerprint(mol)
     elif method == 'rdkit':
         gen = rdFingerprintGenerator.GetRDKitFPGenerator(maxPath=7, fpSize=n_bits)
-        return gen.GetFingerprint(mol)
-    elif method == 'maccs':
-        return MACCSkeys.GenMACCSKeys(mol)
     elif method == 'atompair':
         gen = rdFingerprintGenerator.GetAtomPairGenerator(fpSize=n_bits)
-        return gen.GetFingerprint(mol)
     elif method == 'torsion':
         gen = rdFingerprintGenerator.GetTopologicalTorsionGenerator(fpSize=n_bits)
-        return gen.GetFingerprint(mol)
+    elif method == 'maccs':
+        # MACCS is a fixed 166-key set with no generator object and no
+        # radius/size to configure.
+        return lambda mol: None if mol is None else MACCSkeys.GenMACCSKeys(mol)
     else:
         raise ValueError(f"Unknown fingerprint method: {method}")
+
+    return lambda mol: None if mol is None else gen.GetFingerprint(mol)
+
+
+def generate_fingerprint(mol, method='morgan', radius=2, n_bits=2048):
+    """Generate a single molecular fingerprint.
+
+    Convenience wrapper for one-off use. When fingerprinting more than a
+    handful of molecules, call `make_fingerprinter()` once instead.
+    """
+    if mol is None:
+        return None
+    return make_fingerprinter(method, radius, n_bits)(mol)
 
 
 def load_molecules(file_path):
@@ -115,8 +128,11 @@ def similarity_search(query_mol, database, method='morgan', threshold=0.7,
         print("Error: Invalid query molecule")
         return []
 
-    # Generate query fingerprint
-    query_fp = generate_fingerprint(query_mol, method, radius, n_bits)
+    # One generator for the query and the whole database. Rebuilding it per
+    # database molecule dominates the runtime of a real screen.
+    fingerprint = make_fingerprinter(method, radius, n_bits)
+
+    query_fp = fingerprint(query_mol)
     if query_fp is None:
         print("Error: Failed to generate query fingerprint")
         return []
@@ -134,7 +150,7 @@ def similarity_search(query_mol, database, method='morgan', threshold=0.7,
     # Search database
     hits = []
     for db_entry in database:
-        db_fp = generate_fingerprint(db_entry['mol'], method, radius, n_bits)
+        db_fp = fingerprint(db_entry['mol'])
         if db_fp is None:
             continue
 

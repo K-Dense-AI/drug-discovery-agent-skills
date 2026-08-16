@@ -3,7 +3,7 @@ name: primekg
 description: Query the Precision Medicine Knowledge Graph (PrimeKG) for multiscale biological data including genes, drugs, diseases, phenotypes, and more.
 license: Unknown
 metadata:
-  version: "1.1"
+  version: "1.2"
   skill-author: K-Dense Inc. (PrimeKG original from Harvard MIMS)
 ---
 
@@ -19,7 +19,9 @@ PrimeKG is a precision medicine knowledge graph that integrates over 20 primary 
 - Analyze local disease context (related genes, drugs, phenotypes)
 - Identify drug-disease paths (potential repurposing opportunities)
 
-**Data access:** Programmatic access via `query_primekg.py`. Data is stored at `C:\Users\eamon\Documents\Data\PrimeKG\kg.csv`.
+**Data access:** Programmatic access via `scripts/query_primekg.py`, which reads `kg.csv` from the
+path in the `PRIMEKG_DATA` environment variable (default `data/PrimeKG/kg.csv`). Download the CSV
+first — see [Data Path](#data-path).
 
 ## When to Use This Skill
 
@@ -68,6 +70,28 @@ from scripts.query_primekg import get_disease_context
 context = get_disease_context("Alzheimer's disease")
 # Access: context['associated_genes'], context['associated_drugs'], context['phenotypes']
 ```
+
+### 4. Connect Two Entities (Repurposing Hypotheses)
+
+Find how a drug and a disease are linked, either directly or through one shared
+intermediate node. Edges are traversed as undirected.
+
+```python
+from scripts.query_primekg import find_paths
+
+# Direct edges first, then two-hop paths through a shared neighbour
+paths = find_paths("CHEMBL1", "D001")            # max_depth=2 by default
+paths = find_paths("CHEMBL1", "D001", max_depth=1)  # direct edges only
+
+# Each path is a list of edge dicts, ordered start -> end:
+# [{'relation': 'drug_protein', ...}, {'relation': 'disease_protein', ...}]
+for hops in paths:
+    print(" -> ".join(hop["display_relation"] for hop in hops))
+```
+
+Only depths 1 and 2 are supported; any other `max_depth` raises `ValueError`.
+Three or more hops through a 4-million-edge graph run through hub nodes and are
+rarely interpretable.
 
 ## Relationship Types in PrimeKG
 

@@ -57,15 +57,21 @@ jobs:
 
       - name: Commit updated security report
         run: |
+          set -euo pipefail
           if [ -z "$(git status --porcelain docs/security-report.md docs/security-report.json)" ]; then
             echo "Report unchanged; nothing to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git stash --include-untracked
-          git pull --rebase
-          git stash pop || true
+          # Commit before rebasing rather than stashing across the pull. The
+          # previous form ended `git stash pop || true`, so a conflict left the
+          # tree half-restored and the run committed whatever survived.
           git add docs/security-report.md docs/security-report.json
           git commit -m "chore: update security scan report [skip ci]"
-          git push
+          # The commit being replayed touches only the two report files, and the
+          # report is regenerated wholesale each run, so a concurrent edit to it
+          # is not something to merge. During a rebase `theirs` is the commit
+          # being applied -- this run's fresh report, which is what should win.
+          git pull --rebase --strategy-option=theirs origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

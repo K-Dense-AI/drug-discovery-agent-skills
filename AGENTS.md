@@ -1,7 +1,9 @@
 # Repository Guidance
 
-This repository is a collection of Agent Skills for science and research. Every skill lives in its
-own directory under `skills/` and must conform to the open
+This repository is a focused bundle of Agent Skills for small-molecule and protein therapeutics,
+drawn from the wider
+[scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) collection. Every
+skill lives in its own directory under `skills/` and must conform to the open
 [Agent Skills specification](https://agentskills.io/specification).
 
 Read this file before creating or changing a skill. `CONTRIBUTING.md` covers the same ground at
@@ -9,19 +11,19 @@ more length, plus the pull-request process.
 
 ## What belongs here
 
-**In scope:** a narrow skill for one scientific package, database, platform, or research workflow —
-`scanpy`, `depmap`, `benchling-integration`, `experimental-design`.
+**In scope:** a narrow skill for one drug-discovery package, database, or platform —
+`rdkit`, `depmap`, `diffdock`, `tamarind`. If it would not be reached for during small-molecule or
+protein therapeutics work, it belongs in one of the sibling bundles listed in the README, not here.
 
 **Out of scope**, and routinely declined:
 
 - General software-engineering or coding-judgment skills — they compete for selection on every task.
+- Skills from an adjacent scientific domain (genomics, imaging, clinical) — each has its own bundle,
+  and duplicating one here means two copies drifting apart.
 - General infrastructure with a scientific example bolted on (a vector database, a cloud SDK) —
   accepting one implies carrying every competitor.
 - Broad "orchestrator" skills that route to other skills — they overlap every specialist by design.
 - A second provider for a service an existing skill already reaches.
-
-The general-purpose skills that do exist are narrow output-format helpers (`docx`, `pdf`, `pptx`,
-`generate-image`, `markdown-mermaid-writing`). They are not precedent for broadening scope.
 
 ## Layout
 
@@ -52,10 +54,6 @@ tests/<skill-name>/          # same name as the skill directory
 └── fixtures/                # optional test data
 ```
 
-**Diagrams never live under `skills/` either.** Every skill has one generated workflow diagram at
-`docs/images/<skill-name>.png`, produced by `scripts/generate_skill_image.py` and kept in step with
-the skill's documentation — see [Skill diagrams](#skill-diagrams).
-
 Tests reach their skill through an explicit anchor, never a relative walk:
 
 ```python
@@ -69,15 +67,10 @@ SKILL_ROOT = Path(__file__).resolve().parents[2] / "skills" / "<skill-name>"
 2. Write `SKILL.md` from the template below. Start at `metadata.version: "1.0"`.
 3. Add `references/`, `scripts/`, or `assets/` only when they earn their place.
 4. Run the commands and code you document. Scope claims to the release you actually tested
-   ("targets stable GeoPandas 1.1.4"), and mark anything untested as illustrative.
+   ("targets RDKit 2026.03.x"), and mark anything untested as illustrative.
 5. If the skill ships `scripts/`, put their tests in **`tests/<name>/`** — never in the skill
    directory. Fixtures go in `tests/<name>/fixtures/`.
 6. Validate and scan (below).
-7. Generate the skill's diagram — a new skill without `docs/images/<name>.png` is incomplete:
-
-   ```bash
-   uv run python scripts/generate_skill_image.py --skill <name>
-   ```
 
 ```markdown
 ---
@@ -115,15 +108,6 @@ Use this skill when...
 5. Re-run any example, command, or script you touched, plus `tests/<name>/` if that suite exists.
    Suites check that `metadata.version` is present and quoted, not what it equals, so a version bump
    never needs a matching test edit.
-6. **Regenerate the diagram in the same change** whenever the edit changes what the skill does or
-   how its workflow runs — the picture is generated from `SKILL.md` and `references/`, so it goes
-   stale silently. The command overwrites `docs/images/<name>.png` in place:
-
-   ```bash
-   uv run python scripts/generate_skill_image.py --skill <name>
-   ```
-
-   A typo fix, a link repair, or a version bump alone does not need a new image.
 
 ## Frontmatter
 
@@ -253,9 +237,10 @@ uv run --with pytest python tests/run_all.py
 ```
 
 **One skill per pytest process.** Skills' `scripts/` directories own plain top-level module names —
-32 of them ship a `scripts/_common.py` — so collecting two skills into one interpreter resolves
-`_common` to whichever skill imported first and silently tests the wrong files. `tests/conftest.py`
-refuses such a session; `tests/run_all.py` forks per skill.
+`pytdc` already ships a `scripts/_common.py`, and names like `analyze_results.py` are the obvious
+choice for any number of skills — so collecting two skills into one interpreter resolves such a name
+to whichever skill imported first and silently tests the wrong files. `tests/conftest.py` refuses
+such a session; `tests/run_all.py` forks per skill.
 
 ### The repo-wide guard
 
@@ -294,25 +279,26 @@ DemoBlockTests = skill_contract.cli.demo_test_case(SKILL_ROOT, ("doe_designs.py"
   no hardcoded local paths, shell scripts valid. Run repo-wide by `tests/_meta`; do not duplicate
   these in a per-skill suite.
 - `cli` — the `--help` and demo-block cases above.
-- `office` / `schematic` — behaviour for files several skills ship byte-identical copies of (the
-  OOXML tree under docx/pptx/xlsx; the AI schematic generator under five skills). `tests/_meta`
-  separately fails if those copies drift apart, so fix them together.
+- `office` / `schematic` — behaviour for files that several skills ship byte-identical copies of.
+  No skill in this bundle ships either set; both modules are inherited from the wider
+  [scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) collection and
+  stay here so a skill moved in from it keeps its coverage. `tests/_meta` fails if such copies ever
+  drift apart, so they would have to be fixed together.
 
 ### One environment per skill
 
 The project environment deliberately does not carry the skills' scientific packages. Their upstream
-pins are mutually exclusive — `opentrons` needs `numpy<2`, `esm` caps `transformers` below the
-version the `transformers` skill targets, `geniml` and `spikeinterface` pin `zarr<3` against the
-`zarr-python` skill's 3.x, `bioservices` caps `lxml<6` against `matchms`, and `pytdc`, `molfeat`,
-`deepchem`, `histolab`, `vaex`, and `ete3` each need an interpreter older than 3.13. Installing them
-together forces every one of those skills to the losing side of a version fight.
+pins are mutually exclusive — `torchdrug` and `molfeat` both cap out at Python 3.10, `pytdc` and
+`deepchem` need 3.11, `esm` caps `transformers` below the release `diffdock`'s PyG stack expects,
+and `datamol`, `medchem`, and `rdkit` disagree on the RDKit build. Installing them together forces
+some of those skills to the losing side of a version fight.
 
 So `--isolated` builds a throwaway `uv` environment per skill instead, from
 [`tests/skill-requirements.toml`](tests/skill-requirements.toml):
 
 ```bash
-python tests/run_all.py --isolated                 # every suite, one env each
-python tests/run_all.py --isolated scanpy qiskit   # just these
+python tests/run_all.py --isolated                  # every suite, one env each
+python tests/run_all.py --isolated rdkit pytdc      # just these
 ```
 
 Each entry lists the packages that skill documents, plus an optional `python` when the skill cannot
@@ -325,45 +311,9 @@ without one. Use `packages = []` for skills whose bundled tooling is standard-li
 still get a clean environment, and CI runs exactly that set on every pull request. uv caches wheels
 globally, so repeat runs create each environment in milliseconds.
 
-The full `--isolated` sweep is not run in CI: it builds one environment per skill, several of which
-need a CUDA toolchain, a JDK, or a local MATLAB install. Run it before a release, or whenever you
-touch the shared contract.
-
-## Skill diagrams
-
-Every skill carries one generated workflow diagram at `docs/images/<skill-name>.png`. Creating a
-skill means creating its image; changing what a skill does means regenerating it. The image is not
-optional decoration — it is derived from the documentation, so an out-of-date one misrepresents the
-skill.
-
-`scripts/generate_skill_image.py` is local repository tooling, standard library only, and runs in
-two stages on one `OPENROUTER_API_KEY` (environment variable, repository `.env`, or `--api-key`):
-a text model reads `SKILL.md` plus everything under `references/` and a manifest of `scripts/` and
-`assets/`, distils it into a description of one diagram, then an image model draws it. Because it
-reads the whole skill, run it **after** the documentation is final, not before.
-
-```bash
-# one skill -> docs/images/<name>.png, replacing any existing image
-uv run python scripts/generate_skill_image.py --skill <name>
-
-# see which files feed the reader, and where the image lands — no API calls, nothing billed
-uv run python scripts/generate_skill_image.py --skill <name> --dry-run
-
-# read the skill and print the diagram prompt without drawing it
-uv run python scripts/generate_skill_image.py --skill <name> --prompt-only
-
-# several skills in one batch
-uv run python scripts/generate_skill_image.py --skill <name-a> <name-b>
-
-# backfill everything missing an image, six at a time
-uv run python scripts/generate_skill_image.py --all --skip-existing -j 6
-```
-
-Look at the result before committing it. Image models misspell labels and occasionally point an
-arrow at the wrong card; regenerate rather than ship a diagram whose text is wrong. `--quality low`
-makes iteration cheap while checking composition, but commit a `high` render. Both the art direction
-and the reader's instructions live at the top of the script — change them there rather than
-hand-tuning one skill's prompt, so the set stays visually consistent.
+The full `--isolated` sweep is not run in CI: it builds one environment per skill, and several of
+them pull torch, deepchem, or a CUDA toolchain a runner does not have. Run it before a release, or
+whenever you touch the shared contract.
 
 ## Before opening a PR
 
@@ -380,7 +330,5 @@ hand-tuning one skill's prompt, so the set stays visually consistent.
   leaked local path, and a drifted Agent Plugins manifest.
 - If the skill ships `scripts/`: a suite exists at `tests/<name>/`, a `[skills.<name>]` entry exists
   in `tests/skill-requirements.toml`, and `python tests/run_all.py --isolated <name>` passes.
-- `docs/images/<name>.png` exists, and was regenerated if the change altered what the skill does.
-  Its labels are spelled correctly and its arrows point where they should.
 - Examples and scripts are tested, or clearly marked illustrative.
 - No secrets or private data; scan results clean or explained in the PR.

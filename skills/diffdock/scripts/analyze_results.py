@@ -28,24 +28,26 @@ def parse_confidence_scores(results_dir):
         results_dir: Path to DiffDock results directory
 
     Returns:
-        dict: Dictionary mapping complex names to their predictions and scores
+        dict: Dictionary mapping complex names to their predictions and scores.
+            Poses sitting directly in `results_dir` are keyed 'single_complex';
+            poses in subdirectories are keyed by subdirectory name.
     """
     results = {}
     results_path = Path(results_dir)
 
-    # Check if this is a single complex or batch results
-    sdf_files = list(results_path.glob("*.sdf"))
+    # Both layouts are checked, never one or the other. A batch run that also
+    # leaves a stray .sdf at its root -- a rerun of one complex, a copied pose,
+    # a leftover from an interrupted job -- used to be read as a single complex,
+    # silently discarding every subdirectory in the batch.
+    for subdir in sorted(results_path.iterdir()):
+        if subdir.is_dir():
+            complex_results = parse_single_complex(subdir)
+            if complex_results:
+                results[subdir.name] = complex_results
 
-    if sdf_files:
-        # Single complex output
-        results['single_complex'] = parse_single_complex(results_path)
-    else:
-        # Batch output - multiple subdirectories
-        for subdir in results_path.iterdir():
-            if subdir.is_dir():
-                complex_results = parse_single_complex(subdir)
-                if complex_results:
-                    results[subdir.name] = complex_results
+    top_level = parse_single_complex(results_path)
+    if top_level:
+        results['single_complex'] = top_level
 
     return results
 

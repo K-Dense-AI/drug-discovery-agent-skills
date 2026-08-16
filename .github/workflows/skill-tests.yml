@@ -53,7 +53,7 @@ jobs:
         run: uv run --python 3.13 python -m pytest tests/_meta -q
 
   suites:
-    name: Standard-library-only skill suites
+    name: Skill suites
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: contract
@@ -69,14 +69,45 @@ jobs:
           cache-dependency-glob: uv.lock
           python-version: "3.13"
 
+      - name: Install dependencies
+        run: uv sync --python 3.13
+
+      # Every suite, in the project environment, one process each. The heavy
+      # scientific packages are absent here, so a suite that needs one degrades
+      # to skips via its module-scope `pytest.importorskip` -- but its
+      # standard-library tests still run, and a collection error, a syntax
+      # error, or a broken import fails the build. Without this step only the
+      # `packages = []` suites below ever execute in CI, which left five of
+      # seven suites running nowhere but a manual --isolated sweep.
+      - name: All suites, dependencies absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          # One name per line into an array: passing a space-joined string
+          # unquoted depends on IFS word-splitting, which run_all.py then sees
+          # as a single unknown suite name. `while read` rather than `mapfile`
+          # so the same snippet runs on the bash 3.2 that ships with macOS.
+          SUITES=()
+          while IFS= read -r suite; do SUITES+=("$suite"); done < <(python3 - <<'PY'
+          import pathlib
+          for path in sorted(pathlib.Path("tests").iterdir()):
+              if path.is_dir() and not path.name.startswith((".", "_")):
+                  print(path.name)
+          PY
+          )
+          printf 'Suites: %s\n' "${SUITES[*]}"
+          # Named explicitly so run_all.py does not re-run tests/_meta, which
+          # the `contract` job above already gates on.
+          uv run --python 3.13 python tests/run_all.py "${SUITES[@]}"
+
       # The skills whose bundled tooling is standard-library only -- read from
       # `packages = []` in tests/skill-requirements.toml, so the list needs no
-      # separate maintenance. Each still gets a clean throwaway environment.
+      # separate maintenance. Each gets a clean throwaway environment, which is
+      # what proves the entry is correct.
       #
       # The full `--isolated` sweep across every skill is deliberately NOT run
-      # here: it builds ~100 environments including torch, qiskit, and scanpy,
-      # and several skills need CUDA, a JDK, or a MATLAB install that CI does
-      # not have. Run it locally or on a schedule:
+      # here: it builds one environment per skill including torch and deepchem,
+      # and some need a CUDA toolchain CI does not have. Run it locally:
       #     python tests/run_all.py --isolated
       - name: Select standard-library-only skills
         id: select
@@ -99,7 +130,7 @@ jobs:
           echo "Selected: $SKILLS"
           echo "skills=$SKILLS" >> "$GITHUB_OUTPUT"
 
-      - name: Run suites, one environment each
+      - name: Run standard-library-only suites, one environment each
         # An empty selection means no standard-library-only skills in this
         # repo; running run_all.py with no names would sweep every suite.
         if: steps.select.outputs.skills != ''

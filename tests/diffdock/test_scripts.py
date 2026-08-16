@@ -185,6 +185,24 @@ class ComplexParsingTests(TemporaryDirectoryTestCase):
         # The subdirectory with no poses is omitted rather than listed empty.
         self.assertEqual(sorted(results), ["complex_a", "complex_b"])
 
+    def test_a_stray_pose_at_the_batch_root_does_not_hide_the_batch(self) -> None:
+        # A rerun, a copied pose, or an interrupted job can leave an .sdf beside
+        # the per-complex directories. Treating that as a single-complex run
+        # discarded the entire batch.
+        self.write(self.root / "complex_a", "rank1_confidence0.5.sdf")
+        self.write(self.root / "complex_b", "rank1_confidence-1.0.sdf")
+        self.write(self.root, "rank1_confidence0.9.sdf")
+        results = analyze_results.parse_confidence_scores(self.root)
+        self.assertEqual(
+            sorted(results), ["complex_a", "complex_b", "single_complex"]
+        )
+        self.assertEqual(
+            results["single_complex"]["predictions"][0]["confidence"], 0.9
+        )
+
+    def test_an_empty_directory_yields_no_complexes(self) -> None:
+        self.assertEqual(analyze_results.parse_confidence_scores(self.root), {})
+
 
 class TopPredictionTests(unittest.TestCase):
     @staticmethod

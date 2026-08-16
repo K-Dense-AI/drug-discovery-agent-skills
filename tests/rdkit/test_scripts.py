@@ -16,6 +16,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import pytest
 
@@ -248,6 +249,53 @@ class FingerprintTests(unittest.TestCase):
     def test_the_bit_size_is_honoured(self) -> None:
         small = similarity_search.generate_fingerprint(self.aspirin, "morgan", n_bits=512)
         self.assertEqual(len(small), 512)
+
+
+class FingerprinterTests(unittest.TestCase):
+    """`make_fingerprinter` builds the generator once and reuses it."""
+
+    def setUp(self) -> None:
+        self.aspirin = Chem.MolFromSmiles(ASPIRIN)
+        self.caffeine = Chem.MolFromSmiles(CAFFEINE)
+
+    def test_a_reused_fingerprinter_matches_the_one_off_helper(self) -> None:
+        for method in similarity_search.FINGERPRINT_METHODS:
+            with self.subTest(method=method):
+                reused = similarity_search.make_fingerprinter(method)
+                for mol in (self.aspirin, self.caffeine):
+                    self.assertEqual(
+                        list(reused(mol)),
+                        list(similarity_search.generate_fingerprint(mol, method)),
+                    )
+
+    def test_one_fingerprinter_serves_many_molecules(self) -> None:
+        fingerprint = similarity_search.make_fingerprinter("morgan", n_bits=512)
+        first, second = fingerprint(self.aspirin), fingerprint(self.caffeine)
+        self.assertEqual(len(first), 512)
+        self.assertEqual(len(second), 512)
+        self.assertNotEqual(list(first), list(second))
+
+    def test_a_null_molecule_yields_no_fingerprint(self) -> None:
+        self.assertIsNone(similarity_search.make_fingerprinter("morgan")(None))
+
+    def test_an_unknown_method_is_refused_when_the_fingerprinter_is_built(self) -> None:
+        with self.assertRaisesRegex(ValueError, "Unknown fingerprint method: ecfp99"):
+            similarity_search.make_fingerprinter("ecfp99")
+
+    def test_a_search_builds_exactly_one_generator(self) -> None:
+        # The regression this refactor exists for: the generator used to be
+        # rebuilt inside the per-molecule loop.
+        database = [
+            {"index": i, "name": f"m{i}", "smiles": smiles, "mol": Chem.MolFromSmiles(smiles)}
+            for i, smiles in enumerate((ASPIRIN, CAFFEINE, BENZENE), 1)
+        ]
+        with mock.patch.object(
+            similarity_search,
+            "make_fingerprinter",
+            wraps=similarity_search.make_fingerprinter,
+        ) as builder:
+            similarity_search.similarity_search(self.aspirin, database, threshold=0.0)
+        self.assertEqual(builder.call_count, 1)
 
 
 class MoleculeLoadingTests(unittest.TestCase):

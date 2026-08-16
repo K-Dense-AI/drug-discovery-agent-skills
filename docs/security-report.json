@@ -1,0 +1,2076 @@
+{
+  "generated": "2026-08-16T16:33:22+00:00",
+  "run": {
+    "scanner_version": "2.0.13",
+    "model": "claude-opus-5",
+    "workers": 8,
+    "skills_rescanned": 17,
+    "skills_reused": 0,
+    "wall_seconds": 65.7,
+    "full_scan": true,
+    "cache_invalidated_because": "no previous report",
+    "last_full_scan": "2026-08-16T16:33:22+00:00"
+  },
+  "totals": {
+    "skills_scanned": 17,
+    "findings": 57,
+    "critical": 0,
+    "high": 1,
+    "medium": 9,
+    "low": 46,
+    "info": 1,
+    "safe_skills": 17
+  },
+  "skills_skipped": [],
+  "cross_skill_findings": [
+    {
+      "id": "CROSS_SKILL_RELAY_86f5f707",
+      "rule_id": "CROSS_SKILL_DATA_RELAY",
+      "severity": "HIGH",
+      "category": "data_exfiltration",
+      "title": "Potential data relay attack pattern detected",
+      "description": "Skills appear to form a data relay chain. Collectors (adaptyv, datamol, deepchem, diffdock, esm, medchem, molfeat, ncats-arax, primekg, pytdc, rdkit, rowan, tamarind, torchdrug) access sensitive data while exfiltrators (adaptyv, ncats-arax, rowan, tamarind) send data to external destinations. This pattern may indicate a coordinated attack.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills together to ensure they are not collaborating to exfiltrate sensitive data. Consider disabling one or both skills.",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collectors": [
+          "adaptyv",
+          "datamol",
+          "deepchem",
+          "diffdock",
+          "esm",
+          "medchem",
+          "molfeat",
+          "ncats-arax",
+          "primekg",
+          "pytdc",
+          "rdkit",
+          "rowan",
+          "tamarind",
+          "torchdrug"
+        ],
+        "exfiltrators": [
+          "adaptyv",
+          "ncats-arax",
+          "rowan",
+          "tamarind"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_ed780f51",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'glycoengineering' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: sequences, design, protein. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "glycoengineering",
+        "sender": "adaptyv",
+        "shared_context": [
+          "sequences",
+          "design",
+          "protein"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_743a60ca",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'glycoengineering' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: sequences, access, design, antibody, x, protein, tools. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "glycoengineering",
+        "sender": "tamarind",
+        "shared_context": [
+          "sequences",
+          "access",
+          "design",
+          "antibody",
+          "x",
+          "protein",
+          "tools"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_c65b5d08",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'rdkit' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: use, molecular, generation. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "rdkit",
+        "sender": "tamarind",
+        "shared_context": [
+          "use",
+          "molecular",
+          "generation"
+        ]
+      }
+    }
+  ],
+  "skills": [
+    {
+      "name": "adaptyv",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/adaptyv",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 33.35,
+      "content_hash": "d227c029a4407762e673f632c079205ea1d7b093c8d9071d743b08df6a549769",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The `adaptyv` skill is a documentation-only reference for the Adaptyv Bio Foundry REST API and Python SDK. It contains no script files, no obfuscated content, no eval/exec or shell-injection patterns, and no exfiltration of local data: all network endpoints referenced belong to the vendor's own documented API domains (docs.adaptyvbio.com, foundry-api-public.adaptyvbio.com). Credential guidance is sound (environment variables, no hardcoding, no committing tokens) and no secrets are embedded. The activation description is keyword-rich but accurately scoped to the vendor's product, so it does not constitute capability inflation. Residual issues are minor hygiene concerns: an unpinned git-based dependency install, a documented auto-accept-quote automation pattern that could incur real costs without user confirmation, guidance to load .env files, and several dangling file references. Overall the skill appears benign.",
+        "llm_primary_threats": [
+          "Unpinned GitHub dependency (supply-chain hygiene)",
+          "Autonomous financial commitment via auto-accept-quote pattern",
+          "Broken/missing referenced files"
+        ]
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 2,
+        "analyzed_files": 2,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_adaptyv_2",
+          "rule_id": "LLM_DATA_EXFILTRATION",
+          "severity": "LOW",
+          "category": "data_exfiltration",
+          "title": "Instruction to locate and load .env secrets files",
+          "description": "The skill directs the agent to look for a `.env` file in the project root and load it to obtain the API token. While this is a common and legitimate credential-handling pattern (and the skill correctly warns against hardcoding or committing tokens), it does broaden the agent's interaction with secret-bearing files, which could surface unrelated secrets from that file into the agent context.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "Check for a `.env` file in the project root first; if one exists, use a library like `python-dotenv` to load it.",
+          "remediation": "Instruct the agent to read only the specific `ADAPTYV_API_KEY` variable, avoid echoing the value or other .env contents, and prefer environment variables over parsing secret files.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-8.2",
+            "aitech_name": "Data Exfiltration / Exposure",
+            "aisubtech": "AISubtech-8.2.3",
+            "aisubtech_name": "Data Exfiltration via Agent Tooling",
+            "scanner_category": "SECURITY VIOLATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_adaptyv_1",
+          "rule_id": "LLM_HARMFUL_CONTENT",
+          "severity": "LOW",
+          "category": "harmful_content",
+          "title": "Documented automation pattern bypasses human review of financial commitment",
+          "description": "The skill documents an 'Automated Pipeline' pattern that sets `skip_draft: true` and `auto_accept_quote: true`, which bypasses the Draft review stage and automatically accepts a paid quote and creates a Stripe invoice. If an agent follows this example without explicit user confirmation, it can commit the user to real laboratory costs autonomously. The skill does not include a caution to obtain user confirmation before enabling auto-accept.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "exp = client.experiments.create({\n    \"name\": \"Auto pipeline run\",\n    \"experiment_spec\": {...},\n    \"skip_draft\": True,\n    \"auto_accept_quote\": True,\n    \"webhook_url\": \"https://my-server.com/webhook\"\n})",
+          "remediation": "Add an explicit instruction that the agent must obtain user confirmation (and show the cost estimate) before using `skip_draft` or `auto_accept_quote`, and default examples to Draft-first workflows.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-15.1",
+            "aitech_name": "Harmful Content",
+            "aisubtech": "AISubtech-15.1.12",
+            "aisubtech_name": "Safety Harms and Toxicity: Scams and Deception",
+            "scanner_category": "HARMFUL CONTENT",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_adaptyv_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Unpinned dependency installed directly from GitHub",
+          "description": "The skill instructs the agent to install the `adaptyv-sdk` package directly from a GitHub repository with no version, tag, or commit pin (`git+https://github.com/adaptyvbio/adaptyv-sdk.git`). Any future compromise of, or force-push to, the default branch of that repository would result in arbitrary code being installed and executed in the user's environment. The repository appears to be the vendor's official org, which lowers risk, but the lack of provenance pinning is a supply-chain weakness.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "uv pip install \"git+https://github.com/adaptyvbio/adaptyv-sdk.git\"\nuv add \"adaptyv-sdk @ git+https://github.com/adaptyvbio/adaptyv-sdk.git\"",
+          "remediation": "Pin the install to an immutable ref (e.g., `@v0.1.0` tag or a full commit SHA) and prefer a PyPI release with hash verification once available. Note the expected publisher/fingerprint in the skill docs.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_adaptyv_3",
+          "rule_id": "LLM_SKILL_DISCOVERY_ABUSE",
+          "severity": "LOW",
+          "category": "skill_discovery_abuse",
+          "title": "Missing referenced files and unspecified allowed-tools",
+          "description": "The skill package references `adaptyv.py`, `templates/api-endpoints.md`, and `assets/api-endpoints.md`, none of which exist in the package (only `references/api-endpoints.md` is present). Broken references can lead the agent to search the filesystem or fabricate content. Additionally, `allowed-tools` is not declared (optional per spec, informational only) for a skill that implies network/HTTP and package-install activity.",
+          "file_path": "references/api-endpoints.md",
+          "line_number": null,
+          "snippet": "Referenced File: adaptyv.py (not found); templates/api-endpoints.md (not found); assets/api-endpoints.md (not found)",
+          "remediation": "Remove or fix dangling file references and declare `allowed-tools` explicitly (e.g., Read, Bash/Python) so tool usage matches documented behavior.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-4.3",
+            "aitech_name": "Protocol Manipulation",
+            "aisubtech": "AISubtech-4.3.5",
+            "aisubtech_name": "Capability Inflation",
+            "scanner_category": "PROTOCOL MANIPULATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "datamol",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/datamol",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 26.24,
+      "content_hash": "754e0f334709d236a83e3c67776b3f77b6182299791c4877bc98e1de87d5ab52",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The datamol skill is a documentation-only cheminformatics wrapper guide. It contains no executable scripts (no .py or .sh files bundled), and all four resolvable reference files (core_api.md, core_workflows.md, io_module.md, conformers_module.md, descriptors_viz.md, fragments_scaffolds.md, reactions_data.md, workflow_patterns.md) contain only legitimate RDKit/datamol API documentation and example code. No prompt injection, instruction override, concealment directives, role redefinition, or system-prompt extraction attempts were found in any language. No hardcoded secrets, no eval/exec/os.system patterns, no reverse shells, no obfuscation or encoded payloads, no external URL fetching of instructions (only documentation links to docs.datamol.io, rdkit.org, and the official GitHub repo). The description accurately matches the content, and declared allowed-tools (Read, Write, Edit, Bash) are consistent with the stated need to install packages and read/write molecular files. Only minor, low-severity hygiene issues were identified: unpinned pip installs, documentation of cloud credential env vars with remote-write examples (accompanied by explicit user-confirmation guardrails), and several referenced file paths that do not exist in the package. Overall risk: LOW; the skill appears benign.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 9,
+        "analyzed_files": 9,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_datamol_1",
+          "rule_id": "LLM_DATA_EXFILTRATION",
+          "severity": "LOW",
+          "category": "data_exfiltration",
+          "title": "Documentation of cloud credential environment variables and remote write paths",
+          "description": "Reference documentation describes cloud storage I/O via fsspec, naming credential environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, GOOGLE_APPLICATION_CREDENTIALS) and showing writes to remote S3/GCS destinations. This is legitimate library documentation for datamol and includes explicit mitigations (\"Only use cloud paths when the user explicitly requests them\", \"Confirm the destination before writing\", \"does not collect or transmit environment variables to third-party endpoints\", \"Scope credential access to the named provider variables only\"). No code reads or transmits these credentials. Flagged informationally only: any remote-write pattern is a potential data egress channel if the agent is later given an attacker-controlled destination.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "dm.save_df(df, \"s3://bucket/output.parquet\")  # confirm destination first\nCloud backends read credentials from the standard provider environment (for example `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` ...)",
+          "remediation": "Keep the existing user-confirmation requirement for any remote read/write; avoid enumerating credential variable names in guidance and never allow destination URLs sourced from untrusted files or model-generated content without explicit user approval.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-8.2",
+            "aitech_name": "Data Exfiltration / Exposure",
+            "aisubtech": "AISubtech-8.2.3",
+            "aisubtech_name": "Data Exfiltration via Agent Tooling",
+            "scanner_category": "SECURITY VIOLATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_datamol_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Unpinned dependency installation instructions",
+          "description": "The skill instructs the agent to install packages via `uv pip install datamol`, `s3fs`, and `gcsfs` without version pinning or hash verification. While these are legitimate, well-known PyPI packages (datamol-io project), unpinned installs create a minor supply-chain exposure if a registry or package is compromised. No GitHub/unknown-repo installs or typosquatted names were detected.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "uv pip install datamol\nuv pip install s3fs   # AWS S3\nuv pip install gcsfs  # Google Cloud Storage",
+          "remediation": "Pin versions explicitly (e.g., `uv pip install datamol==0.12.5`) and prompt the user for confirmation before installing packages into their environment.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_datamol_2",
+          "rule_id": "LLM_SKILL_DISCOVERY_ABUSE",
+          "severity": "LOW",
+          "category": "skill_discovery_abuse",
+          "title": "Missing/unresolved referenced files (broken provenance surface)",
+          "description": "The extracted reference list includes many paths that do not exist in the package (assets/*.md, templates/*.md, plus 'sklearn.py' and 'datamol.py'). The SKILL.md body explicitly clarifies that scipy/scikit-learn are PyPI packages and not bundled scripts, and the 'sklearn.py'/'datamol.py' entries appear to be artifacts of import-statement parsing rather than real files. No malicious content is present, but unresolved reference paths could allow a later-added file at those paths to be loaded implicitly (indirect instruction surface).",
+          "file_path": "references/core_api.md",
+          "line_number": null,
+          "snippet": "Referenced File: assets/core_api.md (not found)\nReferenced File: sklearn.py (not found)\nReferenced File: datamol.py (not found)",
+          "remediation": "Ensure the reference list matches only files actually bundled under references/, and remove/ignore ambiguous names that collide with third-party module names to avoid accidental local file shadowing.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-4.3",
+            "aitech_name": "Protocol Manipulation",
+            "aisubtech": "AISubtech-4.3.5",
+            "aisubtech_name": "Capability Inflation",
+            "scanner_category": "PROTOCOL MANIPULATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "deepchem",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/deepchem",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 33.63,
+      "content_hash": "bcbb08d4d7d98c0870e98f8278da2f1acda461c22c7b80c829629b8500db629e",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The deepchem skill appears benign and consistent with its stated purpose. SKILL.md contains only legitimate technical documentation for molecular machine learning \u2014 there are no prompt-injection attempts, instruction overrides, concealment directives, or role redefinitions in any language. The three bundled Python scripts (predict_solubility.py, graph_neural_network.py, transfer_learning.py) use only argparse plus the deepchem API: no eval/exec, no subprocess/os.system, no filesystem traversal, no reading of credential paths (~/.aws, ~/.ssh), no environment-variable harvesting, no hardcoded secrets, no outbound POST/exfiltration endpoints, and no obfuscated or encoded payloads. File access is limited to user-specified CSV paths passed as explicit CLI arguments, and all referenced documentation files are internal to the skill package (several referenced paths under assets/ and templates/ simply do not exist, which is a harmless documentation artifact). Declared allowed-tools (Read, Write, Edit, Bash) are consistent with training scripts that write model directories such as ./grover_pretrained. Remaining findings are low-severity hygiene issues: unpinned/nightly dependency installation guidance, automatic download of third-party pretrained checkpoints, undisclosed network egress in the compatibility metadata, and unbounded default training compute.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 8,
+        "analyzed_files": 8,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_deepchem_2",
+          "rule_id": "LLM_SKILL_DISCOVERY_ABUSE",
+          "severity": "LOW",
+          "category": "skill_discovery_abuse",
+          "title": "Undeclared network access despite compatibility metadata omitting it",
+          "description": "The skill's scripts perform network operations (MoleculeNet dataset downloads via dc.molnet.load_* and Hugging Face model downloads) and the instructions include pip/conda installation commands, but the `compatibility` field only mentions Python/backend requirements and does not disclose outbound network usage. This is a minor manifest/behavior transparency gap rather than deceptive capability inflation; the description accurately reflects the skill's molecular-ML purpose.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "compatibility: Requires Python 3.7\u20133.11 ... RDKit is a core dependency.\n(scripts call dc.molnet.load_tox21(...) and dc.models.HuggingFaceModel(model='seyonec/...'), which download remote data/weights)",
+          "remediation": "Explicitly state in the manifest/compatibility notes that the skill requires outbound network access to download benchmark datasets and pretrained model weights.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-4.3",
+            "aitech_name": "Protocol Manipulation",
+            "aisubtech": "AISubtech-4.3.5",
+            "aisubtech_name": "Capability Inflation",
+            "scanner_category": "PROTOCOL MANIPULATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_deepchem_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Unpinned dependency installation instructions including nightly pre-release builds",
+          "description": "SKILL.md instructs the agent to install packages via `uv pip install deepchem`, `uv pip install 'deepchem[torch]'`, `conda install \"mkl<2025\"`, and even nightly pre-release builds via `uv pip install --pre deepchem` without any version pinning. Unpinned/pre-release installs expose the environment to supply-chain risk (malicious or broken package versions) and non-reproducible builds. This is standard documentation practice for ML libraries, so risk is low, but the `--pre` nightly recommendation is notable.",
+          "file_path": "SKILL.md",
+          "line_number": null,
+          "snippet": "uv pip install deepchem\nuv pip install 'deepchem[torch]'\nNightly builds: `uv pip install --pre deepchem`",
+          "remediation": "Pin explicit versions (e.g. `deepchem==2.8.0`) consistent with the stated version note, and avoid recommending nightly `--pre` builds by default. Require explicit user confirmation before any package installation.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_deepchem_3",
+          "rule_id": "LLM_RESOURCE_ABUSE",
+          "severity": "LOW",
+          "category": "resource_abuse",
+          "title": "Long-running compute-intensive training defaults without resource guardrails",
+          "description": "Scripts default to 50 epochs of GNN/regressor training (and 10-20 epochs of transformer fine-tuning) on datasets such as Tox21/HIV, which can consume substantial CPU/GPU time and memory when invoked by an agent. There is no timeout, sample cap, or user confirmation prompt. This is expected behavior for an ML training skill and is user-parameterized (--epochs), so severity is low.",
+          "file_path": "scripts/graph_neural_network.py",
+          "line_number": null,
+          "snippet": "parser.add_argument('--epochs', type=int, default=50, help='Number of training epochs')\nmodel.fit(train, nb_epoch=50)",
+          "remediation": "Lower default epoch counts for agent-driven runs, add optional max-runtime/max-sample limits, and note expected resource cost in the skill instructions so the agent can confirm with the user before long jobs.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-13.1",
+            "aitech_name": "Disruption of Availability",
+            "aisubtech": "AISubtech-13.1.1",
+            "aisubtech_name": null,
+            "scanner_category": "RESOURCE ABUSE",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_deepchem_1",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Automatic download and execution of remote pretrained model weights",
+          "description": "scripts/transfer_learning.py loads third-party pretrained checkpoints from Hugging Face Hub identifiers ('seyonec/ChemBERTa-zinc-base-v1', 'ibm/MoLFormer-XL-both-10pct') and GROVER weights, which triggers network downloads of remote model artifacts on first run. Remote model artifacts (especially pickle-based checkpoints) are a recognized supply-chain vector. The identifiers are well-known public models and are hardcoded (not user-controlled), so the risk is limited.",
+          "file_path": "scripts/transfer_learning.py",
+          "line_number": null,
+          "snippet": "'model_id': 'seyonec/ChemBERTa-zinc-base-v1'\n'model_id': 'ibm/MoLFormer-XL-both-10pct'\nprint(\"(This may take a while on the first run as the model is downloaded)\")",
+          "remediation": "Document the network egress requirement, pin model revisions/commit hashes, and prefer safetensors-format weights to avoid arbitrary code execution during checkpoint deserialization.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "depmap",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/depmap",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 22.75,
+      "content_hash": "0b1ee49cfc525fd2b5e5a5ad9d13ee0722b99bad034a9bb533d5308f9cf93b10",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The depmap skill is a documentation-oriented bioinformatics reference for querying the Broad Institute's Cancer Dependency Map. It contains no script files, no prompt-injection or instruction-override language, no concealment directives, no credential or environment-variable access, no eval/exec/os.system usage, no obfuscation or encoded payloads, and no hardcoded secrets. All network endpoints referenced (depmap.org, figshare.com, github.com/broadinstitute) are legitimate and consistent with the stated purpose, and the data flow is strictly inbound (download public datasets, analyze locally) with no outbound transmission of user data. The name and description accurately match the documented behavior; there is no capability inflation or keyword baiting beyond legitimate domain terminology. Only minor hygiene issues were identified: a generic URL-to-disk download helper without domain/path validation, missing optional allowed-tools/compatibility metadata despite network and file-write behavior, and an unbounded O(n) correlation loop. The single 'referenced file' flagged (scipy.py) is a false positive from an import statement, not an actual bundled file. Overall risk: LOW.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 2,
+        "analyzed_files": 2,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_depmap_0",
+          "rule_id": "LLM_DATA_EXFILTRATION",
+          "severity": "LOW",
+          "category": "data_exfiltration",
+          "title": "Downloading and writing remote data files to local disk without validation",
+          "description": "The skill includes example code that downloads arbitrary URLs via requests and streams the content directly to a local file path (download_depmap_data). While the intended sources are legitimate (depmap.org, figshare.com), the helper accepts any URL and output path, and the FILES dict contains a placeholder URL. If an agent substitutes an untrusted URL, this becomes an unvalidated remote-file write. No exfiltration of local data occurs; the flow is inbound only.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "def download_depmap_data(url, output_path):\n    response = requests.get(url, stream=True)\n    with open(output_path, 'wb') as f:\n        for chunk in response.iter_content(chunk_size=8192):\n            f.write(chunk)",
+          "remediation": "Restrict downloads to an allowlist of trusted domains (depmap.org, figshare.com), validate/normalize output paths to a working directory, verify checksums of downloaded datasets, and require user confirmation before writing files.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-8.2",
+            "aitech_name": "Data Exfiltration / Exposure",
+            "aisubtech": "AISubtech-8.2.3",
+            "aisubtech_name": "Data Exfiltration via Agent Tooling",
+            "scanner_category": "SECURITY VIOLATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_depmap_2",
+          "rule_id": "LLM_RESOURCE_ABUSE",
+          "severity": "LOW",
+          "category": "resource_abuse",
+          "title": "Unbounded full-matrix correlation loop can exhaust compute/memory",
+          "description": "The co_essentiality helper iterates over every column of the DepMap gene-effect matrix (~18,000 genes x ~1,100 cell lines) performing pairwise index intersections and correlations in pure Python. On the full dataset this is a long-running, memory-heavy operation with no cap, timeout, or progress bound. This appears to be inefficiency rather than intentional DoS.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "for gene in gene_effect_df.columns:\n    ...\n    common = target_scores.index.intersection(other_scores.index)\n    r = target_scores[common].corr(other_scores[common])",
+          "remediation": "Use vectorized pandas/numpy correlation (df.corrwith) and add limits or timeouts on dataset size for interactive use.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-13.1",
+            "aitech_name": "Disruption of Availability",
+            "aisubtech": "AISubtech-13.1.1",
+            "aisubtech_name": null,
+            "scanner_category": "RESOURCE ABUSE",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_depmap_1",
+          "rule_id": "LLM_UNAUTHORIZED_TOOL_USE",
+          "severity": "LOW",
+          "category": "unauthorized_tool_use",
+          "title": "Missing allowed-tools and compatibility metadata while performing network and file operations",
+          "description": "The manifest does not declare allowed-tools or compatibility, yet the documented workflows require Python execution, outbound HTTP requests, and local file writes. This is informational only (allowed-tools is optional per spec), but the absence means the network/file-write capability is not surfaced to the user or enforced by the agent runtime.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "- allowed-tools: Not specified\n- compatibility: Not specified",
+          "remediation": "Declare allowed-tools (e.g., [Read, Write, Bash, Python]) and note that the skill performs outbound network requests to depmap.org/figshare.com.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-12.1",
+            "aitech_name": "Tool Exploitation",
+            "aisubtech": "AISubtech-12.1.2",
+            "aisubtech_name": "Tool Poisoning",
+            "scanner_category": "SUSPICIOUS CODE EXECUTION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "diffdock",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/diffdock",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 25.17,
+      "content_hash": "269b5a2e485eae39180abbe2be3516d626000b23ddda9624af308e4aec8aaaca",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The diffdock skill is a legitimate scientific-computing helper for the DiffDock molecular docking model. The manifest description accurately matches behavior, and all three bundled Python scripts (analyze_results.py, setup_check.py, prepare_batch_csv.py) perform only local, in-scope operations: globbing SDF filenames in a user-supplied results directory, regex-parsing confidence values, exporting a CSV, validating a batch CSV with pandas/RDKit, and importing packages to report versions. There is no network activity, no credential or environment-variable harvesting, no eval/exec/os.system, no subprocess invocation, no obfuscation or encoded payloads, and no file writes outside user-specified output paths. The SKILL.md body contains no prompt injection, role redefinition, concealment directives, or transitive-trust instructions; all 'Read the reference file' directives point to files bundled inside the skill package, which is expected behavior. Declared allowed-tools (Read, Write, Edit, Bash, Glob, Grep) are consistent with the documented workflows (running inference commands, creating CSV/config files, scanning result directories). Bash command examples embed user-supplied paths in shell loops (e.g., the GNINA rescoring loop), but the values are quoted and are user-authored rather than fetched from untrusted external sources, so this is not a meaningful injection vector. Only two low-severity hygiene issues were identified: unpinned upstream repository/Docker/pip dependencies, and several documentation paths referenced in SKILL.md that are absent from the package. Overall the skill appears benign and appropriately scoped.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 9,
+        "analyzed_files": 9,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_diffdock_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Unpinned external repository and Docker image installation instructions",
+          "description": "The SKILL.md instructs cloning the upstream DiffDock repository from GitHub (`git clone https://github.com/gcorso/DiffDock.git`) and pulling a Docker image (`docker pull rbgcsail/diffdock`) without commit pins or image digests. The skill also suggests `uv pip install fair-esm` without a version pin. While these are the legitimate, well-known upstream sources for DiffDock, unpinned fetch-and-execute of third-party code means the executed content can change over time and is not verifiable. This is a common practice in scientific tooling and is informational rather than malicious.",
+          "file_path": "SKILL.md",
+          "line_number": null,
+          "snippet": "git clone https://github.com/gcorso/DiffDock.git\nconda env create --file environment.yml\ndocker pull rbgcsail/diffdock\n... Install with: uv pip install fair-esm",
+          "remediation": "Pin a specific release tag/commit for the repository, a digest for the Docker image, and exact versions for pip packages (e.g., `fair-esm==2.0.0`) so the executed dependency set is reproducible and verifiable.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_diffdock_1",
+          "rule_id": "LLM_HARMFUL_CONTENT",
+          "severity": "LOW",
+          "category": "harmful_content",
+          "title": "Several referenced files are missing from the package",
+          "description": "The instructions reference documentation/asset paths that do not exist in the package (e.g., references/custom_inference_config.yaml, assets/parameters_reference.md, templates/*.md, assets/confidence_and_limitations.md, references/workflows_examples.md). Missing referenced files are a documentation-consistency defect: the agent may attempt reads that fail, or could be induced to search for and read same-named files from elsewhere in the working tree, which would be untrusted content. No malicious content is implied.",
+          "file_path": "references/workflows_examples.md",
+          "line_number": null,
+          "snippet": "Referenced File: references/custom_inference_config.yaml (not found)\nReferenced File: assets/parameters_reference.md (not found)\nReferenced File: templates/parameters_reference.md (not found)",
+          "remediation": "Correct the referenced paths to match the files actually bundled (references/parameters_reference.md, references/confidence_and_limitations.md, assets/custom_inference_config.yaml, assets/batch_template.csv) and either ship or remove references to workflows_examples.md and the templates/ paths.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-15.1",
+            "aitech_name": "Harmful Content",
+            "aisubtech": "AISubtech-15.1.12",
+            "aisubtech_name": "Safety Harms and Toxicity: Scams and Deception",
+            "scanner_category": "HARMFUL CONTENT",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "esm",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/esm",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 33.75,
+      "content_hash": "a57d441f9fe3a672ea262e9e2728d9ddec7fdc7354bae12ca969e97a874b0811",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "This is a documentation-oriented skill for the EvolutionaryScale ESM protein-modeling SDK (ESM3, ESMC, Forge/Biohub hosted inference, ESMFold2). It contains no executable script files \u2014 only SKILL.md plus four bundled reference markdown files with illustrative Python/bash snippets. No prompt injection, role redefinition, concealment directives, or system-prompt-extraction attempts were found in any language. No data exfiltration, credential harvesting, hardcoded secrets, obfuscation/encoded payloads, eval/exec, os.system, reverse shells, or filesystem traversal beyond user-specified inputs. Network activity is limited to official, hardcoded, documented hosts (forge.evolutionaryscale.ai, biohub.ai), and the docs explicitly caution against taking API endpoint hosts from untrusted input and against hardcoding tokens \u2014 security-positive guidance. The name and description accurately match the actual content (no capability inflation or keyword baiting; the description is narrowly scoped to the `esm` SDK). Several referenced files under assets/ and templates/ are missing, and an `esm.py` reference resolves to no file \u2014 these are documentation/packaging hygiene issues rather than security threats, though missing referenced files should be verified so the agent does not attempt to fetch them from elsewhere. Remaining findings are low-severity supply-chain and secret-handling hygiene items. Overall risk: LOW.",
+        "llm_primary_threats": [
+          "Unverified GitHub install source (supply-chain provenance)",
+          "Local .env secret-file read guidance",
+          "Missing optional manifest metadata (allowed-tools/compatibility)",
+          "Dual-use protein design content (mitigated by responsible-use guidance)",
+          "Broken/missing referenced file paths (documentation hygiene)"
+        ]
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 6,
+        "analyzed_files": 6,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_esm_1",
+          "rule_id": "LLM_DATA_EXFILTRATION",
+          "severity": "LOW",
+          "category": "data_exfiltration",
+          "title": "Guidance to read API key from local .env file",
+          "description": "The Authentication section instructs the agent to check a local `.env` file for `ESM_API_KEY` if the environment variable is unset. Reading local secret files is a sensitive operation that could lead to secret exposure in transcripts or logs. Mitigating factors: the instruction is explicitly scoped to only `ESM_API_KEY` ('do not load unrelated secrets'), explicitly forbids hardcoding tokens, and there is no network transmission of the secret to any non-official endpoint. No hardcoded credentials are present anywhere in the package.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "2. If not, check a local `.env` for `ESM_API_KEY` only (do not load unrelated secrets).",
+          "remediation": "Prefer requiring the user to export the environment variable or use a secrets manager rather than having the agent read `.env` files; if read, never echo the value into output.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-8.2",
+            "aitech_name": "Data Exfiltration / Exposure",
+            "aisubtech": "AISubtech-8.2.3",
+            "aisubtech_name": "Data Exfiltration via Agent Tooling",
+            "scanner_category": "SECURITY VIOLATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_esm_3",
+          "rule_id": "LLM_HARMFUL_CONTENT",
+          "severity": "LOW",
+          "category": "harmful_content",
+          "title": "Dual-use protein design content (documentation-only, with responsible-use guidance)",
+          "description": "The skill instructs generative protein design, inverse folding, and function-conditioned generation, which is inherently dual-use biological content. However, the material is standard published ESM/EvolutionaryScale API documentation, contains no guidance toward toxin/pathogen design, and includes an explicit Responsible Use section pointing to the Responsible Biodesign Framework and Biohub Acceptable Use Policy, plus repeated caveats that outputs are hypotheses requiring experimental validation. Recorded for awareness only; no misuse-facilitating content was found.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "Follow the Responsible Biodesign Framework (https://responsiblebiodesign.ai/) and Biohub Acceptable Use Policy ... Consider biosafety and ethical implications of protein designs before experimental validation.",
+          "remediation": "No action required; retain the responsible-use guidance and biosafety caveats.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-15.1",
+            "aitech_name": "Harmful Content",
+            "aisubtech": "AISubtech-15.1.12",
+            "aisubtech_name": "Safety Harms and Toxicity: Scams and Deception",
+            "scanner_category": "HARMFUL CONTENT",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_esm_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Installation guidance points to an unverified GitHub repository for the `esm` SDK",
+          "description": "The skill's reference documentation instructs installing the `esm` package from `git+https://github.com/Biohub/esm.git`. The canonical upstream repository for the ESM SDK is `evolutionaryscale/esm`; the `Biohub/esm` org/repo referenced here is not a well-known provenance-verified source and could be a typosquat or repo-transfer confusion. Installing directly from a git source executes arbitrary setup code from that repository. Mitigating factor: the doc explicitly warns against floating-branch installs and recommends pinning a full 40-character commit SHA and reviewing the release before installing.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "uv pip install \"esm@git+https://github.com/Biohub/esm.git@<full-40-character-commit-sha>\"",
+          "remediation": "Prefer the pinned PyPI release (`esm==3.2.3`) exclusively, and verify the GitHub organization/repository ownership against official EvolutionaryScale documentation before recommending any git-based install.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_esm_2",
+          "rule_id": "LLM_UNAUTHORIZED_TOOL_USE",
+          "severity": "LOW",
+          "category": "unauthorized_tool_use",
+          "title": "No `allowed-tools` declaration despite instructing package installation and code execution",
+          "description": "The manifest omits the optional `allowed-tools` and `compatibility` fields, while the instruction body contains bash install commands (`uv pip install ...`) and substantial Python code intended to be run, plus network calls to hosted inference APIs. This is informational only \u2014 there is no declared restriction being violated \u2014 but explicit tool scoping would improve least-privilege posture for a skill that guides package installation and remote API usage.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "- allowed-tools: Not specified\n- compatibility: Not specified",
+          "remediation": "Declare `allowed-tools` (e.g., [Read, Write, Bash, Python]) and `compatibility` to make the skill's execution and network footprint explicit.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-12.1",
+            "aitech_name": "Tool Exploitation",
+            "aisubtech": "AISubtech-12.1.2",
+            "aisubtech_name": "Tool Poisoning",
+            "scanner_category": "SUSPICIOUS CODE EXECUTION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "glycoengineering",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/glycoengineering",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 21.04,
+      "content_hash": "14623464cfc29c9ee24296b5a311cb8aec20714fa53d8254e2340380deb4c63c",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The glycoengineering skill is a legitimate, domain-focused bioinformatics reference package. Its instructions and embedded Python examples perform local string/regex analysis of protein sequences (N-glycosylation sequon scanning, O-glycosylation heuristics, site mutation helpers) and reference well-known public glycobiology resources. No prompt injection, instruction-override, concealment, credential access, obfuscation, eval/exec, filesystem traversal, or data-exfiltration behavior was found. The description accurately matches the documented behavior, and there are no bundled scripts. Only minor hygiene issues were identified: an unpinned third-party package install command, undocumented outbound calls to public academic web services, and missing optional manifest metadata.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 2,
+        "analyzed_files": 2,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_glycoengineering_1",
+          "rule_id": "LLM_DATA_EXFILTRATION",
+          "severity": "LOW",
+          "category": "data_exfiltration",
+          "title": "Outbound network requests to external bioinformatics web services",
+          "description": "Example code performs HTTP requests to external services (DTU Health Tech webface CGI endpoint and the GlyConnect Expasy API), transmitting protein sequences or UniProt identifiers off-machine. These are well-known, legitimate public academic resources and only scientific inputs are sent, so exfiltration risk is minimal. However, the manifest does not declare network usage or compatibility constraints, so users may not expect outbound traffic.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "url = \"https://services.healthtech.dtu.dk/cgi-bin/webface2.cgi\" ... url = f\"https://glyconnect.expasy.org/api/proteins/uniprot/{uniprot_id}\"; response = requests.get(url, ...)",
+          "remediation": "Document that the skill may send user-supplied sequences to third-party servers, require explicit user confirmation before submission, and avoid sending any data other than the sequence explicitly provided by the user.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-8.2",
+            "aitech_name": "Data Exfiltration / Exposure",
+            "aisubtech": "AISubtech-8.2.3",
+            "aisubtech_name": "Data Exfiltration via Agent Tooling",
+            "scanner_category": "SECURITY VIOLATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_glycoengineering_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Unpinned package installation instruction",
+          "description": "The skill documents installing a third-party Python package via `uv pip install glycoshield` without any version pin or hash verification. If executed by the agent, this pulls the latest available version from PyPI, which introduces a supply-chain risk (package takeover, malicious release, or typosquatting of a low-profile scientific package). The risk is limited because this appears in documentation as an optional external tool rather than an auto-executed script.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "uv pip install glycoshield",
+          "remediation": "Pin the dependency to a specific verified version (e.g., `glycoshield==<x.y.z>`), reference the official project source, and recommend installation in an isolated virtual environment with user confirmation.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_glycoengineering_2",
+          "rule_id": "LLM_UNAUTHORIZED_TOOL_USE",
+          "severity": "LOW",
+          "category": "unauthorized_tool_use",
+          "title": "Missing allowed-tools, license, and compatibility metadata",
+          "description": "The YAML frontmatter omits the optional `allowed-tools`, `license`, and `compatibility` fields even though the skill includes Python code that uses the network and documents shell commands. This is informational only; no declared restriction is violated.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "license: Unknown; compatibility: Not specified; allowed-tools: Not specified",
+          "remediation": "Declare `allowed-tools` (e.g., [Read, Python, Bash]), add a license, and note that the skill may require network access.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-12.1",
+            "aitech_name": "Tool Exploitation",
+            "aisubtech": "AISubtech-12.1.2",
+            "aisubtech_name": "Tool Poisoning",
+            "scanner_category": "SUSPICIOUS CODE EXECUTION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "medchem",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/medchem",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 19.3,
+      "content_hash": "37f61820c175d653231798ce3cc94154a65e8008c66f31434a3bd5e49fbb3f70",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The medchem skill is a legitimate, well-documented wrapper around the open-source datamol-io/medchem cheminformatics library. The SKILL.md body contains no prompt injection, role redefinition, concealment directives, or safety-bypass language; all instructions are domain-appropriate chemistry guidance. The single bundled script (scripts/filter_molecules.py) uses argparse, pandas, RDKit/datamol and only reads a user-specified input file and writes a user-specified CSV/summary \u2014 there is no network activity, no environment variable or credential access, no eval/exec/os.system, no subprocess use, no obfuscated or encoded payloads, and no hardcoded secrets. Data flow is local file-in / local file-out and matches the declared description and the declared allowed-tools (Read, Write, Edit, Bash). Only minor hygiene issues were identified: unpinned dependency install commands and references to a few non-existent resource paths. Overall risk: LOW / benign.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 4,
+        "analyzed_files": 4,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_medchem_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Unpinned dependency installation instructions",
+          "description": "The SKILL.md instructs the agent to install packages via `uv pip install medchem datamol` and `mamba install -c conda-forge lilly-medchem-rules` without version pinning, despite the documentation stating examples target medchem 2.0.5. Unpinned installs can pull in a future or compromised version of the dependency chain. Packages are well-known, legitimate open-source cheminformatics libraries from datamol-io/conda-forge, so risk is low, but pinning would be safer.",
+          "file_path": "SKILL.md",
+          "line_number": null,
+          "snippet": "uv pip install medchem datamol\nmamba install -c conda-forge lilly-medchem-rules",
+          "remediation": "Pin explicit versions (e.g., `uv pip install medchem==2.0.5 datamol==0.12.*`) and require explicit user confirmation before running installation commands.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_medchem_1",
+          "rule_id": "LLM_HARMFUL_CONTENT",
+          "severity": "LOW",
+          "category": "harmful_content",
+          "title": "Several referenced file paths do not exist in the package",
+          "description": "The instruction/reference scan lists paths such as templates/rules_catalog.md, assets/api_guide.md, assets/rules_catalog.md, templates/api_guide.md, medchem.py and datamol.py that are not present in the package (the latter two are Python import names rather than bundled files). Missing referenced resources are a documentation-hygiene issue and could cause the agent to attempt to create or fetch files that do not exist; no malicious content is involved.",
+          "file_path": "references/rules_catalog.md",
+          "line_number": null,
+          "snippet": "Referenced File: templates/rules_catalog.md (not found); assets/api_guide.md (not found); medchem.py (not found)",
+          "remediation": "Ensure only actually bundled files (references/api_guide.md, references/rules_catalog.md, scripts/filter_molecules.py) are referenced, and avoid ambiguous references to module names as file paths.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-15.1",
+            "aitech_name": "Harmful Content",
+            "aisubtech": "AISubtech-15.1.12",
+            "aisubtech_name": "Safety Harms and Toxicity: Scams and Deception",
+            "scanner_category": "HARMFUL CONTENT",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "molecular-dynamics",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/molecular-dynamics",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 16.25,
+      "content_hash": "567537497657bd993874a3b5637b9398c973b03869ae2ef27beebfa563ae8a23",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "This is a legitimate scientific/technical reference skill for molecular dynamics simulation using OpenMM and MDAnalysis. The SKILL.md body consists entirely of domain documentation and illustrative Python snippets for system preparation, minimization, equilibration, production MD, and trajectory analysis. No prompt injection, instruction override, concealment directives, or role redefinition language is present in any language. No script files are bundled. All code writes only to local, purpose-appropriate output files (minimized.pdb, *_traj.dcd, *_log.txt, checkpoints, rmsd.png) and reads only user-supplied structure/trajectory files consistent with the stated purpose. There is no network exfiltration, no credential or environment-variable access, no eval/exec/os.system usage, no obfuscation or encoded payloads, and no hardcoded secrets. External URLs referenced are documentation links only and are not fetched or executed. The 'referenced files' listed (pdbfixer.py, MDAnalysis.py, openmm.py, etc.) are false positives from import-statement parsing rather than actual missing package files. The description accurately matches the skill's content, with no keyword baiting or capability inflation. Long-running simulations are inherently compute-intensive but this is the legitimate, disclosed purpose of the skill, not a DoS pattern. Only minor hygiene issues were identified.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 2,
+        "analyzed_files": 2,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_molecular-dynamics_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Unpinned dependency installation instructions",
+          "description": "The skill instructs installation of packages via conda/uv pip without version pinning (e.g., 'conda install -c conda-forge openmm mdanalysis nglview', 'uv pip install openmm mdanalysis', 'uv pip install openff-toolkit'). Unpinned installs from public registries introduce a minor supply-chain risk (dependency confusion / upstream compromise), though the packages named are legitimate, well-known scientific libraries from trusted channels.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "conda install -c conda-forge openmm mdanalysis nglview\n# or\nuv pip install openmm mdanalysis",
+          "remediation": "Pin explicit versions (e.g., openmm==8.1.1, mdanalysis==2.7.0) and note the trusted channel/registry so installs are reproducible and verifiable.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_molecular-dynamics_1",
+          "rule_id": "LLM_UNAUTHORIZED_TOOL_USE",
+          "severity": "LOW",
+          "category": "unauthorized_tool_use",
+          "title": "Missing allowed-tools and compatibility metadata",
+          "description": "The YAML frontmatter does not declare allowed-tools or compatibility, although the skill's guidance involves executing Python code, installing packages via shell commands, and writing files (PDB, DCD, PNG, checkpoints). This is informational only, as allowed-tools is optional per spec, but declaring it would constrain the shell/Python execution the skill implies.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "- allowed-tools: Not specified\n- compatibility: Not specified",
+          "remediation": "Declare allowed-tools (e.g., [Read, Write, Bash, Python]) and compatibility so the execution surface implied by the installation and simulation steps is explicit.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-12.1",
+            "aitech_name": "Tool Exploitation",
+            "aisubtech": "AISubtech-12.1.2",
+            "aisubtech_name": "Tool Poisoning",
+            "scanner_category": "SUSPICIOUS CODE EXECUTION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "molfeat",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/molfeat",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 18.7,
+      "content_hash": "eb7e39cd6d82ab956bd23d727d6412a51962f694fd78442e75bfb23644856742",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The molfeat skill is a documentation-only cheminformatics skill: it contains SKILL.md plus three reference markdown files with API documentation and code examples for the open-source molfeat library. No script files are present, and no executable payloads were found. There are no prompt-injection or instruction-override attempts, no concealment directives, no credential access (no ~/.aws, ~/.ssh, env harvesting), no network exfiltration endpoints, no eval/exec/os.system usage, no obfuscation or encoded blobs, and no hidden capabilities beyond the declared molecular-featurization purpose. The declared allowed-tools (Read, Write, Edit, Bash) are consistent with the documented workflow (installing packages, writing config/cache files, running Python examples). The description accurately matches the content \u2014 no capability inflation or keyword baiting beyond legitimate domain terms. Several referenced filenames (templates/*, assets/*, molfeat.py, datamol.py) do not exist in the package; these appear to be false-positive extractions from code-fence import statements and duplicated path guesses rather than intentional missing payloads, but they should be cleaned up. Positively, the skill explicitly steers users away from pickle deserialization toward NumPy .npz caching and pins dependency versions. Only minor supply-chain and deserialization hygiene notes are warranted; overall the package appears benign.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 5,
+        "analyzed_files": 5,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_molfeat_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Instructs installation of pinned but network-sourced packages and external GitHub repo",
+          "description": "The skill instructs users to install packages via `uv pip install` (molfeat 0.11.0 and extras). Version pinning is used, which is good practice. However, it also points to an external GitHub repository (reymond-group/map4) for the MAP4 featurizer, which is an unpinned external supply-chain dependency. Installation of heavy ML frameworks (PyTorch, DGL, transformers) pulls large transitive dependency trees and can download pretrained model weights from HuggingFace at runtime. This is expected for the stated purpose but represents residual supply-chain exposure.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "uv pip install \"molfeat[all]==0.11.0\"\n**External featurizers:** MAP4 is not bundled in molfeat extras \u2014 install from [reymond-group/map4](https://github.com/reymond-group/map4) separately.",
+          "remediation": "Recommend pinning or vendoring the external MAP4 install (e.g., a specific commit/tag) and note that pretrained model loading downloads remote weights, so it should occur only in trusted environments.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_molfeat_1",
+          "rule_id": "LLM_UNAUTHORIZED_TOOL_USE",
+          "severity": "LOW",
+          "category": "unauthorized_tool_use",
+          "title": "Deserialization of featurizer state files (YAML/JSON) from potentially untrusted paths",
+          "description": "The skill repeatedly recommends `MoleculeTransformer.from_state_yaml_file(...)` / `from_state_json_file(...)` to reconstruct featurizers from saved configuration. molfeat state files can specify class names and constructor arguments, so loading a state file supplied by an untrusted third party could instantiate unexpected objects. The skill does not warn about validating the provenance of these config files. Notably the skill DOES already warn against pickle and recommends NumPy .npz caching, indicating security awareness; this is a minor residual gap.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "loaded = MoleculeTransformer.from_state_yaml_file(\"featurizer_config.yml\")",
+          "remediation": "Add a note to only load state YAML/JSON files created by the user or from trusted sources, and to inspect them before loading.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-12.1",
+            "aitech_name": "Tool Exploitation",
+            "aisubtech": "AISubtech-12.1.2",
+            "aisubtech_name": "Tool Poisoning",
+            "scanner_category": "SUSPICIOUS CODE EXECUTION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ncats-arax",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/ncats-arax",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 25.05,
+      "content_hash": "2f986e89a5c4ae5ef471d0948678993a57b1933999e4b46ca7d7c729b8b4747b",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The ncats-arax skill is a tightly scoped, defensively written documentation-only package for querying the public NCATS Translator ARAX biomedical knowledge-graph API. No prompt injection, role redefinition, concealment directives, obfuscation, credential access, or hidden data-collection instructions were found in SKILL.md or the two bundled reference files. The manifest description accurately matches the documented behavior, allowed-tools (Read, Bash) is consistent with the documented workflow, and the reference material explicitly enumerates excluded escape hatches (no raw query submission, no arbitrary operations, no MCP/daemon/SDK surface), strict input validation regexes, SSRF protections (HTTPS-only, rejection of loopback/private/link-local hosts, no cross-origin or downgrade redirects), bounded response sizes, no-retry-on-POST semantics, and mandatory user acknowledgment before any network access. Interpretation guidance is scientifically conservative and explicitly forbids presenting results as clinical recommendations. The only issues are informational: the executable client referenced by the instructions is not included in the package, and the skill inherently transmits user query terms to a public third-party service (clearly disclosed and gated). Missing templates/* and assets/* variants are scanner path-expansion artifacts, not real broken references.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 4,
+        "analyzed_files": 4,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_ncats-arax_0",
+          "rule_id": "LLM_DATA_EXFILTRATION",
+          "severity": "LOW",
+          "category": "data_exfiltration",
+          "title": "Outbound transmission of user query content to third-party public API",
+          "description": "The skill directs the agent to send user-supplied biomedical entities (CURIEs, free-text names) over HTTPS to the external NCATS Translator ARAX production service (arax.transltr.io). This is inherent to the stated purpose and is unusually well-mitigated: the skill requires an explicit --acknowledge-public-query flag, warns that query and caller metadata may be publicly visible, forbids patient/proprietary data, fixes a constant non-identifying submitter/User-Agent, restricts base URLs to HTTPS production endpoints, and rejects loopback/private/link-local addresses and protocol-downgrade or cross-origin redirects. No credential, environment, or local-file harvesting is described. Recorded as informational data-egress awareness only.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "\"ARAX status facilities may expose query and caller metadata even when `store=false` is requested.\" / \"Every normalization or graph request requires `--acknowledge-public-query`.\"",
+          "remediation": "No change required. Continue to require explicit user acknowledgment before any network call and keep the prohibition on submitting sensitive, patient, or proprietary content.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-8.2",
+            "aitech_name": "Data Exfiltration / Exposure",
+            "aisubtech": "AISubtech-8.2.3",
+            "aisubtech_name": "Data Exfiltration via Agent Tooling",
+            "scanner_category": "SECURITY VIOLATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_ncats-arax_1",
+          "rule_id": "LLM_UNAUTHORIZED_TOOL_USE",
+          "severity": "LOW",
+          "category": "unauthorized_tool_use",
+          "title": "Referenced executable script (scripts/arax_client.py) is not present in the package",
+          "description": "SKILL.md instructs the agent to run `python skills/ncats-arax/scripts/arax_client.py` for preflight, normalize, one-hop, two-hop, and summarize commands, but no script files are included in the analyzed package. The documented safety controls (byte-exact artifact handling, 25 MiB response cap, URL validation, fixed ARAXi operations, no raw-query escape hatch, 0600 file modes, atomic writes) therefore cannot be verified, and the command path could be satisfied by an unvetted or attacker-supplied file placed at that location. No malicious behavior is observable in the shipped content.",
+          "file_path": "SKILL.md",
+          "line_number": null,
+          "snippet": "python skills/ncats-arax/scripts/arax_client.py preflight",
+          "remediation": "Ship the referenced arax_client.py inside the skill package (with a checksum or version pin) so its behavior can be reviewed, or remove the execution instructions until the script is bundled.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-12.1",
+            "aitech_name": "Tool Exploitation",
+            "aisubtech": "AISubtech-12.1.2",
+            "aisubtech_name": "Tool Poisoning",
+            "scanner_category": "SUSPICIOUS CODE EXECUTION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_budget_scripts/arax_client.py",
+          "rule_id": "LLM_CONTEXT_BUDGET_EXCEEDED",
+          "severity": "INFO",
+          "category": "policy_violation",
+          "title": "'scripts/arax_client.py' excluded from LLM analysis (84,318 chars)",
+          "description": "file size (84,318 chars) exceeds per-file limit (75,000)",
+          "file_path": "scripts/arax_client.py",
+          "line_number": null,
+          "snippet": null,
+          "remediation": "Increase llm_analysis.max_code_file_chars in your scan policy to include this content in LLM analysis.",
+          "analyzer": "llm",
+          "metadata": {
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "primekg",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/primekg",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 19.24,
+      "content_hash": "b460563929aa67a020cae8b6033cc22bdb33fd2edec16703b65cf29ba4889ed7",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The primekg skill is a read-only bioinformatics query helper over a locally stored PrimeKG kg.csv file. The single Python script uses pandas to search nodes, list neighbors, and find 1\u20132 hop paths. No network calls, no subprocess/eval/exec, no credential or environment harvesting (the only env var read is PRIMEKG_DATA, a data path, which is a legitimate configuration pattern), no obfuscation, no hardcoded secrets, and no dependency installation. The SKILL.md body contains no prompt-injection, concealment, role-redefinition, or safety-bypass language, and the description accurately matches the code's behavior. Notably, the author explicitly uses regex=False in string matching, preventing regex-injection/ReDoS from user-supplied query strings. Remaining issues are minor: missing optional manifest metadata, unbounded result growth in two-hop path expansion over a 4M-edge graph, and a referenced file that is not present. Overall risk: LOW / benign.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 2,
+        "analyzed_files": 2,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_primekg_2",
+          "rule_id": "LLM_HARMFUL_CONTENT",
+          "severity": "LOW",
+          "category": "harmful_content",
+          "title": "Referenced file 'scripts.py' not present in package",
+          "description": "The instructions reference imports from `scripts.query_primekg`, and the analysis harness resolved a referenced file `scripts.py` that does not exist in the package. A missing referenced module is a documentation/packaging inconsistency; if an agent later creates or resolves an arbitrary `scripts.py` from the working directory, unintended code could be imported.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "Files referenced in instructions: scripts.py \u2014 (not found)",
+          "remediation": "Ship the referenced module path exactly as documented (include `scripts/__init__.py` if package-style imports are intended) and remove references to non-existent files.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-15.1",
+            "aitech_name": "Harmful Content",
+            "aisubtech": "AISubtech-15.1.12",
+            "aisubtech_name": "Safety Harms and Toxicity: Scams and Deception",
+            "scanner_category": "HARMFUL CONTENT",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_primekg_1",
+          "rule_id": "LLM_RESOURCE_ABUSE",
+          "severity": "LOW",
+          "category": "resource_abuse",
+          "title": "Memory/CPU intensive full-graph load and O(n^2) two-hop path expansion",
+          "description": "`_load_kg()` reads a ~4 million-row CSV fully into memory (hundreds of MB) and caches it. `find_paths` with max_depth=2 performs nested iterrows over all first- and second-hop edges for each shared intermediate; for hub nodes (e.g., highly connected proteins) this can produce a combinatorial explosion of paths and consume large CPU/memory. This appears to be a performance characteristic rather than intentional abuse \u2014 the author bounds depth to 1 or 2 and clears the cache to avoid holding multiple frames \u2014 but there is no cap on the number of returned paths.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "cached = pd.read_csv(DATA_PATH, low_memory=True) ... for intermediate in sorted(intermediates): for _, first in first_hops[...].iterrows(): for _, second in second_hops[...].iterrows(): paths.append(...)",
+          "remediation": "Add a maximum result cap / degree threshold for hub intermediates and consider chunked or indexed loading (e.g., parquet, sqlite) to bound memory usage.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-13.1",
+            "aitech_name": "Disruption of Availability",
+            "aisubtech": "AISubtech-13.1.1",
+            "aisubtech_name": null,
+            "scanner_category": "RESOURCE ABUSE",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_primekg_0",
+          "rule_id": "LLM_UNAUTHORIZED_TOOL_USE",
+          "severity": "LOW",
+          "category": "unauthorized_tool_use",
+          "title": "No allowed-tools / compatibility / license metadata declared",
+          "description": "The YAML frontmatter omits `allowed-tools`, `license` (listed as Unknown), and `compatibility`. This is optional per spec and only informational, but it means the skill's file-read and Python-execution behavior (reading a local CSV via pandas) is not constrained or declared. No violation was observed, as the code performs only local read operations consistent with its stated purpose.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "- license: Unknown\n- compatibility: Not specified\n- allowed-tools: Not specified",
+          "remediation": "Add explicit `allowed-tools: [Read, Python]`, a license identifier, and compatibility notes to the frontmatter.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-12.1",
+            "aitech_name": "Tool Exploitation",
+            "aisubtech": "AISubtech-12.1.2",
+            "aisubtech_name": "Tool Poisoning",
+            "scanner_category": "SUSPICIOUS CODE EXECUTION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "pytdc",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/pytdc",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 22.34,
+      "content_hash": "9f598eb8dd51097ea74db986541b88c7997f93f7c1a3556d9e7900585f782659",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The pytdc skill is a well-constructed, defensively engineered wrapper around the official Therapeutics Data Commons Python package. No prompt injection, concealment directives, role redefinition, or capability-inflation language appears in SKILL.md or the reference documents; the instructions in fact impose an explicit user-approval gate before any network or storage operation. The bundled Python scripts contain no eval/exec/os.system, no subprocess use, no hardcoded credentials, no environment-variable harvesting, no obfuscation, and no outbound network calls of their own. Shared helpers enforce workspace-relative path containment (rejecting absolute paths, '~', symlinks, and path traversal outside CWD), bounded input file sizes, bounded output (truncation, limits on molecules/predictions/files), strict JSON parsing that rejects NaN/Infinity, atomic non-clobbering writes, and lazy optional imports so that discovery operations never instantiate loaders or trigger downloads. Behavior is consistent with the declared description and the declared allowed-tools (Read, Write, Edit, Bash). The only residual concerns are inherent to the upstream ecosystem: optional download and deserialization of remote model checkpoints and a large unpinned transitive dependency graph, both of which the skill itself explicitly discloses and gates behind acknowledgement flags. Overall the package appears benign and unusually safety-conscious.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 11,
+        "analyzed_files": 11,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_pytdc_1",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Dependency installation of a large unaudited transitive graph",
+          "description": "Installation instructions run `uv pip install` for PyTDC 1.1.15 and setuptools 80.9.0, which resolves ~123 transitive packages that are not version-pinned by the skill. Direct pins are provided for the top-level packages and a `--dry-run` review step is recommended, so risk is modest, but transitive versions remain floating unless the user generates a lockfile.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "uv pip install --python .venv-pytdc/bin/python \"setuptools==80.9.0\" \"PyTDC==1.1.15\"",
+          "remediation": "Ship or generate a platform-specific uv.lock / hash-pinned requirements file so the full transitive dependency graph is reproducible and auditable.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_pytdc_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Optional download and loading of remote model checkpoints (serialized artifacts)",
+          "description": "The oracle workflow can download model checkpoints (fpscores, DRD2/GSK3B/JNK3/CYP3A4_Veith) from upstream Harvard Dataverse endpoints via PyTDC and load them locally. Loading third-party serialized model artifacts carries inherent deserialization/supply-chain risk. The skill explicitly documents this, restricts execution to an allowlist of oracle categories, requires both --execute and --download acknowledgement flags, contains writes to a relative runtime directory, and refuses remote-service/docking/composite oracles, so residual risk is low and clearly disclosed.",
+          "file_path": "scripts/molecular_generation.py",
+          "line_number": null,
+          "snippet": "CHECKPOINT_ORACLES = {\"logp\",\"sa\",\"drd2\",\"gsk3b\",\"jnk3\",\"cyp3a4_veith\"} ... if category == \"checkpoint_download\" and not download_acknowledged: raise CliError(...)",
+          "remediation": "Optionally record and verify checksums for downloaded checkpoints and surface artifact size/origin to the user before loading.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "rdkit",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/rdkit",
+      "is_safe": true,
+      "max_severity": "SAFE",
+      "scan_duration_seconds": 9.97,
+      "content_hash": "c09bd7c3720545d514d3769df8d44aca0fe22c6afa078a951248b81a411701ef",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The 'rdkit' skill is a legitimate cheminformatics documentation/utility package. SKILL.md contains only technical guidance with no prompt injection, role redefinition, concealment directives, or safety-bypass language. The three bundled Python scripts (molecular_properties.py, similarity_search.py, substructure_filter.py) perform only local molecular file parsing, descriptor calculation, fingerprint similarity, and substructure filtering with argparse-driven CLI input; there are no network calls, no subprocess/os.system/eval/exec usage, no credential or environment variable access, no hardcoded secrets, and no obfuscated payloads. File I/O (reading SDF/SMILES inputs, writing CSV/SDF outputs) is user-directed and consistent with the declared allowed-tools (Read, Write, Edit, Bash). Referenced files resolve to internal, in-package documentation; several listed paths (templates/, assets/) are simply unresolved scan artifacts rather than external fetches. The reference docs even include a defensive note warning against loading untrusted Python pickle files and recommending SMILES/SDF or RDKit binary formats instead. The base64 usage in the reference doc is for encoding RDKit binary molecule blobs into JSON, not for hiding executable payloads. Installation guidance uses standard, well-known upstream sources (PyPI 'rdkit', conda-forge); versions are unpinned, which is a minor reproducibility note rather than a security threat given the packages are canonical upstream names with no typosquatting indicators. Description accurately matches implemented behavior with no capability inflation or keyword baiting beyond domain-appropriate terminology.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 9,
+        "analyzed_files": 9,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": []
+    },
+    {
+      "name": "rowan",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/rowan",
+      "is_safe": true,
+      "max_severity": "LOW",
+      "scan_duration_seconds": 27.42,
+      "content_hash": "47047434274faaafa7b49c8ae3753c0f8ea1433337bc4c93498ab3abec912eb8",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The 'rowan' skill is a documentation-only package for the Rowan cloud computational-chemistry Python API. It contains no executable scripts, no obfuscated or encoded payloads, no eval/exec/os.system usage, no credential-file access, and no data exfiltration to third-party endpoints \u2014 all network activity described is to the vendor's own documented API using a user-supplied key. The SKILL.md body and bundled reference files (workflow catalog, batch/webhooks, pricing, troubleshooting, end-to-end example) contain no prompt-injection, role-redefinition, concealment, or safety-bypass language, in any language. Guidance is internally consistent: the description matches the documented behavior, and referenced files are internal to the package (several probed template/asset paths simply do not exist, which is a scanner artifact rather than a threat). Residual concerns are minor hygiene issues: an unpinned pip install, placeholder API keys shown inline in example code, and an undeclared allowed-tools field. Overall risk: LOW / benign.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 6,
+        "analyzed_files": 6,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_rowan_1",
+          "rule_id": "LLM_DATA_EXFILTRATION",
+          "severity": "LOW",
+          "category": "data_exfiltration",
+          "title": "Documentation shows inline hardcoding of API key in source",
+          "description": "Several examples set the API key directly in Python source (`rowan.api_key = \"your_api_key_here\"` / `rowan.api_key = \"...\"`). These are clearly placeholders, not real secrets, and the skill correctly recommends the ROWAN_API_KEY environment variable first. Still, the inline pattern can lead an agent to write literal credentials into generated scripts that may be committed or logged. Notably, the skill never reads credential files (~/.aws, ~/.ssh) and never transmits secrets anywhere other than the documented vendor API.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "rowan.api_key = \"your_api_key_here\"  # or set ROWAN_API_KEY env var",
+          "remediation": "Consistently show only environment-variable based configuration (os.environ[\"ROWAN_API_KEY\"]) and explicitly warn against embedding keys in committed code.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-8.2",
+            "aitech_name": "Data Exfiltration / Exposure",
+            "aisubtech": "AISubtech-8.2.3",
+            "aisubtech_name": "Data Exfiltration via Agent Tooling",
+            "scanner_category": "SECURITY VIOLATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_rowan_3",
+          "rule_id": "LLM_SKILL_DISCOVERY_ABUSE",
+          "severity": "LOW",
+          "category": "skill_discovery_abuse",
+          "title": "Dense trigger-keyword metadata for activation targeting",
+          "description": "The manifest includes a 'trigger-keywords' field listing many activation terms (pKa prediction, molecular docking, conformer search, chemistry workflow, drug discovery, SMILES, protein structure, batch molecular modeling, cloud chemistry). The keywords are all narrowly scoped to the skill's genuine domain and there are no over-broad claims ('general assistant', 'use me first'), so this is at most a minor discovery-surface concern rather than capability inflation.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "'trigger-keywords': 'pKa prediction, molecular docking, conformer search, chemistry workflow, drug discovery, SMILES, protein structure, batch molecular modeling, cloud chemistry'",
+          "remediation": "No action strictly required; keep keyword lists limited to the skill's actual domain, as is currently the case.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-4.3",
+            "aitech_name": "Protocol Manipulation",
+            "aisubtech": "AISubtech-4.3.5",
+            "aisubtech_name": "Capability Inflation",
+            "scanner_category": "PROTOCOL MANIPULATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_rowan_0",
+          "rule_id": "LLM_SUPPLY_CHAIN_ATTACK",
+          "severity": "LOW",
+          "category": "supply_chain_attack",
+          "title": "Unpinned dependency installation from PyPI",
+          "description": "The skill instructs the agent to install the 'rowan-python' package via `uv pip install rowan-python` without a pinned version or hash. While this is the vendor's own legitimate client library, unpinned installs expose the workflow to supply-chain risk (malicious version upload, dependency confusion, or typosquatting if the name is mistyped). No install from unknown GitHub repos or arbitrary URLs is present.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "```bash\nuv pip install rowan-python\n# or: uv pip install rowan-python\n```",
+          "remediation": "Pin the package version (e.g., `uv pip install rowan-python==<x.y.z>`) and, where possible, verify hashes or use a lockfile.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-9.3",
+            "aitech_name": "Dependency / Plugin Compromise",
+            "aisubtech": "AISubtech-9.3.1",
+            "aisubtech_name": "Malicious Package / Tool Injection",
+            "scanner_category": "SUPPLY CHAIN ATTACK",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_rowan_2",
+          "rule_id": "LLM_UNAUTHORIZED_TOOL_USE",
+          "severity": "LOW",
+          "category": "unauthorized_tool_use",
+          "title": "allowed-tools not declared while skill implies code execution and network use",
+          "description": "The manifest omits the optional `allowed-tools` field even though the skill's guidance drives Bash (package install), Python execution, network calls to the Rowan cloud API, protein/PDB file uploads from the local filesystem, and file writes (e.g., best_pose.pdb, workflow_uuids.json). This is informational only \u2014 no declared restriction is violated, and all behavior is consistent with the stated purpose.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "allowed-tools: Not specified; body uses `uv pip install`, network API submissions, `rowan.upload_protein(file_path=...)`, `dock_result.best_pose.write(\"best_pose.pdb\")`",
+          "remediation": "Declare `allowed-tools` (e.g., [Read, Write, Bash, Python]) so that the skill's actual capability surface is explicit and auditable.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-12.1",
+            "aitech_name": "Tool Exploitation",
+            "aisubtech": "AISubtech-12.1.2",
+            "aisubtech_name": "Tool Poisoning",
+            "scanner_category": "SUSPICIOUS CODE EXECUTION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "tamarind",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/tamarind",
+      "is_safe": true,
+      "max_severity": "MEDIUM",
+      "scan_duration_seconds": 31.65,
+      "content_hash": "2cfeb95fe3cae0e78aa99978a53009c3c97331ebcdab23535d5689a3369d851f",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "This is a vendor-authored documentation skill for the Tamarind Bio computational-biology REST/MCP API. It contains no executable script files, no obfuscation, no hardcoded secrets, and no data exfiltration: the API key is explicitly sourced from the TAMARIND_API_KEY environment variable with repeated 'never hardcode / never commit' guidance, and all network traffic is directed to the first-party app.tamarind.bio / mcp.tamarind.bio endpoints that the description discloses. The embedded Python examples use standard requests calls with no eval/exec/os.system, no shell interpolation of untrusted input, and bounded polling loops that break on all terminal statuses (the skill even warns about an infinite-loop foot-gun). Manifest description, instruction body, and reference files are consistent with each other and with the stated purpose. Residual concerns are minor and inherent to the skill's function: it instructs runtime fetching of vendor documentation URLs (untrusted-content ingestion path), it uploads user-supplied structure files to a third-party cloud (disclosed and expected), and it omits the optional allowed-tools declaration. No prompt injection, concealment directives, credential harvesting, or capability misrepresentation was found.",
+        "llm_primary_threats": [
+          "External content ingestion / transitive trust on remote documentation URLs",
+          "Broad discovery keyword surface",
+          "Undeclared tool permissions for network egress and local file upload/write"
+        ]
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 5,
+        "analyzed_files": 5,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": [
+        {
+          "id": "llm_finding_tamarind_1",
+          "rule_id": "LLM_SKILL_DISCOVERY_ABUSE",
+          "severity": "LOW",
+          "category": "skill_discovery_abuse",
+          "title": "Large trigger-keyword list in manifest metadata broadens activation surface",
+          "description": "The manifest includes a 'trigger-keywords' field with ~28 broad computational-biology terms (e.g., 'AlphaFold', 'protein design', 'enzyme', 'peptide', 'molecular design', 'x-api-key'). These are topically relevant to the skill's stated purpose, but generic terms such as 'enzyme', 'peptide', 'adme', 'protein language models' and 'x-api-key' could cause the skill to be surfaced for local/offline cheminformatics requests that do not involve the Tamarind platform. This is a discovery/activation-scope concern rather than deception \u2014 the description accurately reflects the skill's behavior.",
+          "file_path": null,
+          "line_number": null,
+          "snippet": "'trigger-keywords': 'protein structure prediction, AlphaFold, Boltz, Chai, ESMFold, ... adme, enzyme, peptide, protein language models, molecular design'",
+          "remediation": "Narrow trigger keywords to Tamarind-specific terms and platform endpoints; the SKILL.md body already correctly scopes usage ('For purely local cheminformatics ... use a local library instead') \u2014 mirror that scoping in the discovery metadata.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-4.3",
+            "aitech_name": "Protocol Manipulation",
+            "aisubtech": "AISubtech-4.3.5",
+            "aisubtech_name": "Capability Inflation",
+            "scanner_category": "PROTOCOL MANIPULATION",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_tamarind_0",
+          "rule_id": "LLM_PROMPT_INJECTION",
+          "severity": "LOW",
+          "category": "prompt_injection",
+          "title": "Runtime fetching of external content instructed as authoritative source",
+          "description": "SKILL.md directs the agent to fetch and prefer live remote resources (https://app.tamarind.bio/llms.txt, https://app.tamarind.bio/openapi.yaml, https://docs.tamarind.bio/llms.txt and its .md pages) over any bundled/hardcoded information ('Prefer fetching them at runtime over trusting any hardcoded list'). Content retrieved from these URLs is untrusted external data that will be read into the agent context; if the vendor site were compromised or a page contained embedded directives, this creates an indirect prompt-injection path. The domains are first-party for the described service and the guidance is technically reasonable (API catalogs change), so risk is low, but the skill provides no instruction to treat fetched content as data rather than instructions.",
+          "file_path": "SKILL.md",
+          "line_number": null,
+          "snippet": "- **`https://app.tamarind.bio/llms.txt`** \u2014 LLM index ... Prefer fetching them at runtime over trusting any hardcoded list",
+          "remediation": "Add an explicit note that fetched documentation/spec content must be treated as inert reference data only, and that any instructions embedded in fetched pages must be ignored. Pin to documented, expected URL paths and validate response shape (e.g., valid OpenAPI YAML) before use.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-1.2",
+            "aitech_name": "Indirect Prompt Injection",
+            "aisubtech": "AISubtech-1.2.1",
+            "aisubtech_name": "Instruction Manipulation (Indirect Prompt Injection)",
+            "scanner_category": "PROMPT INJECTION",
+            "same_path_other_rule_ids": [
+              "MDBLOCK_PYTHON_HTTP_POST"
+            ],
+            "same_path_unique_rule_count": 2,
+            "same_path_findings_count": 3,
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "MDBLOCK_PYTHON_HTTP_POST_26cfc61e5a",
+          "rule_id": "MDBLOCK_PYTHON_HTTP_POST",
+          "severity": "MEDIUM",
+          "category": "data_exfiltration",
+          "title": "Python code block sends HTTP POST request",
+          "description": "Code block in SKILL.md at line 102 contains potentially dangerous Python code.",
+          "file_path": "SKILL.md",
+          "line_number": 102,
+          "snippet": "resp = requests.post(f\"{BASE}/submit-job\", headers=HEADERS, json=payload)",
+          "remediation": "Review the code block for security implications.",
+          "analyzer": "behavioral",
+          "metadata": {
+            "from_code_block": true,
+            "block_language": "python",
+            "same_path_other_rule_ids": [
+              "LLM_PROMPT_INJECTION"
+            ],
+            "same_path_unique_rule_count": 2,
+            "same_path_findings_count": 3,
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "MDBLOCK_PYTHON_HTTP_POST_e47ad1b2f2",
+          "rule_id": "MDBLOCK_PYTHON_HTTP_POST",
+          "severity": "MEDIUM",
+          "category": "data_exfiltration",
+          "title": "Python code block sends HTTP POST request",
+          "description": "Code block in SKILL.md at line 203 contains potentially dangerous Python code.",
+          "file_path": "SKILL.md",
+          "line_number": 203,
+          "snippet": "requests.post(f\"{BASE}/submit-batch\", headers=HEADERS, json={",
+          "remediation": "Review the code block for security implications.",
+          "analyzer": "behavioral",
+          "metadata": {
+            "from_code_block": true,
+            "block_language": "python",
+            "same_path_other_rule_ids": [
+              "LLM_PROMPT_INJECTION"
+            ],
+            "same_path_unique_rule_count": 2,
+            "same_path_findings_count": 3,
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "MDBLOCK_PYTHON_HTTP_POST_ab4f757f94",
+          "rule_id": "MDBLOCK_PYTHON_HTTP_POST",
+          "severity": "MEDIUM",
+          "category": "data_exfiltration",
+          "title": "Python code block sends HTTP POST request",
+          "description": "Code block in references/api_reference.md at line 105 contains potentially dangerous Python code.",
+          "file_path": "references/api_reference.md",
+          "line_number": 105,
+          "snippet": "url = requests.post(f\"{BASE}/result\", headers=H, json={\"jobName\": \"myJob\"}).text.strip('\"')",
+          "remediation": "Review the code block for security implications.",
+          "analyzer": "behavioral",
+          "metadata": {
+            "from_code_block": true,
+            "block_language": "python",
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "llm_finding_tamarind_2",
+          "rule_id": "LLM_UNAUTHORIZED_TOOL_USE",
+          "severity": "LOW",
+          "category": "unauthorized_tool_use",
+          "title": "allowed-tools not declared despite network, file-write, and code-execution guidance",
+          "description": "The manifest omits the optional 'allowed-tools' field while the instructions direct the agent to execute Python/requests code, perform outbound HTTPS calls, upload local files (PDB/CIF/SDF) to a third-party cloud, and write downloaded result archives to disk (e.g., open('batch.zip','wb')). Missing allowed-tools is informational per the spec, but given the breadth of operations (local file read \u2192 external upload) an explicit declaration would let the host enforce boundaries.",
+          "file_path": "references/workflows.md",
+          "line_number": null,
+          "snippet": "allowed-tools: Not specified; workflows.md: requests.put(f\"{BASE}/upload/target.pdb\", headers=HEADERS, data=fh) and open(\"binder-screen.zip\",\"wb\").write(...)",
+          "remediation": "Declare allowed-tools explicitly (e.g., [Bash, Python, Read, Write]) and document that user files are transmitted to app.tamarind.bio, so users can consent to the data egress.",
+          "analyzer": "llm",
+          "metadata": {
+            "model": "claude-opus-5",
+            "aitech": "AITech-12.1",
+            "aitech_name": "Tool Exploitation",
+            "aisubtech": "AISubtech-12.1.2",
+            "aisubtech_name": "Tool Poisoning",
+            "scanner_category": "SUSPICIOUS CODE EXECUTION",
+            "same_path_other_rule_ids": [
+              "MDBLOCK_PYTHON_HTTP_POST"
+            ],
+            "same_path_unique_rule_count": 2,
+            "same_path_findings_count": 7,
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "MDBLOCK_PYTHON_HTTP_POST_e602a15d98",
+          "rule_id": "MDBLOCK_PYTHON_HTTP_POST",
+          "severity": "MEDIUM",
+          "category": "data_exfiltration",
+          "title": "Python code block sends HTTP POST request",
+          "description": "Code block in references/workflows.md at line 29 contains potentially dangerous Python code.",
+          "file_path": "references/workflows.md",
+          "line_number": 29,
+          "snippet": "requests.post(f\"{BASE}/submit-job\", headers=HEADERS, json=job).raise_for_status()",
+          "remediation": "Review the code block for security implications.",
+          "analyzer": "behavioral",
+          "metadata": {
+            "from_code_block": true,
+            "block_language": "python",
+            "same_path_other_rule_ids": [
+              "LLM_UNAUTHORIZED_TOOL_USE"
+            ],
+            "same_path_unique_rule_count": 2,
+            "same_path_findings_count": 7,
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "MDBLOCK_PYTHON_HTTP_POST_fece7d293c",
+          "rule_id": "MDBLOCK_PYTHON_HTTP_POST",
+          "severity": "MEDIUM",
+          "category": "data_exfiltration",
+          "title": "Python code block sends HTTP POST request",
+          "description": "Code block in references/workflows.md at line 61 contains potentially dangerous Python code.",
+          "file_path": "references/workflows.md",
+          "line_number": 61,
+          "snippet": "requests.post(f\"{BASE}/submit-job\", headers=HEADERS, json=job).raise_for_status()",
+          "remediation": "Review the code block for security implications.",
+          "analyzer": "behavioral",
+          "metadata": {
+            "from_code_block": true,
+            "block_language": "python",
+            "same_path_other_rule_ids": [
+              "LLM_UNAUTHORIZED_TOOL_USE"
+            ],
+            "same_path_unique_rule_count": 2,
+            "same_path_findings_count": 7,
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "MDBLOCK_PYTHON_HTTP_POST_00130adc1e",
+          "rule_id": "MDBLOCK_PYTHON_HTTP_POST",
+          "severity": "MEDIUM",
+          "category": "data_exfiltration",
+          "title": "Python code block sends HTTP POST request",
+          "description": "Code block in references/workflows.md at line 104 contains potentially dangerous Python code.",
+          "file_path": "references/workflows.md",
+          "line_number": 104,
+          "snippet": "requests.post(f\"{BASE}/submit-job\", headers=HEADERS, json=job).raise_for_status()",
+          "remediation": "Review the code block for security implications.",
+          "analyzer": "behavioral",
+          "metadata": {
+            "from_code_block": true,
+            "block_language": "python",
+            "same_path_other_rule_ids": [
+              "LLM_UNAUTHORIZED_TOOL_USE"
+            ],
+            "same_path_unique_rule_count": 2,
+            "same_path_findings_count": 7,
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "MDBLOCK_PYTHON_HTTP_POST_d043f56462",
+          "rule_id": "MDBLOCK_PYTHON_HTTP_POST",
+          "severity": "MEDIUM",
+          "category": "data_exfiltration",
+          "title": "Python code block sends HTTP POST request",
+          "description": "Code block in references/workflows.md at line 158 contains potentially dangerous Python code.",
+          "file_path": "references/workflows.md",
+          "line_number": 158,
+          "snippet": "requests.post(f\"{BASE}/submit-batch\", headers=HEADERS, json={",
+          "remediation": "Review the code block for security implications.",
+          "analyzer": "behavioral",
+          "metadata": {
+            "from_code_block": true,
+            "block_language": "python",
+            "same_path_other_rule_ids": [
+              "LLM_UNAUTHORIZED_TOOL_USE"
+            ],
+            "same_path_unique_rule_count": 2,
+            "same_path_findings_count": 7,
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "MDBLOCK_PYTHON_HTTP_POST_bafd087ead",
+          "rule_id": "MDBLOCK_PYTHON_HTTP_POST",
+          "severity": "MEDIUM",
+          "category": "data_exfiltration",
+          "title": "Python code block sends HTTP POST request",
+          "description": "Code block in references/workflows.md at line 228 contains potentially dangerous Python code.",
+          "file_path": "references/workflows.md",
+          "line_number": 228,
+          "snippet": "requests.post(f\"{BASE}/submit-job\", headers=HEADERS,",
+          "remediation": "Review the code block for security implications.",
+          "analyzer": "behavioral",
+          "metadata": {
+            "from_code_block": true,
+            "block_language": "python",
+            "same_path_other_rule_ids": [
+              "LLM_UNAUTHORIZED_TOOL_USE"
+            ],
+            "same_path_unique_rule_count": 2,
+            "same_path_findings_count": 7,
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        },
+        {
+          "id": "MDBLOCK_PYTHON_HTTP_POST_93816b1e61",
+          "rule_id": "MDBLOCK_PYTHON_HTTP_POST",
+          "severity": "MEDIUM",
+          "category": "data_exfiltration",
+          "title": "Python code block sends HTTP POST request",
+          "description": "Code block in references/workflows.md at line 250 contains potentially dangerous Python code.",
+          "file_path": "references/workflows.md",
+          "line_number": 250,
+          "snippet": "url = requests.post(f\"{BASE}/result\", headers=HEADERS,",
+          "remediation": "Review the code block for security implications.",
+          "analyzer": "behavioral",
+          "metadata": {
+            "from_code_block": true,
+            "block_language": "python",
+            "same_path_other_rule_ids": [
+              "LLM_UNAUTHORIZED_TOOL_USE"
+            ],
+            "same_path_unique_rule_count": 2,
+            "same_path_findings_count": 7,
+            "scan_policy_name": "default",
+            "scan_policy_version": "1.0",
+            "scan_policy_preset_base": "balanced",
+            "scan_policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "torchdrug",
+      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/torchdrug",
+      "is_safe": true,
+      "max_severity": "SAFE",
+      "scan_duration_seconds": 9.89,
+      "content_hash": "dc332d00dfe9a4b5af1edbffe13114518472903602d6ff980f551bbac06ec001",
+      "last_scanned": "2026-08-16T16:32:16+00:00",
+      "reused_from_previous_report": false,
+      "analyzers_used": [
+        "behavioral_analyzer",
+        "trigger_analyzer",
+        "llm_analyzer"
+      ],
+      "analyzers_failed": [],
+      "analyzability_score": 100.0,
+      "scan_metadata": {
+        "policy_name": "default",
+        "policy_version": "1.0",
+        "policy_preset_base": "balanced",
+        "policy_fingerprint_sha256": "cdfc68c6468804eb5dc1bb919280fd7a27d97d0eb3191b22a8b4a0483006dabe",
+        "llm_overall_assessment": "The 'torchdrug' skill is a documentation/reference package that provides guidance for building TorchDrug 0.2.1 machine learning workflows. It contains no executable script files; all content consists of SKILL.md instructions and reference markdown files with illustrative Python/Bash code snippets. No prompt injection, instruction override, concealment directives, or role redefinition attempts were detected in any human language. Installation commands use pinned versions (torch==2.0.0, torch-scatter==2.1.1, torch-cluster==1.6.1, torchdrug==0.2.1) sourced from official PyG/PyPI indexes, which is good supply-chain hygiene. Network references point only to legitimate upstream documentation (torchdrug.ai, github.com/DeepGraphLearning) and are cited as reading material, not as instructions to fetch and execute remote content. No credential access, environment variable harvesting, data exfiltration, eval/exec, obfuscation, or over-collection patterns are present. Declared allowed-tools (Read, Write, Edit, Bash) are consistent with the skill's purpose of generating/debugging code and running version checks, and the description accurately matches the observed content. Several referenced files (assets/*, templates/*, torch.py, torchdrug.py) were not found, but these appear to be false-positive extractions from code snippets and generic path patterns rather than missing malicious payloads; the actual references/*.md files referenced in the reference index are present and benign. The reference material additionally includes responsible-use guidance for generated chemistry and biomedical predictions, which is a positive safety signal.",
+        "llm_primary_threats": []
+      },
+      "analyzability_details": {
+        "score": 100.0,
+        "total_files": 9,
+        "analyzed_files": 9,
+        "unanalyzable_files": 0,
+        "risk_level": "LOW",
+        "unanalyzable_file_list": []
+      },
+      "findings": []
+    }
+  ]
+}

@@ -92,6 +92,36 @@ def content_hash(skill_dir: Path) -> str:
     return digest.hexdigest()
 
 
+# Attributes of SkillScanner that this repository's wrappers drive directly.
+# The underscored ones are private to cisco-ai-skill-scanner: there is no public
+# API for scanning one already-loaded skill or for running the cross-skill
+# analyzers, so the wrappers reach in. A rename upstream would otherwise surface
+# as an AttributeError in the middle of a scan -- or, worse, as a scan that
+# quietly stops checking something. pyproject caps the dependency below the next
+# major, and this check catches drift inside that range.
+REQUIRED_SCANNER_API = (
+    "loader",
+    "policy",
+    "list_analyzers",
+    "_scan_single_skill",
+    "_check_description_overlap",
+    "_apply_severity_overrides",
+)
+
+
+def _assert_scanner_api(scanner: SkillScanner) -> None:
+    missing = [name for name in REQUIRED_SCANNER_API if not hasattr(scanner, name)]
+    if missing:
+        installed = scanner_version()
+        raise RuntimeError(
+            "cisco-ai-skill-scanner "
+            f"{installed} does not expose {', '.join(missing)}. The scan "
+            "wrappers in scan_skills.py and scan_pr_skills.py drive these "
+            "directly; update them for the new API rather than pinning around "
+            "it, and re-run the scan before trusting a clean result."
+        )
+
+
 def build_scanner() -> SkillScanner:
     policy = ScanPolicy.from_preset("balanced")
     policy.llm_analysis.max_instruction_body_chars = 75_000
@@ -109,6 +139,7 @@ def build_scanner() -> SkillScanner:
         ],
         policy=policy,
     )
+    _assert_scanner_api(scanner)
     return scanner
 
 

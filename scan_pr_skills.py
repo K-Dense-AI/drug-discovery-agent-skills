@@ -174,6 +174,33 @@ def format_comment(report: Report, scanned_dirs: list[Path]) -> str:
                 lines.append("</details>")
                 lines.append("")
 
+    # Cross-skill findings live outside `scan_results` -- they belong to the set
+    # of skills, not to any one of them -- so they need rendering of their own.
+    # Without this they were computed, counted, and then silently dropped.
+    if report.cross_skill_findings:
+        n = len(report.cross_skill_findings)
+        lines.append("### Cross-skill findings")
+        lines.append("")
+        lines.append(
+            f"{n} finding{'s' if n != 1 else ''} about how the scanned skills "
+            "interact (description overlap, trigger collisions), rather than "
+            "about any single skill."
+        )
+        lines.append("")
+        for finding in sorted(
+            report.cross_skill_findings,
+            key=lambda f: SEVERITY_ORDER.index(_sev_str(f)),
+        ):
+            lines.append(
+                f"- **{severity_badge(_sev_str(finding))}** `{finding.rule_id}` — "
+                f"{finding.title}"
+            )
+            if finding.description:
+                lines.append(f"  > {finding.description}")
+            if finding.remediation:
+                lines.append(f"  > **Remediation:** {finding.remediation}")
+        lines.append("")
+
     if report.skills_skipped:
         lines.append("### Skipped")
         lines.append("")
@@ -192,6 +219,12 @@ def _should_block(report: Report, fail_on: str) -> tuple[bool, str | None]:
         sev = _sev_str(result)
         if sev in blocking_ranks:
             return True, f"{sev} finding(s) in {result.skill_name}"
+    # Cross-skill findings are not attached to any scan result, so checking
+    # only `scan_results` let a CRITICAL overlap or trigger collision through.
+    for finding in report.cross_skill_findings:
+        sev = _sev_str(finding)
+        if sev in blocking_ranks:
+            return True, f"{sev} cross-skill finding ({finding.rule_id})"
     return False, None
 
 

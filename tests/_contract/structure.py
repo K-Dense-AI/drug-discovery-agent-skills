@@ -46,8 +46,12 @@ _MARKDOWN_LINK = re.compile(r"\]\(((?:assets|references|scripts)/[A-Za-z0-9_./-]
 
 # An absolute path under someone's home or drive mount is a leaked local
 # environment: it names a person, and it cannot work on any other machine.
-_PERSONAL_PATH = re.compile(
-    r"/(?:mnt/[a-z]/Users|home|Users)/(?!<|\$|\{)([A-Za-z0-9._-]+)/"
+# Both spellings are needed: the POSIX pattern anchors on a leading `/`, so it
+# cannot see a backslashed `C:\Users\someone\` -- which is exactly how a leak
+# from a Windows machine is written.
+_PERSONAL_PATHS = (
+    re.compile(r"/(?:mnt/[a-z]/Users|home|Users)/(?!<|\$|\{)([A-Za-z0-9._-]+)/"),
+    re.compile(r"[A-Za-z]:[\\/]Users[\\/](?!<|\$|%|\{)([A-Za-z0-9._-]+)[\\/]"),
 )
 
 # Service and platform accounts that legitimately appear in documentation --
@@ -57,6 +61,7 @@ _IMPERSONAL_ACCOUNTS = frozenset(
     {
         "dnanexus", "ubuntu", "root", "runner", "ec2-user", "jovyan", "vscode",
         "airflow", "nextflow", "opt", "shared", "linuxbrew",
+        "public", "default", "administrator",
         "user", "username", "you", "me", "youruser", "your-user", "name",
     }
 )
@@ -78,12 +83,22 @@ def script_bearing_skills(skills_dir: Path = SKILLS_DIR) -> list[Path]:
     ]
 
 
-def all_skill_names(skills_dir: Path = SKILLS_DIR) -> set[str]:
-    return {
-        skill.name
-        for skill in skills_dir.iterdir()
+def all_skills(skills_dir: Path = SKILLS_DIR) -> list[Path]:
+    """Every discoverable skill directory, script-bearing or not.
+
+    The structural contract applies to all of them. Scoping it to
+    `script_bearing_skills()` would leave a documentation-only skill free to
+    ship a broken link, an oversized SKILL.md, or a leaked local path.
+    """
+    return [
+        skill
+        for skill in sorted(skills_dir.iterdir())
         if skill.is_dir() and (skill / "SKILL.md").is_file()
-    }
+    ]
+
+
+def all_skill_names(skills_dir: Path = SKILLS_DIR) -> set[str]:
+    return {skill.name for skill in all_skills(skills_dir)}
 
 
 def _frontmatter(skill: Path) -> str | None:
@@ -386,13 +401,14 @@ def personal_path_problems(skill: Path) -> list[str]:
         for number, line in enumerate(
             document.read_text(encoding="utf-8", errors="replace").splitlines(), 1
         ):
-            for match in _PERSONAL_PATH.finditer(line):
-                if match.group(1).lower() in _IMPERSONAL_ACCOUNTS:
-                    continue
-                problems.append(
-                    f"{skill.name}: {document.relative_to(skill)}:{number} hardcodes "
-                    f"the local path `{match.group(0)}`"
-                )
+            for pattern in _PERSONAL_PATHS:
+                for match in pattern.finditer(line):
+                    if match.group(1).lower() in _IMPERSONAL_ACCOUNTS:
+                        continue
+                    problems.append(
+                        f"{skill.name}: {document.relative_to(skill)}:{number} "
+                        f"hardcodes the local path `{match.group(0)}`"
+                    )
     return problems
 
 

@@ -10,6 +10,7 @@ to get wrong, so most of the assertions are about it.
 
 from __future__ import annotations
 
+import os
 import sys
 import tempfile
 import unittest
@@ -73,6 +74,41 @@ class DataPathTests(unittest.TestCase):
         self.assertIn("PRIMEKG_DATA", message)
 
 
+class LoadingTests(PrimeKgTestCase):
+    """The edge list is parsed once per graph, not once per query."""
+
+    def test_repeated_queries_parse_the_csv_only_once(self) -> None:
+        # PrimeKG is ~4 million edges; get_disease_context alone calls two
+        # query functions, so a re-read per call is seconds of wasted work.
+        with mock.patch.object(
+            query_primekg.pd, "read_csv", wraps=query_primekg.pd.read_csv
+        ) as read_csv:
+            query_primekg.search_nodes("BRCA1")
+            query_primekg.get_neighbors("672")
+            query_primekg.get_disease_context("Breast Cancer")
+        self.assertEqual(read_csv.call_count, 1)
+
+    def test_a_changed_file_is_re_read(self) -> None:
+        query_primekg.search_nodes("BRCA1")
+        self.data.write_text(
+            EDGES.replace("BRCA1", "BRCA2"), encoding="utf-8"
+        )
+        # st_mtime_ns has nanosecond resolution but some filesystems do not;
+        # the size is unchanged here, so touch the mtime explicitly.
+        stat = self.data.stat()
+        os.utime(self.data, ns=(stat.st_atime_ns, stat.st_mtime_ns + 1_000_000_000))
+        self.assertEqual(
+            [row["name"] for row in query_primekg.search_nodes("BRCA2")], ["BRCA2"]
+        )
+
+    def test_pointing_at_a_different_graph_does_not_serve_the_old_one(self) -> None:
+        query_primekg.search_nodes("BRCA1")
+        other = Path(self._temporary.name) / "other.csv"
+        other.write_text(EDGES.replace("BRCA1", "BRCA2"), encoding="utf-8")
+        with mock.patch.object(query_primekg, "DATA_PATH", str(other)):
+            self.assertEqual(query_primekg.search_nodes("BRCA1"), [])
+
+
 class SearchTests(PrimeKgTestCase):
     def test_nodes_are_found_on_either_side_of_an_edge(self) -> None:
         # TP53 appears as x in one row and as y in another; one record either way.
@@ -100,6 +136,15 @@ class SearchTests(PrimeKgTestCase):
 
     def test_no_match_returns_an_empty_list(self) -> None:
         self.assertEqual(query_primekg.search_nodes("no-such-gene"), [])
+
+    def test_the_query_is_a_literal_substring_not_a_regular_expression(self) -> None:
+        # Gene and drug names carry regex metacharacters. Passing the query
+        # through as a pattern would either raise or match far too much.
+        self.assertEqual(query_primekg.search_nodes("BRCA1("), [])
+        self.assertEqual(query_primekg.search_nodes("B.CA1"), [])
+        self.assertEqual(
+            [row["name"] for row in query_primekg.search_nodes("BRCA1")], ["BRCA1"]
+        )
 
     def test_results_carry_the_source_database(self) -> None:
         self.assertEqual(query_primekg.search_nodes("Olaparib")[0]["source"], "DrugBank")
@@ -146,10 +191,41 @@ class PathTests(PrimeKgTestCase):
     def test_unconnected_nodes_yield_no_path(self) -> None:
         self.assertEqual(query_primekg.find_paths("CHEMBL1", "HP001"), [])
 
-    def test_two_hop_search_is_documented_as_unimplemented(self) -> None:
-        # The depth-2 branch is a stub; assert the current contract rather than
-        # a capability the script does not have.
-        self.assertEqual(query_primekg.find_paths("CHEMBL1", "D001", max_depth=2), [])
+    def test_a_two_hop_path_goes_through_a_shared_neighbour(self) -> None:
+        # Olaparib and Breast Cancer share no edge, but both touch BRCA1 --
+        # the drug-repurposing shape the skill advertises.
+        paths = query_primekg.find_paths("CHEMBL1", "D001", max_depth=2)
+        self.assertEqual(len(paths), 1)
+        hops = paths[0]
+        self.assertEqual(len(hops), 2)
+        self.assertEqual(
+            [hop["relation"] for hop in hops], ["drug_protein", "disease_protein"]
+        )
+
+    def test_the_hops_are_ordered_from_start_to_end(self) -> None:
+        # First hop leaves the start node, second hop arrives at the end node.
+        first, second = query_primekg.find_paths("CHEMBL1", "D001")[0]
+        self.assertEqual(str(first["x_id"]), "CHEMBL1")
+        self.assertEqual(str(second["x_id"]), "D001")
+        # Both hops meet at BRCA1.
+        self.assertEqual(str(first["y_id"]), "672")
+        self.assertEqual(str(second["y_id"]), "672")
+
+    def test_depth_one_excludes_two_hop_paths(self) -> None:
+        self.assertEqual(query_primekg.find_paths("CHEMBL1", "D001", max_depth=1), [])
+
+    def test_an_unsupported_depth_is_rejected_rather_than_ignored(self) -> None:
+        # The old stub accepted any depth and silently searched one hop.
+        for depth in (0, 3):
+            with self.subTest(depth=depth):
+                with self.assertRaises(ValueError):
+                    query_primekg.find_paths("CHEMBL1", "D001", max_depth=depth)
+
+    def test_a_two_hop_search_does_not_bounce_off_the_endpoints(self) -> None:
+        # TP53 and Ovarian Cancer are directly connected. The two-hop search
+        # must not also report the degenerate path start -> end -> start.
+        paths = query_primekg.find_paths("7157", "D002")
+        self.assertTrue(all(len(hops) == 1 for hops in paths))
 
 
 class DiseaseContextTests(PrimeKgTestCase):

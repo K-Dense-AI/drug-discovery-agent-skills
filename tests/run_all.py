@@ -5,7 +5,7 @@ Separate processes are required, not a preference: skills' `scripts/`
 directories share top-level module names (see tests/conftest.py).
 
     python tests/run_all.py                     # every skill under tests/
-    python tests/run_all.py qutip pydicom       # only the named skills
+    python tests/run_all.py rdkit pytdc         # only the named skills
     python tests/run_all.py -- -x --tb=long     # pass extra args to pytest
 
 A full run starts with `tests/_meta`, the repo-wide guard that checks every
@@ -16,13 +16,13 @@ With `--isolated`, each suite instead runs in a throwaway `uv` environment
 built from that skill's entry in tests/skill-requirements.toml:
 
     python tests/run_all.py --isolated
-    python tests/run_all.py --isolated scanpy qiskit
+    python tests/run_all.py --isolated rdkit pytdc
 
 Nothing is installed into the project environment. Each skill gets only the
 packages it documents, on the interpreter it needs -- which is the point:
-opentrons pins numpy<2, PyTDC needs 3.11, and esm caps transformers below the
-version the transformers skill targets, so no single environment can host them
-all. uv caches wheels globally, so repeat runs create each environment in
+torchdrug and molfeat cap out at Python 3.10, PyTDC and deepchem need 3.11,
+and esm caps transformers below the release diffdock's PyG stack expects, so no
+single environment can host them all. uv caches wheels globally, so repeat runs create each environment in
 milliseconds.
 
 Exit code is 0 only when every suite passes. Suites that collect nothing are

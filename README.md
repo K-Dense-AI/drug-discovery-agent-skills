@@ -56,6 +56,20 @@ git clone https://github.com/K-Dense-AI/drug-discovery-agent-skills.git ~/.agent
 git clone https://github.com/K-Dense-AI/drug-discovery-agent-skills.git .agents/skills/drug-discovery-agent-skills      # project-level
 ```
 
+## 📌 Version pinning
+
+`main` is the development branch: skills change there between releases. For reproducible installs,
+pin to a release tag and move the pin forward deliberately.
+
+```bash
+gh skill install K-Dense-AI/drug-discovery-agent-skills --pin v1.0.0   # a release tag
+git clone --branch v1.0.0 --depth 1 https://github.com/K-Dense-AI/drug-discovery-agent-skills.git
+```
+
+Each skill also carries its own `metadata.version` in its `SKILL.md`, bumped whenever that skill
+changes — check it to see whether an upgrade touched the skills you actually use. A pin you never
+move stops receiving fixes, including security fixes; see [SECURITY.md](SECURITY.md).
+
 ## 📦 What's included
 
 | Skill | What it does |
@@ -98,6 +112,24 @@ Install any combination — each bundle is standalone:
 
 The original [scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) repository
 remains the full monolithic collection.
+
+## 🔒 Security disclaimer
+
+Agent Skills are instructions an AI agent reads, plus scripts it may execute on your machine. That
+is what makes them useful, and it is also the risk: installing a skill grants it the agent's
+reach over your files, your credentials, and the network.
+
+- **Review before you install**, and install only the skills you need rather than the whole bundle.
+- Skills here reach external services (Adaptyv, ESM Forge, Rowan, Tamarind, NCATS ARAX, DepMap) and
+  read API keys from your environment. Each `SKILL.md` says which credentials and network access it
+  needs — read that section before supplying a key.
+- Bundled scripts run scientific tooling. Nothing here is validated for clinical, diagnostic, or
+  regulatory use; treat every result as a hypothesis to confirm with your own methods.
+- A skill performing the work it documents is not a vulnerability. Something a skill does that its
+  documentation does not describe **is** — report it per [SECURITY.md](SECURITY.md).
+
+Skills are scanned automatically ([`cisco-ai-skill-scanner`](https://pypi.org/project/cisco-ai-skill-scanner/))
+on every pull request and weekly. Scanning is a prompt to review, not a certification.
 
 ## 🤝 Contributing
 

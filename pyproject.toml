@@ -5,7 +5,10 @@ description = "Agent Skills for small-molecule and protein therapeutics: cheminf
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "cisco-ai-skill-scanner>=2.0.12",
+    # Capped below the next major: scan_skills.py and scan_pr_skills.py drive
+    # SkillScanner's private methods (see REQUIRED_SCANNER_API), which a major
+    # release is free to rename. uv.lock pins the exact resolution for CI.
+    "cisco-ai-skill-scanner>=2.0.12,<3",
     "firecrawl-py>=4.9.0",
     "pytest>=9.1.1",
     "python-dotenv>=1.0.0",

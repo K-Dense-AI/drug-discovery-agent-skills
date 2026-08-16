@@ -23,4 +23,6 @@ research/
 
 skills-lock.json
 
-uv.lock
+# uv.lock is deliberately NOT ignored. Every workflow keys its uv cache on it
+# and three filter their triggers on it, and without it CI resolves
+# cisco-ai-skill-scanner and the git-pinned skills-ref afresh on every run.

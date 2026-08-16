@@ -105,9 +105,22 @@ jobs:
           path: pr_scan_comment.md
           if-no-files-found: ignore
 
+      # Under `pull_request`, a PR opened from a fork gets a read-only
+      # GITHUB_TOKEN regardless of the `permissions:` block above, so this step
+      # cannot post and would otherwise fail the job on every fork PR -- the
+      # exact case the scanner's no-API-key fallback comment exists for. The
+      # comment body is uploaded as an artifact by the step above either way,
+      # so nothing is lost when posting is refused.
       - name: Post or update PR comment
         if: always() && hashFiles('pr_scan_comment.md') != ''
+        continue-on-error: true
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: skill-security-scan
           path: pr_scan_comment.md
+
+      - name: Note when the comment could not be posted
+        if: always() && steps.scan.conclusion != 'skipped' && github.event.pull_request.head.repo.fork
+        run: |
+          echo "::notice::This PR is from a fork, so the scan comment cannot be posted." \
+               "Download the 'pr-skill-scan-comment' artifact to read the results."

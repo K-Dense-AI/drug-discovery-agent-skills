@@ -28,7 +28,7 @@ body:
     attributes:
       label: Skill name
       description: The skill directory name, exactly as it appears under `skills/`. Leave blank if this is not skill-specific.
-      placeholder: scanpy
+      placeholder: rdkit
     validations:
       required: false
 
@@ -54,7 +54,7 @@ body:
       label: Steps to reproduce
       description: The smallest sequence that triggers it. Include the prompt you gave the agent, if relevant.
       placeholder: |
-        1. Load the `scanpy` skill in Claude Code
+        1. Load the `rdkit` skill in Claude Code
         2. Ask: "cluster my AnnData object"
         3. Run the code the agent produces
         4. See the error below

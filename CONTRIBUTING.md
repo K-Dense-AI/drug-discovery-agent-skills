@@ -1,12 +1,13 @@
 # Contributing Skills
 
-Thanks for helping improve Scientific Agent Skills. This guide explains how to add or update a skill in this repository while following the open [Agent Skills specification](https://agentskills.io/specification).
+Thanks for helping improve Drug Discovery Agent Skills. This guide explains how to add or update a skill in this repository while following the open [Agent Skills specification](https://agentskills.io/specification).
 
 Participation in this project is governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Ways to Contribute
 
-- Add a new scientific package, database, platform, workflow, or research method skill.
+- Add a skill for a drug-discovery package, database, or platform. Skills from an adjacent domain
+  (genomics, imaging, clinical) belong in the sibling bundle for that domain — see the README.
 - Improve an existing skill with clearer instructions, current APIs, better examples, references, or scripts.
 - Fix outdated examples, broken install steps, security issues, or documentation gaps.
 - Add or extend a skill's tests under `tests/<skill-name>/` (see [Tests](#tests)).
@@ -286,7 +287,7 @@ uv run --with pytest python -m pytest tests/skill-name -q
 uv run --with pytest python tests/run_all.py
 ```
 
-Each skill's suite must run in its own process. Skills' `scripts/` directories own plain top-level module names — 32 skills ship a `scripts/_common.py`, and names like `cluster.py` and `validate_manifest.py` recur — so collecting two skills into one interpreter would resolve those imports to whichever skill was imported first and silently test the wrong files. `tests/conftest.py` rejects a multi-skill session, and `tests/run_all.py` forks per skill.
+Each skill's suite must run in its own process. Skills' `scripts/` directories own plain top-level module names — `pytdc` ships a `scripts/_common.py`, and a name like `analyze_results.py` is the obvious choice for any number of skills — so collecting two skills into one interpreter would resolve those imports to whichever skill was imported first and silently test the wrong files. `tests/conftest.py` rejects a multi-skill session, and `tests/run_all.py` forks per skill.
 
 ### The repo-wide guard, and what you no longer have to write
 
@@ -310,7 +311,7 @@ CliHelpTests = skill_contract.cli.help_test_case(SKILL_ROOT)
 DemoBlockTests = skill_contract.cli.demo_test_case(SKILL_ROOT, ("doe_designs.py",))
 ```
 
-`skill_contract.office` and `skill_contract.schematic` cover files that several skills ship byte-identical copies of — the OOXML `office/` tree under `docx`/`pptx`/`xlsx`, and the AI schematic generator under five skills. Instantiate them against your skill root rather than writing the tests again; `tests/_meta` separately fails if the copies drift apart, so those files have to be changed together.
+`skill_contract.office` and `skill_contract.schematic` cover files that several skills ship byte-identical copies of. No skill in this bundle ships either set — both modules are inherited from the wider [scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) collection and kept here so a skill moved in from it keeps its coverage. If you bring one in, instantiate them against your skill root rather than writing the tests again; `tests/_meta` separately fails if the copies drift apart, so those files have to be changed together.
 
 Guard heavy imports at module scope so a suite degrades to skips rather than a collection error when a package is missing:
 
@@ -320,20 +321,26 @@ np = pytest.importorskip("numpy", reason="skill-name needs numpy")
 
 ### One environment per skill
 
-Four suites fail on this repository's default environment because their scientific dependencies are not installed (`exa-search`, `qutip`, `scikit-survival`, `simpy`), and installing them all into one environment is not possible: the skills' upstream pins contradict each other. `opentrons` requires `numpy<2`; `esm` caps `transformers` below the release the `transformers` skill targets; `geniml` and `spikeinterface` pin `zarr<3` while the `zarr-python` skill targets 3.x; `bioservices` caps `lxml<6` while `matchms` requires 6.0.2+; and `pytdc`, `molfeat`, `deepchem`, `histolab`, `vaex`, and `ete3` each need an interpreter older than 3.13.
+Most suites skip on this repository's default environment because their scientific dependencies are not installed (`rdkit`, `medchem`, `deepchem`, `diffdock`, `primekg`), and installing them all into one environment is not possible: the skills' upstream pins contradict each other. `torchdrug` and `molfeat` both cap out at Python 3.10; `pytdc` and `deepchem` need 3.11; `esm` caps `transformers` below the release `diffdock`'s PyG stack expects; and `datamol`, `medchem`, and `rdkit` disagree on the RDKit build.
 
 `--isolated` therefore gives each skill its own throwaway `uv` environment, built from [`tests/skill-requirements.toml`](tests/skill-requirements.toml):
 
 ```bash
-python tests/run_all.py --isolated                    # every suite, one env each
-python tests/run_all.py --isolated qutip exa-search   # just these
+python tests/run_all.py --isolated                 # every suite, one env each
+python tests/run_all.py --isolated rdkit pytdc     # just these
 ```
 
 Nothing is installed into the project environment, so `uv sync` is unaffected. Each `[skills.<name>]` entry lists the packages that skill documents and, where needed, a `python` version for that skill alone — uv downloads the interpreter on demand. Packages that cannot be installed at all (a GitHub-only SDK, a conda-forge-only library, a CUDA build) are listed under `[unavailable]` with the reason, and the runner prints them so the gap appears in the test output.
 
 A new skill that ships `scripts/` needs a `[skills.<name>]` entry — `tests/_meta` fails without one. Use `packages = []` when its bundled tooling is standard-library only — the skill still gets a clean environment with just pytest. uv caches wheels globally, so repeat runs create each environment in milliseconds.
 
-`.github/workflows/skill-tests.yml` runs `tests/_meta` plus every `packages = []` suite on each pull request, which is fast and needs no wheels beyond pytest. The full `--isolated` sweep is not run in CI: it builds an environment per skill, and several of them need a CUDA toolchain, a JDK, or a local MATLAB install that a runner does not have. Run it locally before a release, and whenever you change anything under `tests/_contract/`.
+`.github/workflows/skill-tests.yml` runs three things on each pull request, none of which needs a scientific wheel:
+
+1. `tests/_meta` — the structural contract and the coverage guard.
+2. **Every** suite in the project environment, one process each. Suites whose packages are absent degrade to skips through their module-scope `pytest.importorskip`, but their standard-library tests still run and a collection error, a bad import, or a syntax error fails the build.
+3. Every `packages = []` suite again, each in its own throwaway environment — which is what proves the `skill-requirements.toml` entry is right.
+
+The full `--isolated` sweep is not run in CI: it builds an environment per skill, several of which pull torch or deepchem, and some need a CUDA toolchain a runner does not have. Run it locally before a release, and whenever you change anything under `tests/_contract/`.
 
 ## Pull Request Checklist
 
@@ -361,9 +368,9 @@ Before submitting a pull request, confirm:
 ## Pull Request Process
 
 1. Push your branch to your fork.
-2. Open a pull request with a clear title, such as `Add scanpy workflow examples` or `Update astropy skill for current API`.
+2. Open a pull request with a clear title, such as `Add medchem query-language examples` or `Update rdkit skill for current API`.
 3. Describe what changed, why it matters, and how you tested it.
 4. Link related issues, package documentation, release notes, or security findings.
 5. Respond to review comments and update the skill as needed.
 
-Thank you for helping make scientific computing more accessible to AI agents and researchers.
+Thank you for helping make drug discovery more accessible to AI agents and researchers.

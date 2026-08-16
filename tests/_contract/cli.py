@@ -65,7 +65,7 @@ def run_help(script: Path, timeout: int = DEFAULT_TIMEOUT) -> subprocess.Complet
 
 #: A script that guards its own imports and prints a friendly install hint --
 #: better behaviour than a traceback -- must still be recognised as "package
-#: absent" rather than reported as a broken CLI. `exa-search` does exactly this.
+#: absent" rather than reported as a broken CLI.
 _GRACEFUL_IMPORT_GUARD = re.compile(
     r"(?:^|\n)\s*([\w.\-]+) (?:is )?not installed\b"
     r"|No module named ['\"]?([\w.]+)"

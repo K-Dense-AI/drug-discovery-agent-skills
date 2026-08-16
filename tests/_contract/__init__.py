@@ -1,7 +1,7 @@
 """Shared test contract for every skill in this repository.
 
 Suites do not import this package by name from `sys.path` -- putting `tests/`
-on `sys.path` would turn `tests/simpy/`, `tests/qutip/`, `tests/neurokit2/` and
+on `sys.path` would turn `tests/rdkit/`, `tests/deepchem/`, `tests/medchem/` and
 friends into importable namespace packages that shadow the real libraries (see
 the comment on `addopts` in `pyproject.toml`). Instead `tests/conftest.py`
 loads this package by file location and registers it as `skill_contract`, so a
