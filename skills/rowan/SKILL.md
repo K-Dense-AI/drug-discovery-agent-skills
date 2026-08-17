@@ -1,7 +1,7 @@
 ---
 name: rowan
 description: Rowan is a cloud-native molecular modeling and medicinal-chemistry workflow platform with a Python API. Use for pKa and macropKa prediction, conformer and tautomer ensembles, docking and analogue docking, protein-ligand cofolding, MSA generation, molecular dynamics, permeability, descriptor workflows, and related small-molecule or protein modeling tasks. Ideal for programmatic batch screening, multi-step chemistry pipelines, and workflows that would otherwise require maintaining local HPC/GPU infrastructure.
-license: MIT
+license: Proprietary (API key required)
 allowed-tools: Read Write Edit Bash
 compatibility: Requires Python 3.12+ and a ROWAN_API_KEY. Rowan is a commercial hosted service — compute is metered and billed, so a large batch has a real cost. No local GPU or HPC needed.
 metadata:
@@ -393,6 +393,3 @@ Rowan is a molecular-design workflow platform, not just a remote chemistry engin
 - `pkpd-translation` → after: predicted permeability and pKa feed dose projection.
 - `tamarind` → alongside: overlapping hosted-compute coverage, stronger on protein and structure
   tools where Rowan is stronger on small-molecule quantum and ADME workflows.
-
-**Licence note:** this skill's text is MIT, like the rest of the bundle. The Rowan platform itself
-is a commercial service and its terms are Rowan's.
