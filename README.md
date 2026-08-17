@@ -1,7 +1,7 @@
 # Drug Discovery Agent Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
-[![Version](https://img.shields.io/badge/Version-1.2.0-blue.svg)](pyproject.toml)
+[![Version](https://img.shields.io/badge/Version-1.3.0-blue.svg)](pyproject.toml)
 [![Skills](https://img.shields.io/badge/Skills-37-brightgreen.svg)](#whats-included)
 [![Agent Skills](https://img.shields.io/badge/Standard-Agent_Skills-blueviolet.svg)](https://agentskills.io/)
 [![Agent Plugins](https://img.shields.io/badge/Standard-Agent_Plugins-0A7A72.svg)](https://agent-plugins.org/)
@@ -102,7 +102,7 @@ npx skills add K-Dense-AI/drug-discovery-agent-skills
 gh skill install K-Dense-AI/drug-discovery-agent-skills
 
 # Pin to a release tag for reproducible installs
-gh skill install K-Dense-AI/drug-discovery-agent-skills --pin v1.2.0
+gh skill install K-Dense-AI/drug-discovery-agent-skills --pin v1.3.0
 ```
 
 ### Option 3: Agent Plugins (Cursor, Codex, and other plugin clients)
@@ -224,8 +224,8 @@ tool will not install on a newer interpreter.
 pin to a release tag and move the pin forward deliberately.
 
 ```bash
-gh skill install K-Dense-AI/drug-discovery-agent-skills --pin v1.2.0   # a release tag
-git clone --branch v1.2.0 --depth 1 https://github.com/K-Dense-AI/drug-discovery-agent-skills.git
+gh skill install K-Dense-AI/drug-discovery-agent-skills --pin v1.3.0   # a release tag
+git clone --branch v1.3.0 --depth 1 https://github.com/K-Dense-AI/drug-discovery-agent-skills.git
 ```
 
 Each skill also carries its own `metadata.version` in its `SKILL.md`, bumped whenever that skill
