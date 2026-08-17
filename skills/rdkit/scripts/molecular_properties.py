@@ -18,7 +18,7 @@ try:
     from rdkit import Chem
     from rdkit.Chem import Descriptors, Lipinski
 except ImportError:
-    print("Error: RDKit not installed. Install with: uv pip install rdkit")
+    print("Error: RDKit not installed. Install with: uv pip install rdkit", file=sys.stderr)
     sys.exit(1)
 
 
@@ -71,16 +71,21 @@ def calculate_properties(mol):
         'QED': Descriptors.qed(mol),
     }
 
-    # Lipinski's Rule of Five
-    properties['Lipinski_Pass'] = (
-        properties['MW'] <= 500 and
-        properties['LogP'] <= 5 and
-        properties['HBD'] <= 5 and
-        properties['HBA'] <= 10
-    )
+    # Lipinski's Rule of Five. The rule as stated predicts poor absorption when
+    # *more than one* criterion is violated, so a single violation still passes --
+    # requiring all four would reject a large share of oral drugs. The count is
+    # reported alongside the flag because which criterion fails is what matters.
+    properties['Lipinski_Violations'] = sum((
+        properties['MW'] > 500,
+        properties['LogP'] > 5,
+        properties['HBD'] > 5,
+        properties['HBA'] > 10,
+    ))
+    properties['Lipinski_Pass'] = properties['Lipinski_Violations'] <= 1
 
-    # Lead-likeness
-    properties['Lead-like'] = (
+    # Lead-likeness (Teague): a smaller, less lipophilic starting point, on the
+    # assumption that optimisation adds weight and logP.
+    properties['Lead_Like'] = (
         250 <= properties['MW'] <= 350 and
         properties['LogP'] <= 3.5 and
         properties['Rotatable_Bonds'] <= 7
@@ -93,7 +98,7 @@ def process_single_molecule(smiles):
     """Process a single SMILES string."""
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
-        print(f"Error: Failed to parse SMILES: {smiles}")
+        print(f"Error: Failed to parse SMILES: {smiles}", file=sys.stderr)
         return None
 
     props = calculate_properties(mol)
@@ -105,8 +110,8 @@ def process_file(input_file, output_file=None):
     input_path = Path(input_file)
 
     if not input_path.exists():
-        print(f"Error: File not found: {input_file}")
-        return
+        print(f"Error: File not found: {input_file}", file=sys.stderr)
+        return None
 
     # Determine file type
     if input_path.suffix.lower() in ['.sdf', '.mol']:
@@ -114,13 +119,13 @@ def process_file(input_file, output_file=None):
     elif input_path.suffix.lower() in ['.smi', '.smiles', '.txt']:
         suppl = Chem.SmilesMolSupplier(str(input_path), titleLine=False)
     else:
-        print(f"Error: Unsupported file format: {input_path.suffix}")
-        return
+        print(f"Error: Unsupported file format: {input_path.suffix}", file=sys.stderr)
+        return None
 
     results = []
     for idx, mol in enumerate(suppl):
         if mol is None:
-            print(f"Warning: Failed to parse molecule {idx+1}")
+            print(f"Warning: Failed to parse molecule {idx+1}", file=sys.stderr)
             continue
 
         props = calculate_properties(mol)
@@ -147,7 +152,7 @@ def write_csv(results, output_file):
     import csv
 
     if not results:
-        print("No results to write")
+        print("No results to write", file=sys.stderr)
         return
 
     with open(output_file, 'w', newline='') as f:
@@ -197,12 +202,13 @@ def print_properties(props):
 
     print("\n[Drug-likeness]")
     print(f"  QED Score:           {props['QED']:.3f}")
-    print(f"  Lipinski Pass:       {'Yes' if props['Lipinski_Pass'] else 'No'}")
-    print(f"  Lead-like:           {'Yes' if props['Lead-like'] else 'No'}")
+    print(f"  Lipinski Pass:       {'Yes' if props['Lipinski_Pass'] else 'No'} "
+          f"({props['Lipinski_Violations']} of 4 violated; >1 is the failure)")
+    print(f"  Lead-like:           {'Yes' if props['Lead_Like'] else 'No'}")
     print("="*60)
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser(
         description='Calculate molecular properties for molecules',
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -227,17 +233,22 @@ Examples:
 
     if not args.smiles and not args.file:
         parser.print_help()
-        sys.exit(1)
+        return 1
 
+    # Exit status has to distinguish "nothing parsed" from "worked", or a caller
+    # piping this into anything else cannot tell a typo'd SMILES from a clean run.
     if args.smiles:
-        # Process single molecule
         props = process_single_molecule(args.smiles)
-        if props:
-            print_properties(props)
-    elif args.file:
-        # Process file
-        process_file(args.file, args.output)
+        if not props:
+            return 1
+        print_properties(props)
+    else:
+        results = process_file(args.file, args.output)
+        if not results:
+            return 1
+
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())

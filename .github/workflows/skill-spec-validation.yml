@@ -61,7 +61,7 @@ jobs:
           exit $fail
 
       # Rules the reference validator does not enforce: this repo's metadata.version
-      # requirement (see AGENTS.md), plus spec constraints skills-ref accepts but the
+      # requirement (see CONTRIBUTING.md), plus spec constraints skills-ref accepts but the
       # spec text requires -- allowed-tools must be a space-separated string, and
       # metadata values must be strings apart from the host-manifest blocks that have
       # to stay nested objects (see NESTED_OK below).
@@ -116,10 +116,10 @@ jobs:
 
               m = fm.get("metadata")
               if not isinstance(m, dict):
-                  errors.append(f"{md}: missing a `metadata` mapping (see AGENTS.md)")
+                  errors.append(f"{md}: missing a `metadata` mapping (see CONTRIBUTING.md)")
               else:
                   if "version" not in m:
-                      errors.append(f"{md}: metadata.version is required (see AGENTS.md)")
+                      errors.append(f"{md}: metadata.version is required (see CONTRIBUTING.md)")
                   for k, v in m.items():
                       if k in NESTED_OK:
                           if not isinstance(v, dict):

@@ -671,5 +671,5 @@ Some newer APIs (notably ESMFold2 structure prediction) run on [biohub.ai](https
 - **Forge Platform**: https://forge.evolutionaryscale.ai
 - **Biohub Platform**: https://biohub.ai
 - **API Documentation**: Check Forge or Biohub dashboard for latest API specs
-- **Community Support**: Slack community at https://bit.ly/3FKwcWd
+- **Community Support**: Slack community at https://join.slack.com/t/esm-community/shared_invite/zt-2tbndpdmu-92lUCmp8CEOro_rioU5qdA
 - **Enterprise Contact**: Contact EvolutionaryScale for custom deployments

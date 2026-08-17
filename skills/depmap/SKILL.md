@@ -1,9 +1,11 @@
 ---
 name: depmap
-description: Query the Cancer Dependency Map (DepMap) for cancer cell line gene dependency scores (CRISPR Chronos), drug sensitivity data, and gene effect profiles. Use for identifying cancer-specific vulnerabilities, synthetic lethal interactions, and validating oncology drug targets.
-license: CC-BY-4.0
+description: Query the Cancer Dependency Map (DepMap) for cancer cell line gene dependency scores (CRISPR Chronos), RNAi DEMETER2 scores, PRISM compound sensitivity, and gene effect profiles across the cell-line panel. Use for identifying cancer-selective vulnerabilities, separating pan-essential genes from selective ones, finding synthetic lethal interactions, correlating dependency with mutation, expression and copy number, and validating oncology drug targets. Also trigger on DepMap, Chronos gene effect, CRISPRGeneEffect.csv, DEMETER2, PRISM repurposing, co-essentiality, pan-essential, or ACH- cell line identifiers.
+license: MIT
+compatibility: Requires Python 3.10+ with pandas, numpy, scipy and requests. Analysis is download-based — the DepMap release files (CRISPRGeneEffect.csv is roughly 500 MB) are fetched from the portal by hand and read locally. The portal gates programmatic access behind a browser verification page, so there is no usable REST API. Data is CC-BY-4.0 and requires registration to download.
+allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.0"
+  version: "1.1"
   skill-author: Kuan-lin Huang
 ---
 
@@ -20,8 +22,11 @@ The Cancer Dependency Map (DepMap) project, run by the Broad Institute, systemat
 **Key resources:**
 - DepMap Portal: https://depmap.org/portal/
 - DepMap data downloads: https://depmap.org/portal/download/all/
-- Python package: `depmap` (or access via API/downloads)
-- API: https://depmap.org/portal/api/
+- Data downloads are the supported route; see the warning below about the portal API.
+
+**There is no DepMap Python package.** The PyPI project named `depmap` is "Dependency Mapper CLI",
+an unrelated software-dependency tool — installing it will not get you cell-line data. Read the
+release CSVs with pandas.
 
 ## When to Use This Skill
 
@@ -59,45 +64,17 @@ Each cell line has:
 
 ## Core Capabilities
 
-### 1. DepMap API
+### 1. The portal API is not a usable data source
 
-```python
-import requests
-import pandas as pd
+**Checked live, August 2026:** every path under `https://depmap.org/portal/api/` answers a
+programmatic request with **HTTP 200 and an HTML browser-verification page**, not JSON. That
+combination is the trap — `response.raise_for_status()` sees the 200 and passes, so the failure
+surfaces later as a `JSONDecodeError`, or worse as an HTML string quietly carried forward as data.
 
-BASE_URL = "https://depmap.org/portal/api"
+DepMap publishes no documented, stable, public REST API. Download the release files and work
+locally; that is the supported route and the one the rest of this skill uses.
 
-def depmap_get(endpoint, params=None):
-    url = f"{BASE_URL}/{endpoint}"
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    return response.json()
-```
-
-### 2. Gene Dependency Scores
-
-```python
-def get_gene_dependency(gene_symbol, dataset="Chronos_Combined"):
-    """Get CRISPR dependency scores for a gene across all cell lines."""
-    url = f"{BASE_URL}/gene"
-    params = {
-        "gene_id": gene_symbol,
-        "dataset": dataset
-    }
-    response = requests.get(url, params=params)
-    return response.json()
-
-# Alternatively, use the /data endpoint:
-def get_dependencies_slice(gene_symbol, dataset_name="CRISPRGeneEffect"):
-    """Get a gene's dependency slice from a dataset."""
-    url = f"{BASE_URL}/data/gene_dependency"
-    params = {"gene_name": gene_symbol, "dataset_name": dataset_name}
-    response = requests.get(url, params=params)
-    data = response.json()
-    return data
-```
-
-### 3. Download-Based Analysis (Recommended for Large Queries)
+### 2. Download-Based Analysis (the supported route)
 
 For large-scale analysis, download DepMap data files and analyze locally:
 
@@ -121,7 +98,7 @@ FILES = {
     # OmicsExpressionProteinCodingGenesTPMLogp1.csv - mRNA expression
     # OmicsSomaticMutationsMatrixDamaging.csv - mutation binary matrix
     # OmicsCNGene.csv - copy number
-    # sample_info.csv - cell line metadata
+    # Model.csv - cell line metadata (was sample_info.csv before 23Q2)
 }
 
 def load_depmap_gene_effect(filepath="CRISPRGeneEffect.csv"):
@@ -134,12 +111,19 @@ def load_depmap_gene_effect(filepath="CRISPRGeneEffect.csv"):
     df.columns = [col.split(" ")[0] for col in df.columns]
     return df
 
-def load_cell_line_info(filepath="sample_info.csv"):
-    """Load cell line metadata."""
+def load_cell_line_info(filepath="Model.csv"):
+    """Load cell line metadata.
+
+    Release 23Q2 renamed this file from sample_info.csv AND renamed its columns:
+    DepMap_ID -> ModelID, cell_line_name -> CellLineName,
+    primary_disease -> OncotreePrimaryDisease, lineage -> OncotreeLineage.
+    Code written against the old names merges to an empty frame rather than
+    raising, so check the columns you actually got before trusting a join.
+    """
     return pd.read_csv(filepath)
 ```
 
-### 4. Identifying Selective Dependencies
+### 3. Identifying Selective Dependencies
 
 ```python
 import numpy as np
@@ -161,6 +145,8 @@ def find_selective_dependencies(gene_effect_df, cell_line_info, target_gene,
         "DepMap_ID": dependent.index,
         "gene_effect": dependent.values
     }).merge(cell_line_info[["DepMap_ID", "cell_line_name", "primary_disease", "lineage"]])
+    # On a 23Q2+ Model.csv these are ModelID / CellLineName /
+    # OncotreePrimaryDisease / OncotreeLineage -- rename before merging.
 
     if cancer_type:
         result = result[result["primary_disease"].str.contains(cancer_type, case=False, na=False)]
@@ -169,11 +155,11 @@ def find_selective_dependencies(gene_effect_df, cell_line_info, target_gene,
 
 # Example usage (after loading data)
 # df_effect = load_depmap_gene_effect("CRISPRGeneEffect.csv")
-# cell_info = load_cell_line_info("sample_info.csv")
+# cell_info = load_cell_line_info("Model.csv")   # see the column renames in the loader
 # deps = find_selective_dependencies(df_effect, cell_info, "KRAS", cancer_type="Lung")
 ```
 
-### 5. Biomarker Analysis (Gene Effect vs. Mutation)
+### 4. Biomarker Analysis (Gene Effect vs. Mutation)
 
 ```python
 import pandas as pd
@@ -214,7 +200,7 @@ def biomarker_analysis(gene_effect_df, mutation_df, target_gene, biomarker_gene)
     }
 ```
 
-### 6. Co-Essentiality Analysis
+### 5. Co-Essentiality Analysis
 
 ```python
 import pandas as pd
@@ -248,7 +234,8 @@ def co_essentiality(gene_effect_df, target_gene, top_n=20):
 
 ### Workflow 1: Target Validation for a Cancer Type
 
-1. Download `CRISPRGeneEffect.csv` and `sample_info.csv`
+1. Download `CRISPRGeneEffect.csv` and `Model.csv` (cell-line metadata; this file was named
+   `sample_info.csv` before release 23Q2, and older code still asks for that name)
 2. Filter cell lines by cancer type
 3. Compute mean gene effect for target gene in cancer vs. all others
 4. Calculate selectivity: how specific is the dependency to your cancer type?
@@ -274,13 +261,17 @@ def co_essentiality(gene_effect_df, target_gene, top_n=20):
 | `CRISPRGeneEffect.csv` | CRISPR Chronos gene effect (primary dependency data) |
 | `CRISPRGeneEffectUnscaled.csv` | Unscaled CRISPR scores |
 | `RNAi_merged.csv` | DEMETER2 RNAi dependency |
-| `sample_info.csv` | Cell line metadata (lineage, disease, etc.) |
+| `Model.csv` | Cell line metadata (lineage, disease, etc.). Called `sample_info.csv` before 23Q2 |
 | `OmicsExpressionProteinCodingGenesTPMLogp1.csv` | mRNA expression |
 | `OmicsSomaticMutationsMatrixDamaging.csv` | Damaging somatic mutations (binary) |
 | `OmicsCNGene.csv` | Copy number per gene |
 | `PRISM_Repurposing_Primary_Screens_Data.csv` | Drug sensitivity (repurposing library) |
 
 Download all files from: https://depmap.org/portal/download/all/
+
+Read [references/dependency_analysis.md](references/dependency_analysis.md) before acting on a
+score — it covers what Chronos corrects for, the full score-band interpretation, selectivity
+metrics, and the copy-number and expression confounders that produce false dependencies.
 
 ## Best Practices
 
@@ -291,11 +282,29 @@ Download all files from: https://depmap.org/portal/download/all/
 - **Account for copy number**: Amplified genes may appear essential due to copy number effect (junk DNA hypothesis)
 - **Multiple testing correction**: When computing biomarker associations genome-wide, apply FDR correction
 
+## Composing with the rest of the bundle
+
+- `open-targets` → before: its `depMapEssentiality` roll-up is the summary of what is here. Come to
+  this skill when the roll-up says "essential" and you need to know *in which lineages*.
+- `target-safety` → alongside: cell-line essentiality is not human tolerance. A gene essential
+  across the panel may still have healthy human knockouts — gnomAD LOEUF answers that, DepMap
+  cannot.
+- `chembl` → after: once a dependency looks selective, what has already been made against it.
+- `uniprot-rcsb` → after: the structure, once the target survives triage.
+- `clinicaltrials` → after: whether anyone has taken this vulnerability into patients.
+- `primekg` / `ncats-arax` → alongside: mechanistic context for a co-essentiality pair that has no
+  obvious pathway explanation.
+
+**A pan-essential gene is a toxicity finding, not a target.** The whole point of the panel is the
+contrast between lineages; a gene at −1 everywhere kills normal cells too.
+
 ## Additional Resources
 
 - **DepMap Portal**: https://depmap.org/portal/
 - **Data downloads**: https://depmap.org/portal/download/all/
-- **DepMap paper**: Behan FM et al. (2019) Nature. PMID: 30971826
-- **Chronos paper**: Dempster JM et al. (2021) Nature Methods. PMID: 34349281
+- **DepMap paper**: Tsherniak A et al. (2017) *Defining a Cancer Dependency Map*. Cell. PMID: 28753430
+- **Chronos paper**: Dempster JM et al. (2021) *Chronos: a cell population dynamics model of CRISPR
+  experiments that improves inference of gene fitness effects*. Genome Biology. PMID: 34930405
+- **Project Score (Sanger, complementary panel)**: Behan FM et al. (2019) Nature. PMID: 30971826
 - **GitHub**: https://github.com/broadinstitute/depmap-portal
 - **Figshare**: https://figshare.com/articles/dataset/DepMap_24Q4_Public/27993966

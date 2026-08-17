@@ -5,7 +5,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash
 compatibility: Requires Python 3.10+ and outbound HTTPS access to api.platform.opentargets.org. The bundled client uses only the Python standard library and needs no API key or account. Data is CC0; the API is a shared public resource, so batch requests rather than looping.
 metadata:
-  version: "1.0"
+  version: "1.1"
   skill-author: K-Dense Inc.
   openclaw:
     emoji: "🎯"
@@ -24,7 +24,7 @@ this target worth working on for this disease, and what is already known about i
 **Endpoint:** `https://api.platform.opentargets.org/api/v4/graphql` — POST, JSON, no key.
 **Docs:** [platform-docs.opentargets.org](https://platform-docs.opentargets.org) ·
 [playground](https://api.platform.opentargets.org/api/v4/graphql/browser)
-**Checked against:** API 26.6.3, data release 26.06.
+**Checked against:** the live API, August 2026 — `meta` reports API 26.6.3, data release 26.06.
 
 Read [references/graphql-schema.md](references/graphql-schema.md) before writing a query by hand,
 [references/datasources.md](references/datasources.md) before interpreting or filtering a score,
@@ -52,11 +52,15 @@ python skills/open-targets/scripts/ot_query.py resolve EGFR "non-small cell lung
 term                             id                name                           entity  score
 EGFR                             ENSG00000146648   EGFR                           target  1
 non-small cell lung carcinoma    MONDO_0005233     non-small cell lung carcinoma  disease 1
+gefitinib                        CHEMBL2087361     ICOTINIB                       drug    1
+gefitinib                        CHEMBL553         ERLOTINIB                      drug    1
 gefitinib                        CHEMBL939         GEFITINIB                      drug    1
 ```
 
 `resolve` uses `mapIds` (exact-ish); use `search` when the input is partial or misspelled. Hits
-come back **unsorted by score**, so read the names rather than taking the first row.
+come back **unsorted by score**, so read the names rather than taking the first row. Note the drug
+rows above: one term returned three molecules, all scored 1, with the one actually asked for last.
+Taking `[0]` here silently hands the rest of the analysis a different drug.
 
 ## Workflow
 

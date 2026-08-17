@@ -56,7 +56,7 @@ class PatternLibraryTests(unittest.TestCase):
     def test_the_documented_libraries_are_all_present_and_non_empty(self) -> None:
         libraries = substructure_filter.PATTERN_LIBRARIES
         self.assertEqual(
-            set(libraries), {"functional-groups", "rings", "pains", "privileged"}
+            set(libraries), {"functional-groups", "rings", "reactive-groups", "privileged"}
         )
         for name, patterns in libraries.items():
             with self.subTest(library=name):
@@ -70,7 +70,7 @@ class PatternLibraryTests(unittest.TestCase):
             ("rings", "benzene", BENZENE),
             ("rings", "pyridine", "c1ccncc1"),
             ("privileged", "piperidine", "C1CCNCC1"),
-            ("pains", "catechol", "Oc1ccccc1O"),
+            ("reactive-groups", "catechol", "Oc1ccccc1O"),
         ]
         for library, name, smiles in cases:
             with self.subTest(pattern=name):

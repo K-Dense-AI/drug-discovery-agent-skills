@@ -260,5 +260,39 @@ class DiseaseContextTests(PrimeKgTestCase):
         )
 
 
+# query_primekg.py is both an importable module and an argparse CLI, so it owes
+# the same --help contract as every other script in the bundle.
+CliHelpTests = skill_contract.cli.help_test_case(SKILL_ROOT)
+
+
+class CliWiringTests(unittest.TestCase):
+    """Parse argv through the real parser rather than shelling out."""
+
+    def test_every_subcommand_binds_a_callable_handler(self) -> None:
+        cases = [
+            ["search", "Breast"],
+            ["neighbors", "D001"],
+            ["context", "Breast Cancer"],
+            ["paths", "CHEMBL1", "D001"],
+        ]
+        parser = query_primekg.build_parser()
+        for argv in cases:
+            with self.subTest(command=argv[0]):
+                args = parser.parse_args(argv)
+                self.assertTrue(callable(getattr(args, "handler", None)))
+
+    def test_documented_defaults_are_what_the_parser_actually_sets(self) -> None:
+        parser = query_primekg.build_parser()
+        self.assertEqual(parser.parse_args(["paths", "A", "B"]).max_depth, 2)
+        self.assertEqual(parser.parse_args(["search", "x"]).format, "tsv")
+        self.assertIsNone(parser.parse_args(["search", "x"]).node_type)
+
+    def test_a_missing_data_file_exits_non_zero_rather_than_tracebacking(self) -> None:
+        # The whole point of the exit code: a caller must be able to tell a
+        # missing download from an empty result set.
+        with mock.patch.object(query_primekg, "DATA_PATH", "/nonexistent/kg.csv"):
+            self.assertEqual(query_primekg.main(["search", "anything"]), 2)
+
+
 if __name__ == "__main__":
     unittest.main()

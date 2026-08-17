@@ -1,11 +1,11 @@
 ---
 name: datamol
-description: Pythonic wrapper around RDKit with simplified interface and sensible defaults. Preferred for standard drug discovery including SMILES parsing, standardization, descriptors, fingerprints, clustering, 3D conformers, parallel processing. Returns native rdkit.Chem.Mol objects. For advanced control or custom parameters, use rdkit directly.
-license: Apache-2.0 license
+description: Pythonic wrapper around RDKit with a simplified interface and sensible defaults. Preferred for standard drug discovery work — SMILES/SELFIES/InChI conversion, molecule standardization and sanitization, descriptors, ECFP and other fingerprints, Tanimoto distance matrices, Butina clustering and diverse subset picking, Bemis-Murcko scaffolds and scaffold splits, BRICS/RECAP fragmentation, 3D conformer generation, SDF/CSV/Excel and cloud I/O, and parallel processing via n_jobs. Returns native rdkit.Chem.Mol objects, so it composes with RDKit throughout. Also trigger on datamol, `import datamol as dm`, dm.to_mol, dm.standardize_mol, dm.cluster_mols, or dm.pick_diverse. For advanced control or custom parameters, use the rdkit skill directly.
+license: MIT
 allowed-tools: Read Write Edit Bash
 compatibility: Requires Python 3.8+ and datamol (uv pip install). RDKit is installed automatically as a datamol dependency (since 0.12.2). Optional s3fs/gcsfs for cloud I/O via fsspec.
 metadata:
-  version: "1.1"
+  version: "1.2"
   skill-author: K-Dense Inc.
 ---
 
@@ -15,7 +15,8 @@ metadata:
 
 Datamol is a Python library that provides a lightweight, Pythonic abstraction layer over RDKit for molecular cheminformatics. Simplify complex molecular operations with sensible defaults, efficient parallelization, and modern I/O capabilities. All molecular objects are native `rdkit.Chem.Mol` instances, ensuring full compatibility with the RDKit ecosystem.
 
-**Version note:** Examples target **datamol 0.12.x** (PyPI stable: **0.12.5**, June 2024). Since 0.10.0, modules are lazy-loaded by default (set `DATAMOL_DISABLE_LAZY_LOADING=1` to disable). Since 0.12.2, RDKit is a direct PyPI dependency of datamol. Fingerprints use RDKit's `rdFingerprintGenerator` API (0.12.5+).
+**Checked against:** datamol **0.12.5** (PyPI stable, released 2024-06-10; still the current
+release as of August 2026). Examples target **datamol 0.12.x**. Since 0.10.0, modules are lazy-loaded by default (set `DATAMOL_DISABLE_LAZY_LOADING=1` to disable). Since 0.12.2, RDKit is a direct PyPI dependency of datamol. Fingerprints use RDKit's `rdFingerprintGenerator` API (0.12.5+).
 
 **Key capabilities**:
 - Molecular format conversion (SMILES, SELFIES, InChI)
@@ -111,9 +112,10 @@ For detailed API documentation, consult these reference files:
        # Handle invalid SMILES
    ```
 
-3. **Use parallel processing** for large datasets:
+3. **Use parallel processing** for large datasets — `n_jobs`/`progress` are accepted by the
+   batch entry points listed under Parallelization, not by every function:
    ```python
-   result = dm.operation(..., n_jobs=-1, progress=True)
+   desc_df = dm.descriptors.batch_compute_many_descriptors(mols, n_jobs=-1, progress=True)
    ```
 
 4. **Use cloud I/O only when requested** — confirm remote write paths; install `s3fs`/`gcsfs` as needed:
@@ -191,7 +193,20 @@ predictions = model.predict(X_test)
 - **Solution**: Reduce `n_confs` or increase `rms_cutoff` to generate fewer conformers
 
 **Issue**: Remote file access fails
-- **Solution**: Install the matching fsspec backend (`uv pip install s3fs` or `gcsfs`) and verify only the provider credentials needed for that backend are set (see Remote file support above)
+- **Solution**: Install the matching fsspec backend (`uv pip install s3fs` or `gcsfs`) and verify only the provider credentials needed for that backend are set (see Installation and Setup above)
+
+## Composing with the rest of the bundle
+
+- `rdkit` → instead: when you need control datamol does not expose — custom sanitization, partial
+  sanitization, reaction fingerprints, pharmacophore features.
+- `medchem` → after: rule-based triage (Lipinski/Veber/CNS, PAINS and NIBR alerts) on the
+  standardized molecules produced here. Same maintainers, same `Mol` objects.
+- `molfeat` → after: featurization for a model, from ECFP through pretrained ChemBERTa.
+- `chembl` → before: measured bioactivity to standardize and cluster.
+- `admet-prediction` → after: **standardize and desalt here first.** ADMET-AI predicts on the SMILES
+  string as given, so a salt or mixture yields a number for the wrong species.
+- `chemical-space` / `generative-design` → after: `dm.pick_diverse` and scaffold grouping are how
+  you cut a generated or enumerated set down to what is worth making.
 
 ## Additional Resources
 

@@ -325,7 +325,7 @@ These references contain detailed API specifications, parameter descriptions, an
 - **Blog Posts:**
   - ESM3 Release: https://www.evolutionaryscale.ai/blog/esm3-release
   - ESM C Launch: https://www.evolutionaryscale.ai/blog/esm-cambrian
-- **Community:** Slack community at https://bit.ly/3FKwcWd
+- **Community:** Slack community at https://join.slack.com/t/esm-community/shared_invite/zt-2tbndpdmu-92lUCmp8CEOro_rioU5qdA
 - **Model Weights:** Hugging Face EvolutionaryScale and Biohub organizations
 
 ## Responsible Use

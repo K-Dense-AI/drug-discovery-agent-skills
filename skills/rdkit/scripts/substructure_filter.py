@@ -48,7 +48,12 @@ PATTERN_LIBRARIES = {
         'indole': 'c1ccc2[nH]ccc2c1',
         'naphthalene': 'c1ccc2ccccc2c1',
     },
-    'pains': {
+    # Five frequent-hitter motifs, not the PAINS filter set. Real PAINS (Baell &
+    # Holloway) is 480 filters and ships inside RDKit as
+    # FilterCatalogParams.FilterCatalogs.PAINS; the `medchem` skill wraps that plus
+    # the NIBR alerts. Naming these five "pains" would let a caller report a
+    # library PAINS-clean after testing 1% of the set.
+    'reactive-groups': {
         'rhodanine': 'S1C(=O)NC(=S)C1',
         'catechol': 'c1ccc(O)c(O)c1',
         'quinone': 'O=C1C=CC(=O)C=C1',
@@ -259,7 +264,8 @@ def main():
 Pattern libraries:
   --filter-type functional-groups    Common functional groups
   --filter-type rings               Ring systems
-  --filter-type pains               PAINS (Pan-Assay Interference)
+  --filter-type reactive-groups     Five frequent-hitter motifs (NOT the 480-filter
+                                    PAINS set -- use the medchem skill for that)
   --filter-type privileged          Privileged structures
 
 Examples:
@@ -273,7 +279,7 @@ Examples:
   python substructure_filter.py molecules.smi --filter-type functional-groups -o fg.smi
 
   # Remove PAINS
-  python substructure_filter.py compounds.smi --filter-type pains --exclude-mode -o clean.smi
+  python substructure_filter.py compounds.smi --filter-type reactive-groups --exclude-mode -o clean.smi
 
   # Multiple patterns
   python substructure_filter.py mol.smi --pattern "c1ccccc1" --pattern "N" -o aromatic_amines.smi

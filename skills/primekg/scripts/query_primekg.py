@@ -1,6 +1,25 @@
-import pandas as pd
+#!/usr/bin/env python3
+"""Query the Precision Medicine Knowledge Graph (PrimeKG) edge list.
+
+Importable as a library (`search_nodes`, `get_neighbors`, `find_paths`,
+`get_disease_context`) and runnable as a CLI:
+
+    python query_primekg.py search Alzheimer --node-type disease
+    python query_primekg.py neighbors EFO_0000249 --relation disease_protein
+    python query_primekg.py context "Alzheimer's disease"
+    python query_primekg.py paths CHEMBL1 D001 --max-depth 2
+
+Reads `kg.csv` from $PRIMEKG_DATA (default `data/PrimeKG/kg.csv`). Output is
+TSV by default, or JSON with --format json.
+"""
+
+import argparse
+import json
 import os
+import sys
 from typing import List, Dict, Optional, Union
+
+import pandas as pd
 
 # Where kg.csv lives. Override with the PRIMEKG_DATA environment variable, or
 # by assigning to DATA_PATH before calling any query function.
@@ -210,3 +229,128 @@ def get_disease_context(disease_name: str) -> Dict:
         "related_diseases": [n for n in neighbors if n['neighbor_type'] == 'disease']
     }
     return summary
+
+
+# --- CLI -------------------------------------------------------------------
+#
+# The library functions above return dicts; everything below is presentation.
+# Kept deliberately thin so importing this module costs nothing extra.
+
+
+def _emit(rows: Union[List[Dict], Dict], fmt: str, columns: Optional[List[str]] = None) -> None:
+    """Print records as TSV (default) or JSON."""
+    if fmt == "json":
+        print(json.dumps(rows, indent=2, default=str))
+        return
+    if isinstance(rows, dict):
+        for key, value in rows.items():
+            if isinstance(value, list):
+                print(f"# {key}: {len(value)}")
+            else:
+                print(f"{key}\t{value}")
+        return
+    if not rows:
+        print("# no rows", file=sys.stderr)
+        return
+    columns = columns or list(rows[0].keys())
+    print("\t".join(columns))
+    for row in rows:
+        print("\t".join(str(row.get(c, "")) for c in columns))
+
+
+def command_search(args: argparse.Namespace) -> None:
+    _emit(search_nodes(args.query, node_type=args.node_type), args.format)
+
+
+def command_neighbors(args: argparse.Namespace) -> None:
+    _emit(get_neighbors(args.node_id, relation_type=args.relation), args.format)
+
+
+def command_context(args: argparse.Namespace) -> None:
+    context = get_disease_context(args.disease)
+    if args.format == "json":
+        print(json.dumps(context, indent=2, default=str))
+        return
+    if "error" in context:
+        print(f"error: {context['error']}", file=sys.stderr)
+        raise SystemExit(1)
+    info = context["disease_info"]
+    print(f"# {info.get('name')} ({info.get('id')})")
+    for bucket in ("associated_genes", "associated_drugs", "phenotypes", "related_diseases"):
+        entries = context[bucket]
+        print(f"\n## {bucket} ({len(entries)})")
+        for entry in entries[: args.limit]:
+            print(f"{entry.get('neighbor_name')}\t{entry.get('display_relation', entry.get('relation'))}")
+
+
+def command_paths(args: argparse.Namespace) -> None:
+    paths = find_paths(args.start, args.end, max_depth=args.max_depth)
+    if args.format == "json":
+        print(json.dumps(paths, indent=2, default=str))
+        return
+    if not paths:
+        print("# no paths found", file=sys.stderr)
+        return
+    print(f"# {len(paths)} path(s)")
+    for hops in paths:
+        print(" -> ".join(hop.get("display_relation", hop.get("relation", "?")) for hop in hops))
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        "--format", choices=("tsv", "json"), default="tsv", help="output format (default: tsv)"
+    )
+    parser.add_argument(
+        "--data",
+        help="path to kg.csv; overrides $PRIMEKG_DATA for this run",
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    search = subparsers.add_parser("search", help="find nodes by name substring")
+    search.add_argument("query")
+    search.add_argument("--node-type", help="restrict to one node type, e.g. disease, drug, gene/protein")
+    search.set_defaults(handler=command_search)
+
+    neighbors = subparsers.add_parser("neighbors", help="direct neighbours of a node id")
+    neighbors.add_argument("node_id")
+    neighbors.add_argument("--relation", help="restrict to one relation type, e.g. drug_protein")
+    neighbors.set_defaults(handler=command_neighbors)
+
+    context = subparsers.add_parser("context", help="genes, drugs and phenotypes around a disease")
+    context.add_argument("disease")
+    context.add_argument("--limit", type=int, default=25, help="rows per bucket (default: 25)")
+    context.set_defaults(handler=command_context)
+
+    paths = subparsers.add_parser("paths", help="direct or two-hop paths between two nodes")
+    paths.add_argument("start")
+    paths.add_argument("end")
+    paths.add_argument("--max-depth", type=int, default=2, choices=(1, 2))
+    paths.set_defaults(handler=command_paths)
+
+    return parser
+
+
+def main(argv: Optional[List[str]] = None) -> int:
+    args = build_parser().parse_args(argv)
+    if args.data:
+        # Assigning the module global is the documented way to repoint the data
+        # file; the read cache is keyed on the file's identity, so this is safe.
+        global DATA_PATH
+        DATA_PATH = args.data
+    try:
+        args.handler(args)
+    except FileNotFoundError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 2
+    except ValueError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

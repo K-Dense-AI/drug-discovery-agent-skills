@@ -4,7 +4,7 @@ This suite is deliberately not per-skill. It imports no skill code -- the
 structural contract parses scripts with `ast` and never executes them -- so
 running it across all skills in one interpreter is safe, and it is the only
 place that can see the whole repository at once. That is what lets it enforce
-the rule `AGENTS.md` states but nothing previously checked:
+the rule `CONTRIBUTING.md` states but nothing previously checked:
 
     If the skill ships `scripts/`, put their tests in `tests/<name>/`.
 
@@ -79,7 +79,7 @@ class CoverageTests(unittest.TestCase):
             untested,
             [],
             "these skills ship scripts/ but have no tests/<name>/ suite; add one "
-            "(see AGENTS.md, 'Creating a skill' step 5)",
+            "(see CONTRIBUTING.md, 'Adding a New Skill' step 6)",
         )
 
     def test_every_suite_has_a_test_file(self) -> None:

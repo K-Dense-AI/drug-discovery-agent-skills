@@ -149,4 +149,6 @@ Coerce before comparing across endpoints.
   stale rows across releases. The bundled scripts stay stdlib-only for that reason.
 - **Bulk downloads** — <https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/latest/>. Once you
   want more than ~10⁵ activities, take the Postgres/SQLite dump instead of paging the API.
-- **RDF / SPARQL** — <https://www.ebi.ac.uk/rdf/services/sparql> for federated queries.
+- **RDF / SPARQL** — the EBI RDF Platform that hosted the ChEMBL SPARQL endpoint is gone:
+  checked live in August 2026, `https://www.ebi.ac.uk/rdf/` and every service path under it return
+  404. For federated or whole-database questions, take the FTP dump above and query it locally.

@@ -1,11 +1,11 @@
 ---
 name: medchem
-description: Medicinal chemistry filters for compound triage. Apply drug-likeness rules (Lipinski, Veber, CNS), structural alert catalogs (PAINS, NIBR, ChEMBL), complexity metrics, and the medchem query language for library filtering.
-license: Apache-2.0 license
+description: Medicinal chemistry filters for compound triage. Apply drug-likeness rules (Lipinski rule of five, Veber, Oprea, CNS, lead-like, rule of three), structural alert catalogs (PAINS a/b/c, NIBR screening-deck severity, Brenk, BMS, Glaxo, Dundee, ChEMBL common alerts), ZINC-15 percentile complexity metrics (Bertz, SAscore, QED, Whitlock, Barone), chemical-group detection, Lilly demerits, and the medchem query language (MATCHRULE, HASALERT, HASPROP, HASGROUP) for filtering a library at scale. Also trigger on medchem, `import medchem as mc`, RuleFilters, NIBRFilters, CommonAlertsFilters, NamedCatalogs, QueryFilter, PAINS filtering, or structural alerts.
+license: MIT
 allowed-tools: Read Write Edit Bash
 compatibility: Requires Python 3.9+ and datamol (installed with medchem). Optional Lilly demerit filter requires separate `lilly-medchem-rules` conda package.
 metadata:
-  version: "1.1"
+  version: "1.2"
   skill-author: K-Dense Inc.
 ---
 
@@ -15,7 +15,8 @@ metadata:
 
 Medchem is a Python library from [datamol-io](https://github.com/datamol-io/medchem) for molecular filtering and prioritization in drug discovery. Apply literature-derived drug-likeness rules, named alert catalogs, complexity thresholds, chemical-group detection, and a custom query language to triage compound libraries at scale. Filters are context-specific guidelines — combine with domain expertise and target knowledge.
 
-**Version note:** Examples target **medchem 2.0.5** (PyPI stable, Nov 2024). Requires **Python ≥3.9**. Depends on **datamol** and **RDKit** (installed automatically). `RuleFilters` and structural filter classes return **pandas DataFrames**. Lilly demerits require optional native binaries (`mamba install lilly-medchem-rules`).
+**Checked against:** medchem **2.0.5** (PyPI stable, released 2024-11-18; still the current release
+as of August 2026) — 22 rules and 32 named catalogs verified live. Requires **Python ≥3.9**. Depends on **datamol** and **RDKit** (installed automatically). `RuleFilters` and structural filter classes return **pandas DataFrames**. Lilly demerits require optional native binaries (`mamba install lilly-medchem-rules`).
 
 ## When to Use This Skill
 
@@ -310,9 +311,30 @@ Catalog of available rules, alert sets, complexity metrics, and filter selection
 Batch filtering script for CSV/TSV/SDF/SMILES inputs with configurable rules, alerts, and complexity thresholds.
 
 ```bash
-uv run python scripts/filter_molecules.py input.csv \
+python skills/medchem/scripts/filter_molecules.py input.csv \
   --rules rule_of_five,rule_of_cns --pains --nibr --output filtered.csv
 ```
+
+`--output` is required. Alongside it the script writes `<output>_summary.txt` unless
+`--no-summary` is passed.
+
+## Composing with the rest of the bundle
+
+- `rdkit` / `datamol` → before: parse and **standardize first**. An alert catalog matched against an
+  unstandardized salt or tautomer answers a question about the wrong species.
+- `chembl` → before: the measured library worth triaging.
+- `chemical-space` → around: this is the cheap filter stage in an ultra-large screening cascade.
+  Run it before docking, not after.
+- `admet-prediction` → after: alerts cost nothing and catch much of what ADMET models flag more
+  expensively and less reliably.
+- `generative-design` / `retrosynthesis` → after: generated molecules need triage before route
+  search. A PAINS hit is not worth a synthesis plan.
+- `autodock-vina` / `diffdock` → before: docking 20,000 frequent hitters wastes the compute and
+  pollutes the hit list.
+
+**Do not over-filter early.** Alerts are context-specific guidelines, not verdicts — marketed drugs
+violate Ro5 routinely, and covalent warheads are a liability only if you did not want a covalent
+inhibitor. Keep `status`, `reasons`, and `severity` so a rejection can be argued with.
 
 ## Documentation
 

@@ -13,6 +13,22 @@ Participation in this project is governed by our [Code of Conduct](CODE_OF_CONDU
 - Add or extend a skill's tests under `tests/<skill-name>/` (see [Tests](#tests)).
 - Report bugs or request new skills through GitHub Issues.
 
+### What belongs here
+
+**In scope:** a narrow skill for one drug-discovery package, database, or platform — `rdkit`,
+`depmap`, `diffdock`, `tamarind`. If it would not be reached for during small-molecule or protein
+therapeutics work, it belongs in one of the sibling bundles listed in the README, not here.
+
+**Out of scope**, and routinely declined:
+
+- General software-engineering or coding-judgment skills — they compete for selection on every task.
+- Skills from an adjacent scientific domain (genomics, imaging, clinical) — each has its own bundle,
+  and duplicating one here means two copies drifting apart.
+- General infrastructure with a scientific example bolted on (a vector database, a cloud SDK) —
+  accepting one implies carrying every competitor.
+- Broad "orchestrator" skills that route to other skills — they overlap every specialist by design.
+- A second provider for a service an existing skill already reaches.
+
 ## Skill Location
 
 All repository skills live under `skills/`. The repository root is also an
@@ -250,14 +266,29 @@ for d in skills/*/; do uv run skills-ref validate "$d"; done
 
 CI runs this on every pull request that touches `skills/`, along with the repo-specific checks in `.github/workflows/skill-spec-validation.yml` (a required `metadata.version`, `allowed-tools` as a string, quoted `metadata` scalars, and a warning above 500 lines).
 
-Security-scan new or substantially changed skills:
+Security-scan new or substantially changed skills. `.github/workflows/pr-skill-scan.yml` runs the
+repo wrapper for changed skills on every pull request and posts a sticky comment, failing on HIGH or
+above:
 
 ```bash
+# needs SKILL_SCANNER_LLM_API_KEY (see .env.example)
+uv run python scan_pr_skills.py skills/skill-name
+
+# or the upstream CLI directly, without the repo wrapper
 uv pip install cisco-ai-skill-scanner
 skill-scanner scan ./skills/skill-name --use-behavioral
 ```
 
 A clean scan reduces review noise but does not replace manual review.
+
+**Verify a finding against the code before "fixing" it.** Known systematic false positives:
+`BEHAVIOR_*_EXFILTRATION` and `BEHAVIOR_ENV_VAR_HARVESTING` on any skill that reads its own API key
+and calls its own service; `MDBLOCK_PYTHON_SUBPROCESS` on any `subprocess` snippet, including the
+safe argument-list form; and `*_EVAL_EXEC` on substrings inside ordinary identifiers (`retrieval`,
+`executor`) or on `model.eval()`. Findings sometimes cite files a skill does not contain — check
+against `find skills/skill-name -type f` before acting. `CROSS_SKILL_DATA_RELAY` is deliberately
+demoted from HIGH to MEDIUM in `scan_skills.py`: it pairs unrelated skills heuristically, which is
+unavoidable in a bundle of public-API clients that all use `urllib.request`.
 
 ## Tests
 

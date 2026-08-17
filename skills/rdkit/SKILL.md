@@ -1,11 +1,11 @@
 ---
 name: rdkit
-description: Cheminformatics toolkit for fine-grained molecular control. SMILES/SDF parsing, descriptors (MW, LogP, TPSA), fingerprints, substructure search, 2D/3D generation, similarity, reactions. For standard workflows with simpler interface, use datamol (wrapper around RDKit). Use rdkit for advanced control, custom sanitization, specialized algorithms.
-license: BSD-3-Clause license
+description: Cheminformatics toolkit for fine-grained molecular control. Parse and write SMILES, SDF, MOL and InChI; compute descriptors (MW, LogP, TPSA, QED, Bertz); build fingerprints (Morgan/ECFP, RDKit, MACCS, atom pair, torsion) and score Tanimoto, Dice or cosine similarity; run SMARTS substructure search and reaction SMARTS; generate 2D depictions and ETKDG 3D conformers; extract Murcko scaffolds and canonical hashes; control sanitization and stereochemistry directly. Also trigger on rdkit, Chem.MolFromSmiles, rdFingerprintGenerator, SDMolSupplier, SMARTS query, ETKDG, or FilterCatalog. For standard workflows with a simpler interface use the datamol skill, which wraps RDKit; use rdkit for advanced control, custom sanitization, and specialized algorithms.
+license: MIT
 allowed-tools: Read Write Edit Bash
 compatibility: Examples target RDKit 2026.03.x. Use conda-forge for the broadest binary support or PyPI package `rdkit` for supported platform wheels; `rdkit-pypi` is the legacy PyPI name.
 metadata:
-  version: "1.3"
+  version: "1.4"
   skill-author: K-Dense Inc.
 ---
 
@@ -15,7 +15,7 @@ metadata:
 
 RDKit is a comprehensive cheminformatics library providing Python APIs for molecular analysis and manipulation. This skill provides guidance for reading/writing molecular structures, calculating descriptors, fingerprinting, substructure searching, chemical reactions, 2D/3D coordinate generation, and molecular visualization. Use this skill for drug discovery, computational chemistry, and cheminformatics research tasks.
 
-**Current baseline (checked 2026-06-07):** RDKit **2026.03.3** is the latest GitHub/PyPI release (`rdkit` 2026.3.3 on PyPI). Official installation docs continue to recommend conda-forge for most users, while cross-platform PyPI wheels are published under the `rdkit` package name. `rdkit-pypi` is the old PyPI package name and should only appear when maintaining legacy environments.
+**Checked against:** RDKit **2026.03.5** (`rdkit` 2026.3.5 on PyPI, released 2026-08-03), August 2026. Official installation docs continue to recommend conda-forge for most users, while cross-platform PyPI wheels are published under the `rdkit` package name. `rdkit-pypi` is the old PyPI package name and should only appear when maintaining legacy environments.
 
 ## Installation and Setup
 
@@ -73,22 +73,42 @@ binary molecule representation avoids generic pickle.
 
 ### references/
 
-This skill includes detailed API reference documentation:
+All five bundled reference documents, loaded only when needed:
 
-- `api_reference.md` - Comprehensive listing of RDKit modules, functions, and classes organized by functionality
-- `descriptors_reference.md` - Complete list of available molecular descriptors with descriptions
-- `smarts_patterns.md` - Common SMARTS patterns for functional groups and structural features
-
-Load these references when needing specific API details, parameter information, or pattern examples.
+- [references/core_capabilities.md](references/core_capabilities.md) - the twelve capability areas above, each with worked code
+- [references/workflows_and_best_practices.md](references/workflows_and_best_practices.md) - end-to-end workflows plus performance, thread-safety, and version-sensitivity notes
+- [references/api_reference.md](references/api_reference.md) - RDKit modules, functions, and classes organized by functionality
+- [references/descriptors_reference.md](references/descriptors_reference.md) - the available molecular descriptors with descriptions
+- [references/smarts_patterns.md](references/smarts_patterns.md) - SMARTS patterns for functional groups and structural features
 
 Only the files listed in `references/` and `scripts/` are bundled local resources. Names such as `rdkit`, `datamol`, `scipy`, and `sklearn` refer to installable Python packages, not local files in this skill.
 
 ### scripts/
 
-Example scripts for common RDKit workflows:
+```bash
+# Descriptors for one molecule, or a whole file to CSV
+python skills/rdkit/scripts/molecular_properties.py "CC(=O)Oc1ccccc1C(=O)O"
+python skills/rdkit/scripts/molecular_properties.py --file library.smi --output properties.csv
 
-- `molecular_properties.py` - Calculate comprehensive molecular properties and descriptors
-- `similarity_search.py` - Perform fingerprint-based similarity screening
-- `substructure_filter.py` - Filter molecules by substructure patterns
+# Fingerprint similarity screen; --method morgan|rdkit|maccs|atompair|torsion
+python skills/rdkit/scripts/similarity_search.py "c1ccccc1O" library.sdf --threshold 0.6
 
-These scripts can be executed directly or used as templates for custom workflows.
+# SMARTS filtering, with predefined libraries via --list-patterns
+python skills/rdkit/scripts/substructure_filter.py library.smi --pattern "C(=O)[OH]" --report hits.csv
+```
+
+Each exits nonzero and writes to stderr on failure, so they compose in a pipeline. They are equally
+usable as templates for custom workflows.
+
+## Composing with the rest of the bundle
+
+- `datamol` → instead: the same standardization, clustering and parallel work with sensible
+  defaults. Reach for `rdkit` only when you need control datamol does not expose.
+- `medchem` → after: real triage. Its rule catalogue and the full PAINS/NIBR alert sets are what you
+  want for library filtering; `substructure_filter.py` here is a general SMARTS tool, not a
+  curated alert set.
+- `molfeat` → after: turning molecules into model-ready features rather than hand-rolled fingerprints.
+- `chembl` → before: measured bioactivity to featurize, rather than a library you invented.
+- `chemical-space` → after: once a SMARTS query defines the chemotype, find purchasable examples.
+- `admet-prediction` / `deepchem` / `pytdc` → after: descriptors and fingerprints from here are the
+  input those models expect. Desalt and standardise first or you predict on the wrong species.

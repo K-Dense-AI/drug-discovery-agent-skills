@@ -5,7 +5,7 @@ allowed-tools: Read Bash
 license: MIT
 compatibility: Requires Python 3.10+ and outbound HTTPS access to arax.transltr.io. The client uses only the Python standard library and needs no API key. Queries and caller metadata may be publicly visible; never submit sensitive or patient-specific content.
 metadata:
-  version: "1.0"
+  version: "1.1"
   skill-author: neuroepithelial
 ---
 
@@ -14,6 +14,10 @@ metadata:
 Use ARAX as a constrained knowledge-graph lookup service. Submit reviewed CURIEs and explicit
 Biolink types, preserve the exact TRAPI exchange, inspect query-edge bindings and provenance, and
 treat every returned path as a candidate for subsequent verification.
+
+**Endpoint:** `https://arax.transltr.io/api/arax/v1.4` — POST TRAPI, no key.
+**Checked against:** the live production service, August 2026 — `preflight` reports ARAX 1.5.4 and
+TRAPI 1.5.0, the versions this client is pinned to.
 
 Read [query-contract.md](references/query-contract.md) before constructing a query. Read
 [output-schema.md](references/output-schema.md) when interpreting saved artifacts, warnings,
@@ -168,6 +172,22 @@ The client has no raw-query, workflow, operation, overlay, ranking, inference, l
 Pathfinder, ARS, batch, all-provider, three-hop, cache, daemon, SDK, MCP, or
 natural-language-to-TRAPI surface. Do not work around those limits with direct HTTP calls under
 this skill.
+
+## Composing with the rest of the bundle
+
+- `open-targets` → before: it scores whether a target-disease link is supported and by which
+  datatype. Come here when you need the *mechanistic path* and the source attribution behind it.
+- `primekg` → alongside: the same kind of graph as a local CSV, faster to traverse in bulk but
+  without ARAX's per-edge provenance. Use PrimeKG to generate candidates, ARAX to attribute them.
+- `target-safety` / `depmap` → after: a returned path is an assertion, not a validated mechanism.
+  Human genetic constraint and cell-line essentiality test it against something measured.
+- `chembl` → after: whether chemistry exists against a protein a path implicates.
+- `clinicaltrials` / `openfda` → after: whether the hypothesis has already been taken into people,
+  and what happened.
+
+**Provenance is the reason to use this skill.** Every edge names its knowledge source; a path
+assembled from `infores:text-mining-provider` edges is a different claim from one assembled from
+curated sources. Read the attribution before reporting the path.
 
 ## Official references
 
