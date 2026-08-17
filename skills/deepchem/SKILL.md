@@ -1,11 +1,11 @@
 ---
 name: deepchem
 description: Molecular ML with diverse featurizers and pre-built datasets. Use for property prediction (ADMET, toxicity) with traditional ML or GNNs when you want extensive featurization options and MoleculeNet benchmarks. Best for quick experiments with pre-trained models, diverse molecular representations. For ready-made ADMET numbers without training a model use admet-prediction; for benchmark datasets and task-aware splits use pytdc.
-license: MIT license
+license: MIT
 allowed-tools: Read Write Edit Bash
 compatibility: Requires Python 3.7–3.11 (PyPI 2.8.0 caps at <3.12). Install PyTorch, TensorFlow, or JAX before the matching deepchem extra. RDKit is a core dependency.
 metadata:
-  version: "1.5"
+  version: "1.6"
   skill-author: K-Dense Inc.
 ---
 
@@ -15,7 +15,8 @@ metadata:
 
 DeepChem is a comprehensive Python library for applying machine learning to chemistry, materials science, and biology. Enable molecular property prediction, drug discovery, materials design, and biomolecule analysis through specialized neural networks, molecular featurization methods, and pretrained models.
 
-**Version note:** Examples target **deepchem 2.8.0** (PyPI stable, Apr 2024). Requires **Python 3.7–3.11** (`<3.12` on PyPI). Core utilities (loaders, featurizers, MoleculeNet) work without a DL backend; GNN and transformer models need the matching extra (`torch`, `tensorflow`, or `jax`). Install the backend framework first when using GPU builds.
+**Checked against:** deepchem **2.8.0** (PyPI stable, released 2024-04-02; still the current
+release as of August 2026). Requires **Python 3.7–3.11** (`<3.12` on PyPI). Core utilities (loaders, featurizers, MoleculeNet) work without a DL backend; GNN and transformer models need the matching extra (`torch`, `tensorflow`, or `jax`). Install the backend framework first when using GPU builds.
 
 **The release you install is much older than the code you will read about.** The GitHub
 repository is actively developed, but 2.8.0 (April 2024) is still the newest tagged release, so
@@ -242,6 +243,23 @@ uv pip install 'deepchem[dqc]'         # Differentiable quantum chemistry (torch
 Nightly builds: `uv pip install --pre deepchem` (same extras apply with `--pre`).
 
 See [installation guide](https://deepchem.readthedocs.io/en/latest/get_started/installation.html) and [soft requirements](https://deepchem.readthedocs.io/en/latest/requirements.html) for optional dependencies per model class.
+
+## Composing with the rest of the bundle
+
+- `admet-prediction` → instead, usually: if you want ADMET numbers rather than a trained model,
+  ADMET-AI gives you 41 endpoints with approved-drug percentiles and no training run. Come here
+  when you have your own measured data.
+- `pytdc` → before: the datasets and, more importantly, the **task-aware splits**. A random split
+  on molecular data reports a fantasy R²; scaffold splits are the reason to use PyTDC's loaders
+  rather than rolling your own.
+- `chembl` → before: the measured bioactivity to train on, curated rather than raw.
+- `rdkit` / `datamol` → before: standardise and desalt. A featurizer will happily embed a salt.
+- `molfeat` → alongside: a wider featurizer catalogue with a consistent interface, if
+  featurization rather than model fitting is the bottleneck.
+- `medchem` → after: a model's top-ranked generated molecules still need alert triage.
+
+**Train on your own data or do not train.** A public benchmark model applied to your chemistry is
+out of domain by construction; that is the case for `admet-prediction` instead.
 
 ## Additional Resources
 

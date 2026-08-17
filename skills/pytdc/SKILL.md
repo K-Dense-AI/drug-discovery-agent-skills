@@ -1,11 +1,11 @@
 ---
 name: pytdc
-description: Use Therapeutics Data Commons through the PyTDC Python package for registry discovery, approved dataset access, task-aware splits, evaluator metrics, benchmark groups, and bounded molecular-oracle workflows.
+description: Use Therapeutics Data Commons through the PyTDC Python package for registry discovery, approved dataset access, task-aware splits (scaffold, cold-start, temporal, combination), evaluator metrics, benchmark groups, and bounded molecular-oracle workflows. Use this skill to find which TDC datasets exist for a therapeutic task, load them with a split that does not leak, score predictions with the task's own official metric rather than a generic one, and run benchmark groups reproducibly. Also trigger on PyTDC, Therapeutics Data Commons, tdc.single_pred, tdc.multi_pred, ADMET Benchmark Group, scaffold split, get_split, or molecular oracles such as GSK3B, JNK3 and DRD2.
 license: MIT
 allowed-tools: Read Write Edit Bash
 compatibility: Requires uv, CPython 3.11, PyTDC 1.1.15, and setuptools 80.9.0 for its legacy pkg_resources runtime import. Dataset, benchmark, checkpoint, and remote-oracle operations require network/storage review and explicit user approval.
 metadata:
-  version: "1.1"
+  version: "1.2"
   skill-author: K-Dense Inc.
 ---
 
@@ -295,3 +295,20 @@ summaries, bounded output, and no implicit dataset/model download.
   and safe execution
 - [references/sources.md](references/sources.md) — dated authoritative sources and
   unresolved upstream gaps
+
+## Composing with the rest of the bundle
+
+- `chembl` → before: PyTDC ships curated benchmark sets; ChEMBL is where a dataset for *your*
+  target comes from. The split discipline here applies to both.
+- `rdkit` / `datamol` / `molfeat` → alongside: standardisation and featurisation. PyTDC supplies
+  the data and the split; it does not choose your representation.
+- `deepchem` → after: the training loop, once the split is decided.
+- `admet-prediction` → instead: ADMET-AI is trained on 41 of these same TDC datasets. If you want
+  numbers rather than a benchmark run, use it and skip the training entirely.
+- `generative-design` → alongside: TDC's oracles (GSK3B, JNK3, DRD2, QED, SA) are the standard
+  scoring functions for de novo generation, and the usual way to overfit a generator.
+- `medchem` → after: an oracle-optimised molecule is not a real molecule until it survives alerts.
+
+**The split is the experiment.** A random split on molecular data reports a number that will not
+survive contact with prospective compounds, because congeneric series from one paper land on both
+sides. That is the single reason to use PyTDC's loaders rather than `train_test_split`.

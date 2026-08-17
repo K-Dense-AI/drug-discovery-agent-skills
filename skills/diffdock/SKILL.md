@@ -1,11 +1,11 @@
 ---
 name: diffdock
-description: DiffDock and DiffDock-L molecular docking. Use for protein-small-molecule pose prediction from PDB or sequence plus SMILES/SDF/MOL2, batch docking, virtual screening, and pose-confidence interpretation. Not for binding affinity prediction.
+description: DiffDock and DiffDock-L diffusion-based molecular docking. Use for blind protein-small-molecule pose prediction from a PDB file or sequence plus SMILES/SDF/MOL2, batch docking over a CSV of complexes, virtual screening triage, sampling multiple poses per complex, and reading the confidence score correctly. Also trigger on DiffDock, DiffDock-L, inference.py, confidence_model, samples_per_complex, ESM embedding preparation for docking, or blind docking without a defined box. Not for binding affinity prediction — the confidence score ranks pose plausibility, not potency.
 allowed-tools: Read Write Edit Bash Glob Grep
 compatibility: Requires the DiffDock repository, Python 3.9 environment from upstream environment.yml or the official Docker image, RDKit, PyTorch/PyG, and optional CUDA GPU acceleration. Current guidance targets DiffDock v1.1.3 / DiffDock-L.
-license: MIT license
+license: MIT
 metadata:
-  version: "1.4"
+  version: "1.5"
   skill-author: K-Dense Inc.
 ---
 

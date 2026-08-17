@@ -11,9 +11,18 @@ Usage:
 """
 
 import argparse
-import deepchem as dc
-import numpy as np
 import sys
+
+try:
+    import deepchem as dc
+    import numpy as np
+except ImportError as error:  # pragma: no cover - exercised only without the extra
+    print(
+        f"Error: missing required package: {error.name}\n"
+        "Install with: uv pip install 'deepchem[torch]'  (needs Python <3.12)",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 
 def train_solubility_model(data_path=None, smiles_col='smiles', target_col='measured log solubility in mols per litre'):

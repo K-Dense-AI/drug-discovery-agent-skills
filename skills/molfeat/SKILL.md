@@ -1,11 +1,11 @@
 ---
 name: molfeat
-description: Molecular featurization for ML. ECFP/MACCS and other fingerprints, RDKit and Mordred descriptors, pharmacophores and shape descriptors, and pretrained embeddings (ChemBERTa, ChemGPT, GIN, Graphormer). Convert SMILES to features for QSAR, virtual screening, and molecular ML.
-license: Apache-2.0 license
+description: Molecular featurization hub with one consistent interface over 100+ featurizers. Fingerprints (ECFP/Morgan, MACCS, atom pair, topological torsion, Avalon, RDKit, ERG), RDKit and Mordred descriptor sets, pharmacophore and 3D shape descriptors, scaffold keys, and pretrained embeddings (ChemBERTa, ChemGPT, MolT5, GIN, Graphormer) through a common transformer API with caching and parallelism. Use this skill to convert SMILES into model-ready feature matrices for QSAR, virtual screening, and molecular ML, and to choose between featurizer families. Also trigger on molfeat, MoleculeTransformer, FPVecTransformer, PretrainedHFTransformer, molfeat model store, or featurizer selection.
+license: MIT
 allowed-tools: Read Write Edit Bash
 compatibility: Requires Python 3.9–3.10 (molfeat 0.11.0 declares `requires-python <3.11`). Requires datamol, RDKit, and PyTorch; GNN and transformer featurizers need optional extras. The 8 HuggingFace models in the model store cannot be downloaded from it — see "Pretrained models" below.
 metadata:
-  version: "1.3"
+  version: "1.4"
   skill-author: K-Dense Inc.
 ---
 
@@ -357,6 +357,23 @@ Python 3.11 and pip/uv will refuse to resolve on 3.11+.
 
 **Reproducibility** — save `to_state_yaml_file` next to the model, and record
 `molfeat.__version__`; state files carry the writing version in `_molfeat_version`.
+
+## Composing with the rest of the bundle
+
+- `rdkit` / `datamol` → before: **standardise and desalt first.** A featurizer embeds whatever
+  string it is given, so a salt or mixture produces a vector for the wrong species — and no error.
+- `chembl` → before: curated measured bioactivity is what you want to featurize, not raw rows.
+- `pytdc` → alongside: the scaffold and cold-start splits. Featurization quality is invisible under
+  a random split, which reports a fantasy R² regardless of the representation you chose.
+- `deepchem` → after: model fitting, if you want the training loop rather than just the features.
+- `admet-prediction` → instead: for standard ADMET endpoints, a ready-made model beats featurizing
+  and training from scratch unless you have your own measured data.
+- `chemical-space` / `generative-design` → after: features are what a similarity or diversity
+  selection over an enumerated set is computed on.
+
+**Try ECFP first.** Across most QSAR tasks a count-based Morgan fingerprint with a gradient-boosted
+model is within noise of a pretrained transformer embedding, at a fraction of the cost. Reach for
+pretrained embeddings when you have shown ECFP is the bottleneck, not before.
 
 ## Additional Resources
 

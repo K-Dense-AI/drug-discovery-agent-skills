@@ -1,9 +1,11 @@
 ---
 name: molecular-dynamics
-description: Run and analyze molecular dynamics simulations with OpenMM and MDAnalysis. Set up protein/small molecule systems, define force fields, run energy minimization and production MD, analyze trajectories (RMSD, RMSF, contact maps, free energy surfaces). For structural biology, drug binding, and biophysics.
+description: Run and analyze molecular dynamics simulations with OpenMM and MDAnalysis. Set up protein and protein-ligand systems with PDBFixer, choose force fields and water models (AMBER14, CHARMM36m, ff19SB, GAFF2, TIP3P), solvate and add ions, run energy minimization, NVT/NPT equilibration and production MD on GPU, then analyze trajectories for RMSD, RMSF, radius of gyration, hydrogen bonds, native contacts, PCA and free energy surfaces. Use this skill for protein stability under mutation, ligand binding-mode and residence-time questions, conformational sampling, membrane proteins, and disordered ensembles. Also trigger on OpenMM, MDAnalysis, mdtraj, Simulation.step, LangevinMiddleIntegrator, PDBFixer, DCD or XTC trajectory, RMSD analysis, or production MD.
 license: MIT
+compatibility: Requires Python 3.11+ with openmm and mdanalysis, best installed from conda-forge; PDBFixer and nglview are optional extras. A CUDA or OpenCL GPU is effectively required — production MD on CPU is 10-100x slower, so nanoseconds become days. Trajectory analysis alone runs fine on CPU.
+allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.1"
+  version: "1.2"
   skill-author: Kuan-lin Huang
 ---
 
@@ -15,6 +17,13 @@ Molecular dynamics (MD) simulation computationally models the time evolution of 
 
 - **OpenMM** (https://openmm.org/): High-performance MD simulation engine with GPU support, Python API, and flexible force field support
 - **MDAnalysis** (https://mdanalysis.org/): Python library for reading, writing, and analyzing MD trajectories from all major simulation packages
+
+**Checked against:** OpenMM 8.5.2 and MDAnalysis 2.10.0, August 2026.
+
+Read [references/mdanalysis_analysis.md](references/mdanalysis_analysis.md) for the trajectory
+analysis catalogue — selection language, RMSD/RMSF, contacts, hydrogen bonds, PCA, clustering and
+free energy surfaces — and load it when the question is about analysing a finished run rather than
+producing one.
 
 **Installation:**
 ```bash
@@ -446,6 +455,27 @@ def parameterize_ligand(smiles, ff_name="openff-2.0.0.offxml"):
 - **Periodic boundary conditions**: Required for solvated systems
 - **PME for electrostatics**: More accurate than cutoff methods for charged systems
 
+## Composing with the rest of the bundle
+
+- `uniprot-rcsb` → before: the structure, plus the check that the residues you care about are
+  actually resolved. Minimising a model with a 12-residue gap through your binding loop wastes the
+  whole run.
+- `binding-site-analysis` → before: whether the pocket is real and whether it is cryptic. MD is the
+  standard way to open a cryptic site, but only if you know that is the question.
+- `autodock-vina` / `diffdock` → before: MD is how a docked pose is tested. **A pose that leaves
+  the site in 10 ns was not a pose.** Docking scores rank; MD tells you whether the ranking
+  survives contact with dynamics.
+- `boltz` → before: a predicted complex, when no experimental structure exists — but treat a
+  predicted holo structure as a hypothesis and check its confidence before spending GPU-days.
+- `free-energy-perturbation` → after: rigorous ΔΔG. FEP is MD with an alchemical schedule and
+  proper convergence checks; reach for it when you need numbers rather than a movie.
+- `degraders` → after: ternary complex stability, which is exactly a question about persistence
+  over time rather than a static pose.
+
+**Report the ensemble, not the frame.** A single snapshot from a trajectory is a screenshot of a
+distribution — quote the mean and spread over the equilibrated portion, and say how much you
+discarded as equilibration.
+
 ## Additional Resources
 
 - **OpenMM documentation**: https://docs.openmm.org/latest/userguide/
@@ -454,5 +484,6 @@ def parameterize_ligand(smiles, ff_name="openff-2.0.0.offxml"):
 - **NAMD** (alternative): https://www.ks.uiuc.edu/Research/namd/
 - **CHARMM-GUI** (web-based system builder): https://charmm-gui.org/
 - **AmberTools** (free Amber tools): https://ambermd.org/AmberTools.php
-- **OpenMM paper**: Eastman P et al. (2017) PLOS Computational Biology. PMID: 28278240
+- **OpenMM paper**: Eastman P et al. (2017) *OpenMM 7: Rapid development of high performance
+  algorithms for molecular dynamics*. PLOS Computational Biology. PMID: 28746339
 - **MDAnalysis paper**: Michaud-Agrawal N et al. (2011) J Computational Chemistry. PMID: 21500218

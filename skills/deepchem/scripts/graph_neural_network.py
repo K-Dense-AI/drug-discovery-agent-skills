@@ -12,8 +12,17 @@ Usage:
 """
 
 import argparse
-import deepchem as dc
 import sys
+
+try:
+    import deepchem as dc
+except ImportError as error:  # pragma: no cover - exercised only without the extra
+    print(
+        f"Error: missing required package: {error.name}\n"
+        "Install with: uv pip install 'deepchem[torch]'  (needs Python <3.12)",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 
 AVAILABLE_MODELS = {
