@@ -1,9 +1,11 @@
 ---
 name: glycoengineering
-description: Analyze and engineer protein glycosylation. Scan sequences for N-glycosylation sequons (N-X-S/T), predict O-glycosylation hotspots, and access curated glycoengineering tools (NetOGlyc, GlycoShield, GlycoWorkbench). For glycoprotein engineering, therapeutic antibody optimization, and vaccine design.
-license: Unknown
+description: Analyze and engineer protein glycosylation. Scan sequences for canonical N-glycosylation sequons (N-X-S/T with X not proline, including overlapping sites), predict O-GalNAc hotspots, read glycan notation, and reach the curated external tooling (NetNGlyc, NetOGlyc, GlycoShield, GlycoWorkbench, GlyTouCan, GlyConnect). Use this skill for therapeutic antibody glycoengineering and afucosylation for ADCC, Fc glycan control, glycan shielding in vaccine immunogen design, sequon removal or insertion, and half-life engineering through sialylation. Also trigger on N-glycosylation, sequon, NXS/NXT, O-glycosylation, glycoform heterogeneity, afucosylation, high-mannose, GlyTouCan, or WURCS.
+license: MIT
+compatibility: Requires Python 3.10+. The bundled sequon and notation analysis is standard library only. Optional extras — pandas and requests for the database lookups, glycoshield for ensemble modelling. The external predictors (NetNGlyc, NetOGlyc) are DTU web services requiring manual submission and, for some, an academic licence; there is no public REST API.
+allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.1"
+  version: "1.2"
   skill-author: Kuan-lin Huang
 ---
 
@@ -51,20 +53,18 @@ def find_n_glycosylation_sequons(sequence: str) -> List[dict]:
     """
     seq = sequence.upper()
     results = []
-    i = 0
-    while i <= len(seq) - 3:
+    # Step by one, not by three. Sequons overlap: in NNTS both N1 (NNT) and
+    # N2 (NTS) are glycosylation sites, and advancing past a match would
+    # silently drop the second one -- a missed liability, reported as clean.
+    for i in range(len(seq) - 2):
         triplet = seq[i:i+3]
         if triplet[0] == 'N' and triplet[1] != 'P' and triplet[2] in {'S', 'T'}:
-            context = seq[max(0, i-3):i+6]  # ±3 residue context
             results.append({
-                'position': i + 1,   # 1-based
+                'position': i + 1,   # 1-based, the asparagine
                 'motif': triplet,
-                'context': context,
+                'context': seq[max(0, i-3):i+6],  # ±3 residue context
                 'sequon_type': 'NXS' if triplet[2] == 'S' else 'NXT'
             })
-            i += 3
-        else:
-            i += 1
     return results
 
 def summarize_glycosylation_sites(sequence: str, protein_name: str = "") -> str:
@@ -328,12 +328,37 @@ Neu5Ac-Gal-GlcNAc-Man/
 - **For antibodies**: Fc N297 glycan is critical — always characterize this site first
 - **Use GlyConnect** to check if your protein of interest has experimentally verified glycosylation data
 
+## Composing with the rest of the bundle
+
+- `antibody-engineering` → before: **an N-glycosylation sequon inside a CDR is a developability
+  liability, not a feature.** Its liability scanner flags them with region weighting; come here to
+  decide whether to remove the sequon or keep it.
+- `esm` / `protein-binder-design` → after: scan any designed or generated sequence. Design tools
+  introduce sequons without noticing, and the glycan then blocks the interface you designed.
+- `uniprot-rcsb` → before: the canonical sequence, plus UniProt's own CARBOHYD annotations, which
+  tell you which sequons are actually occupied rather than merely present.
+- `immunogenicity` → alongside: glycan shielding and T-cell epitope exposure are the same surface
+  argued from two directions.
+- `molecular-dynamics` → after: GlycoShield-style ensembles are what turn a sequon list into an
+  actual picture of what the glycan covers.
+
+**A sequon is necessary, not sufficient.** Occupancy depends on local structure and expression
+system; roughly a third of predicted sequons are unoccupied. Report predicted sites as predicted.
+
+## Resources
+
+Read [references/glycan_databases.md](references/glycan_databases.md) when you need to look a
+structure up rather than scan a sequence — GlyTouCan accessions, GlyConnect site-specific data,
+UniCarbKB, the notation formats (GlycoCT, WURCS, IUPAC) and worked lookup code.
+
 ## Additional Resources
 
 - **GlyTouCan** (glycan structure repository): https://glytoucan.org/
 - **GlyConnect**: https://glyconnect.expasy.org/
 - **CFG Functional Glycomics**: http://www.functionalglycomics.org/
 - **DTU Health Tech servers** (NetNGlyc, NetOGlyc): https://services.healthtech.dtu.dk/
-- **GlycoWorkbench**: https://glycoworkbench.software.informer.com/
-- **Review**: Apweiler R et al. (1999) Biochim Biophys Acta. PMID: 10564035
-- **Therapeutic glycoengineering review**: Jefferis R (2009) Nature Reviews Drug Discovery. PMID: 19448661
+- **GlycoWorkbench**: https://www.eurocarbdb.org/project/glycoworkbench
+- **Review**: Apweiler R, Hermjakob H, Sharon N (1999) *On the frequency of protein glycosylation,
+  as deduced from analysis of the SWISS-PROT database*. Biochim Biophys Acta. PMID: 10580125
+- **Therapeutic glycoengineering review**: Jefferis R (2009) *Glycosylation as a strategy to improve
+  antibody-based therapeutics*. Nature Reviews Drug Discovery. PMID: 19247305

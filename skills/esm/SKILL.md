@@ -1,9 +1,11 @@
 ---
 name: esm
-description: Use when working directly with the `esm` Python SDK, ESM3 or ESMC model IDs, Forge/Biohub inference clients, or ESMFold2 folding workflows.
-license: MIT license
+description: Protein language models through the EvolutionaryScale `esm` Python SDK. Generate and embed sequences with ESM3 (multimodal sequence, structure and function prompting), extract per-residue and mean-pooled embeddings with ESM C, fold sequences with ESMFold2, and run inference locally or against the Forge and Biohub hosted clients. Use this skill for protein representation learning, variant effect and mutational scanning from likelihoods, sequence generation and inpainting, structure prediction from sequence alone, and embedding features for downstream models. Also trigger on esm, ESM3, ESMC, ESM Cambrian, ESMFold2, `from esm.models`, ESMProtein, GenerationConfig, forge.evolutionaryscale.ai, biohub.ai, or ESM_API_KEY.
+license: MIT
+compatibility: Requires Python >=3.12,<3.13 and `esm` 3.2.3 from PyPI. Local ESM3-open inference needs a GPU with roughly 16 GB of memory and a gated Hugging Face licence acceptance; hosted inference through Forge or Biohub needs an API key in ESM_API_KEY and no local GPU. ESMFold2 is served through Biohub rather than the local SDK.
+allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.1"
+  version: "1.2"
   skill-author: K-Dense Inc.
 ---
 
@@ -327,6 +329,25 @@ These references contain detailed API specifications, parameter descriptions, an
   - ESM C Launch: https://www.evolutionaryscale.ai/blog/esm-cambrian
 - **Community:** Slack community at https://join.slack.com/t/esm-community/shared_invite/zt-2tbndpdmu-92lUCmp8CEOro_rioU5qdA
 - **Model Weights:** Hugging Face EvolutionaryScale and Biohub organizations
+
+## Composing with the rest of the bundle
+
+- `uniprot-rcsb` → before: the canonical sequence and any experimental structure. Fold from
+  sequence only when no structure exists — an experimental structure beats a predicted one.
+- `protein-binder-design` → after: ESM embeddings and likelihoods are inputs to binder design and
+  filtering, not a substitute for BindCraft or RFdiffusion.
+- `antibody-engineering` → alongside: **general protein language models are weak on antibody CDRs**,
+  which are hypervariable by design and poorly represented in the training distribution. Use IMGT
+  numbering and antibody-specific tooling there rather than a generic ESM likelihood.
+- `immunogenicity` → after: a generated or humanised sequence still needs class II epitope scanning.
+  A low ESM perplexity says nothing about T-cell epitopes.
+- `boltz` / `diffdock` → after: for a complex, cofolding or docking answers the question ESM does
+  not — where the ligand goes.
+- `glycoengineering` → after: sequon scanning on any designed sequence destined for expression.
+- `adaptyv` / `tamarind` → after: designs are hypotheses until expressed and assayed.
+
+**Likelihood is not fitness.** A high-likelihood sequence is one the model finds typical of its
+training distribution; that correlates with foldability and not at all with the activity you want.
 
 ## Responsible Use
 

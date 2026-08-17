@@ -86,6 +86,31 @@ class MotifDetectionTests(unittest.TestCase):
             any(item["liability"] == "N-glycosylation sequon" for item in findings)
         )
 
+    def test_overlapping_sequons_are_both_reported(self) -> None:
+        """In NNTS both asparagines are sequons: N1 of NNT and N2 of NTS.
+
+        re.finditer resumes after a match, so a scan without a lookahead finds
+        the first and never looks at the second -- a real liability reported as
+        absent. Regression test for that.
+        """
+        findings = self._findings("AAANNTSAAA")
+        positions = sorted(
+            item["position"]
+            for item in findings
+            if item["liability"] == "N-glycosylation sequon"
+        )
+        self.assertEqual(positions, [4, 5])
+
+    def test_overlapping_deamidation_motifs_are_both_reported(self) -> None:
+        """A run of asparagines carries one N[STNADH] motif per residue."""
+        findings = self._findings("AAANNNSAAA")
+        positions = sorted(
+            item["position"]
+            for item in findings
+            if item["liability"].startswith("deamidation (NS")
+        )
+        self.assertEqual(positions, [4, 5, 6])
+
     def test_an_odd_cysteine_count_is_critical(self) -> None:
         findings = self._findings("ACACAC")
         unpaired = [item for item in findings if item["liability"] == "unpaired cysteine"]

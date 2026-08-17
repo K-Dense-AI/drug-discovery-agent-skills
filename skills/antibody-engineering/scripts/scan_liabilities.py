@@ -224,7 +224,11 @@ def scan(name: str, sequence: str, regions: list[tuple[int, int, str]]) -> list[
     for label, pattern, base_severity, rationale in LIABILITY_MOTIFS:
         if label == "free cysteine":
             continue  # counted separately, below
-        for match in re.finditer(pattern, sequence):
+        # Lookahead so overlapping motifs are all reported. re.finditer resumes
+        # after each match, so in NNTS it would find the N1 sequon and never
+        # look at N2 -- a real liability, silently absent from the report. The
+        # same applies to the NG/N[STNADH] deamidation motifs in a run of Asn.
+        for match in re.finditer(f"(?=({pattern}))", sequence):
             position = match.start() + 1
             region = region_at(regions, position)
             severity = base_severity
@@ -237,7 +241,7 @@ def scan(name: str, sequence: str, regions: list[tuple[int, int, str]]) -> list[
                 {
                     "name": name,
                     "liability": label,
-                    "motif": match.group(0),
+                    "motif": match.group(1),
                     "position": position,
                     "region": region or "unknown",
                     "severity": severity,
