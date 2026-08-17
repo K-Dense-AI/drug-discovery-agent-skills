@@ -1,12 +1,12 @@
 # Security Scan Report
 
-**Generated:** 2026-08-17 00:35 UTC  
+**Generated:** 2026-08-17 09:18 UTC  
 **Skills scanned:** 37  
 **Total findings:** 154  
 **Critical:** 0 | **High:** 0 | **Safe skills:** 37/37
 
 **Scanner:** cisco-ai-skill-scanner 2.0.13 · **Model:** claude-opus-5  
-**This run:** full rescan of all 37 skill(s).  
+**This run:** 1 skill(s) rescanned; 36 unchanged since the last scan and carried forward unmodified. Per-skill scan dates are in [`security-report.json`](security-report.json) (`last_scanned`).  
 
 ## Summary
 
@@ -14,39 +14,39 @@
 |-------|----------|----------|------|----------|
 | adaptyv | 🟡 MEDIUM | 4 | ✅ | 34.0s |
 | esm | 🟡 MEDIUM | 5 | ✅ | 46.6s |
-| patent-landscape | 🟡 MEDIUM | 3 | ✅ | 23.4s |
 | openfda | 🟡 MEDIUM | 4 | ✅ | 31.9s |
-| tamarind | 🟡 MEDIUM | 12 | ✅ | 32.9s |
+| patent-landscape | 🟡 MEDIUM | 3 | ✅ | 23.4s |
+| tamarind | 🟡 MEDIUM | 12 | ✅ | 33.0s |
 | admet-prediction | 🔵 LOW | 2 | ✅ | 17.3s |
-| boltz | 🔵 LOW | 2 | ✅ | 21.9s |
 | antibody-engineering | 🔵 LOW | 2 | ✅ | 23.4s |
 | autodock-vina | 🔵 LOW | 2 | ✅ | 23.8s |
+| boltz | 🔵 LOW | 2 | ✅ | 21.9s |
 | chembl | 🔵 LOW | 2 | ✅ | 22.9s |
 | chemical-space | 🔵 LOW | 3 | ✅ | 22.3s |
 | clinicaltrials | 🔵 LOW | 3 | ✅ | 24.7s |
-| deepchem | 🔵 LOW | 3 | ✅ | 28.4s |
 | datamol | 🔵 LOW | 3 | ✅ | 30.8s |
+| deepchem | 🔵 LOW | 3 | ✅ | 28.4s |
 | depmap | 🔵 LOW | 2 | ✅ | 23.9s |
 | diffdock | 🔵 LOW | 2 | ✅ | 26.1s |
-| immunogenicity | 🔵 LOW | 1 | ✅ | 16.2s |
 | free-energy-perturbation | 🔵 LOW | 2 | ✅ | 28.6s |
 | generative-design | 🔵 LOW | 2 | ✅ | 24.1s |
-| glycoengineering | 🔵 LOW | 4 | ✅ | 30.7s |
+| glycoengineering | 🔵 LOW | 4 | ✅ | 30.8s |
+| immunogenicity | 🔵 LOW | 1 | ✅ | 16.2s |
 | medchem | 🔵 LOW | 3 | ✅ | 26.9s |
-| molfeat | 🔵 LOW | 1 | ✅ | 18.3s |
 | molecular-dynamics | 🔵 LOW | 3 | ✅ | 26.4s |
+| molfeat | 🔵 LOW | 1 | ✅ | 18.3s |
 | ncats-arax | 🔵 LOW | 4 | ✅ | 28.8s |
 | oligonucleotides | 🔵 LOW | 2 | ✅ | 23.1s |
-| open-targets | 🔵 LOW | 2 | ✅ | 23.0s |
+| open-targets | 🔵 LOW | 2 | ✅ | 23.1s |
+| pkpd-translation | 🔵 LOW | 3 | ✅ | 31.8s |
 | primekg | 🔵 LOW | 2 | ✅ | 17.6s |
 | protein-binder-design | 🔵 LOW | 3 | ✅ | 23.9s |
-| pkpd-translation | 🔵 LOW | 3 | ✅ | 31.8s |
-| rdkit | 🔵 LOW | 2 | ✅ | 26.3s |
-| rowan | 🔵 LOW | 2 | ✅ | 18.9s |
 | pytdc | 🔵 LOW | 2 | ✅ | 30.4s |
+| rdkit | 🔵 LOW | 2 | ✅ | 26.3s |
 | retrosynthesis | 🔵 LOW | 3 | ✅ | 24.4s |
 | target-safety | 🔵 LOW | 2 | ✅ | 22.0s |
-| uniprot-rcsb | 🔵 LOW | 2 | ✅ | 21.0s |
+| uniprot-rcsb | 🔵 LOW | 2 | ✅ | 21.1s |
+| rowan | 🔵 LOW | 2 | ✅ | 17.9s |
 | binding-site-analysis | 🟢 SAFE | 0 | ✅ | 8.5s |
 | degraders | 🟢 SAFE | 0 | ✅ | 15.0s |
 
@@ -95,22 +95,6 @@
   > File: `references/biohub-platform.md`
   > **Remediation:** Ensure all referenced paths resolve within the package, or remove references to non-existent template/asset/script files.
 
-### patent-landscape — 🟡 MEDIUM
-
-- **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Description includes an explicit keyword trigger list to broaden activation
-  > The frontmatter description appends 'Also trigger on SureChEMBL, patent chemistry, Markush structure, freedom to operate, composition of matter, assignee, priority date, patent family, or PatentsView.' This is discovery-surface tuning via keyword enumeration. The listed terms are all genuinely in scope for a patent-chemistry skill and there is no brand impersonation or over-broad 'general assistant' claim, so the risk is informational only.
-  > **Remediation:** Describe capabilities functionally rather than listing activation keywords, to avoid unintended activation on unrelated queries.
-
-- **🔵 LOW** `LLM_DATA_EXFILTRATION` — API endpoint base URL is overridable via environment variable, key sent to whatever host is configured
-  > `_common.py` reads PATENTSVIEW_URL (and SURECHEMBL_FTP) from the environment with a safe default. `patent_search.search()` attaches the PATENTSVIEW_API_KEY as an `X-Api-Key` header to a URL built from that base. If the environment is tampered with (e.g., by another skill, a poisoned shell profile, or a compromised CI config), the free API key would be transmitted to an arbitrary host. Impact is low because the default is the legitimate PatentsView endpoint, the credential is a free low-value key, and no other secrets or local files are read or transmitted.
-  > File: `scripts/_common.py`
-  > **Remediation:** Validate the resolved host against an allow-list (search.patentsview.org, ftp.ebi.ac.uk) before attaching credential headers, or only send the API key when the URL scheme is https and the host matches the expected domain.
-
-- **🟡 MEDIUM** `BEHAVIOR_ENV_VAR_HARVESTING` — Environment variable harvesting detected
-  > Script iterates through environment variables in skills/patent-landscape/scripts/_common.py
-  > File: `skills/patent-landscape/scripts/_common.py`
-  > **Remediation:** Remove environment variable collection unless explicitly required and documented
-
 ### openfda — 🟡 MEDIUM
 
 - **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Explicit activation keyword list in skill description
@@ -129,6 +113,22 @@
 - **🟡 MEDIUM** `BEHAVIOR_ENV_VAR_HARVESTING` — Environment variable harvesting detected
   > Script iterates through environment variables in skills/openfda/scripts/_common.py
   > File: `skills/openfda/scripts/_common.py`
+  > **Remediation:** Remove environment variable collection unless explicitly required and documented
+
+### patent-landscape — 🟡 MEDIUM
+
+- **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Description includes an explicit keyword trigger list to broaden activation
+  > The frontmatter description appends 'Also trigger on SureChEMBL, patent chemistry, Markush structure, freedom to operate, composition of matter, assignee, priority date, patent family, or PatentsView.' This is discovery-surface tuning via keyword enumeration. The listed terms are all genuinely in scope for a patent-chemistry skill and there is no brand impersonation or over-broad 'general assistant' claim, so the risk is informational only.
+  > **Remediation:** Describe capabilities functionally rather than listing activation keywords, to avoid unintended activation on unrelated queries.
+
+- **🔵 LOW** `LLM_DATA_EXFILTRATION` — API endpoint base URL is overridable via environment variable, key sent to whatever host is configured
+  > `_common.py` reads PATENTSVIEW_URL (and SURECHEMBL_FTP) from the environment with a safe default. `patent_search.search()` attaches the PATENTSVIEW_API_KEY as an `X-Api-Key` header to a URL built from that base. If the environment is tampered with (e.g., by another skill, a poisoned shell profile, or a compromised CI config), the free API key would be transmitted to an arbitrary host. Impact is low because the default is the legitimate PatentsView endpoint, the credential is a free low-value key, and no other secrets or local files are read or transmitted.
+  > File: `scripts/_common.py`
+  > **Remediation:** Validate the resolved host against an allow-list (search.patentsview.org, ftp.ebi.ac.uk) before attaching credential headers, or only send the API key when the URL scheme is https and the host matches the expected domain.
+
+- **🟡 MEDIUM** `BEHAVIOR_ENV_VAR_HARVESTING` — Environment variable harvesting detected
+  > Script iterates through environment variables in skills/patent-landscape/scripts/_common.py
+  > File: `skills/patent-landscape/scripts/_common.py`
   > **Remediation:** Remove environment variable collection unless explicitly required and documented
 
 ### tamarind — 🟡 MEDIUM
@@ -202,18 +202,6 @@
   > File: `references/interpreting-predictions.md`
   > **Remediation:** No action required for security; ensure only existing paths are referenced to avoid the agent attempting reads on missing files.
 
-### boltz — 🔵 LOW
-
-- **🔵 LOW** `LLM_SUPPLY_CHAIN_ATTACK` — Unpinned dependency and direct git installation guidance
-  > The reference documentation instructs the user to install Boltz via `pip install boltz` without a version pin, and offers `pip install git+https://github.com/jwohlwend/boltz.git` to install the development branch directly from GitHub. Unpinned/HEAD installs mean the code executed on the user's machine can change without review. The repository is the legitimate upstream Boltz project and the risk is low, but the installation guidance provides no version pin or hash verification.
-  > File: `references/running.md`
-  > **Remediation:** Pin an explicit version (e.g. `pip install boltz==2.2.1`) and avoid recommending installs from a mutable git HEAD, or note the security implications of doing so.
-
-- **🔵 LOW** `LLM_DATA_EXFILTRATION` — Workflow can transmit user sequences to a public third-party server
-  > The documented workflow uses `boltz predict ... --use_msa_server`, which uploads the user's protein sequence to the public ColabFold MSA server. This is inherent to the upstream tool rather than to the skill's own code, and the skill repeatedly and explicitly warns not to use it for confidential or unpublished sequences (in the compatibility field, SKILL.md, running.md, yaml-schema.md, and a runtime reminder printed by make_boltz_yaml.py). Flagged only as informational data-egress awareness; no covert exfiltration exists in the bundled scripts.
-  > File: `scripts/make_boltz_yaml.py`
-  > **Remediation:** No change required; the existing warnings are adequate. Optionally default guidance to precomputed local MSAs for sensitive targets.
-
 ### antibody-engineering — 🔵 LOW
 
 - **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Description contains an explicit trigger-keyword list
@@ -235,6 +223,18 @@
   > The SKILL.md compatibility field and reference documentation instruct users to install third-party toolchain components (`pip install meeko`, `pip install molscrub`, `pip install vina`, `conda install -c conda-forge vina`, `pip install pdbfixer`) without version pinning or hash verification. The scripts themselves do not perform installs, so this is informational only, but unpinned installs from public registries carry a minor supply-chain risk if a package is compromised or typosquatted.
   > File: `SKILL.md`
   > **Remediation:** Pin exact versions (e.g., `pip install meeko==0.7.1 vina==1.2.7 molscrub==<version>`) and prefer verified conda-forge/PyPI sources; note that installation is a user action, not performed automatically by the skill.
+
+### boltz — 🔵 LOW
+
+- **🔵 LOW** `LLM_SUPPLY_CHAIN_ATTACK` — Unpinned dependency and direct git installation guidance
+  > The reference documentation instructs the user to install Boltz via `pip install boltz` without a version pin, and offers `pip install git+https://github.com/jwohlwend/boltz.git` to install the development branch directly from GitHub. Unpinned/HEAD installs mean the code executed on the user's machine can change without review. The repository is the legitimate upstream Boltz project and the risk is low, but the installation guidance provides no version pin or hash verification.
+  > File: `references/running.md`
+  > **Remediation:** Pin an explicit version (e.g. `pip install boltz==2.2.1`) and avoid recommending installs from a mutable git HEAD, or note the security implications of doing so.
+
+- **🔵 LOW** `LLM_DATA_EXFILTRATION` — Workflow can transmit user sequences to a public third-party server
+  > The documented workflow uses `boltz predict ... --use_msa_server`, which uploads the user's protein sequence to the public ColabFold MSA server. This is inherent to the upstream tool rather than to the skill's own code, and the skill repeatedly and explicitly warns not to use it for confidential or unpublished sequences (in the compatibility field, SKILL.md, running.md, yaml-schema.md, and a runtime reminder printed by make_boltz_yaml.py). Flagged only as informational data-egress awareness; no covert exfiltration exists in the bundled scripts.
+  > File: `scripts/make_boltz_yaml.py`
+  > **Remediation:** No change required; the existing warnings are adequate. Optionally default guidance to precomputed local MSAs for sensitive targets.
 
 ### chembl — 🔵 LOW
 
@@ -279,6 +279,21 @@
   > File: `scripts/_common.py`
   > **Remediation:** Consider capping --limit to a sane maximum and adding a total request budget to prevent accidental heavy polling of the public registry.
 
+### datamol — 🔵 LOW
+
+- **🔵 LOW** `LLM_DATA_EXFILTRATION` — Documented cloud I/O paths use provider credentials from the environment
+  > The skill documents remote read/write via fsspec (s3://, gs://, https://), which implicitly uses provider credentials from environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, GOOGLE_APPLICATION_CREDENTIALS). This is a legitimate library feature and the skill explicitly instructs that cloud paths should only be used when the user requests them, that write destinations must be confirmed, that credential scope should be limited to provider variables, and that no environment data is transmitted to third parties. No exfiltration endpoint, no credential reading code, and no automated upload behavior is present — flagged only as an informational data-egress surface for the operator to be aware of.
+  > **Remediation:** No change strictly required. Optionally reiterate that the agent must obtain explicit user confirmation before any remote write and must never echo credential values into chat or logs.
+
+- **🔵 LOW** `LLM_SUPPLY_CHAIN_ATTACK` — Unpinned dependency installation instructions
+  > The skill instructs the agent to install packages via `uv pip install datamol`, `uv pip install s3fs`, and `uv pip install gcsfs` without version pinning or hash verification. While these are well-known, legitimate PyPI packages from a reputable maintainer (datamol-io/Valence Labs), unpinned installs mean the resolved artifact is whatever is current at install time, which is a minor supply-chain exposure. No typosquatting or untrusted GitHub sources are used.
+  > **Remediation:** Recommend pinned versions consistent with the documented tested release (e.g., `uv pip install "datamol==0.12.5"`) and note that installation should be user-approved.
+
+- **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Broken/non-existent file references in extracted reference list
+  > The reference extraction lists several paths that do not exist in the package (assets/*.md, templates/*.md, sklearn.py, datamol.py). Inspection shows these are artifacts of pattern extraction: the six real reference documents exist under references/ and are present; `sklearn.py` and `datamol.py` originate from `import datamol as dm` / `from sklearn.ensemble import ...` code snippets, and the SKILL.md explicitly clarifies these are third-party PyPI packages, not bundled scripts. Impact is documentation hygiene only, but dangling references could later be satisfied by an attacker-dropped file of the same name in the skill directory.
+  > File: `references/core_api.md`
+  > **Remediation:** Keep all reference links limited to the actual references/ directory paths and avoid phrasing that causes import statements to be parsed as local file references.
+
 ### deepchem — 🔵 LOW
 
 - **🔵 LOW** `LLM_SUPPLY_CHAIN_ATTACK` — Unpinned dependency installation and install directly from a Git branch
@@ -295,21 +310,6 @@
   > The transfer_learning.py script instantiates HuggingFace models by remote identifier ('seyonec/ChemBERTa-zinc-base-v1', 'ibm/MoLFormer-XL-both-10pct') and GroverModel with a local model_dir, causing weights/tokenizer configs to be fetched from the HuggingFace Hub at runtime without pinned revisions or checksum verification. Loading remote model artifacts can execute arbitrary deserialization code depending on the backend. These are well-known public model repositories and the behavior is disclosed in the skill documentation, so severity is low.
   > File: `scripts/transfer_learning.py`
   > **Remediation:** Pin model revisions (commit hashes) when loading HuggingFace checkpoints and prefer safetensors weights; note the network download requirement in the manifest compatibility field.
-
-### datamol — 🔵 LOW
-
-- **🔵 LOW** `LLM_DATA_EXFILTRATION` — Documented cloud I/O paths use provider credentials from the environment
-  > The skill documents remote read/write via fsspec (s3://, gs://, https://), which implicitly uses provider credentials from environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, GOOGLE_APPLICATION_CREDENTIALS). This is a legitimate library feature and the skill explicitly instructs that cloud paths should only be used when the user requests them, that write destinations must be confirmed, that credential scope should be limited to provider variables, and that no environment data is transmitted to third parties. No exfiltration endpoint, no credential reading code, and no automated upload behavior is present — flagged only as an informational data-egress surface for the operator to be aware of.
-  > **Remediation:** No change strictly required. Optionally reiterate that the agent must obtain explicit user confirmation before any remote write and must never echo credential values into chat or logs.
-
-- **🔵 LOW** `LLM_SUPPLY_CHAIN_ATTACK` — Unpinned dependency installation instructions
-  > The skill instructs the agent to install packages via `uv pip install datamol`, `uv pip install s3fs`, and `uv pip install gcsfs` without version pinning or hash verification. While these are well-known, legitimate PyPI packages from a reputable maintainer (datamol-io/Valence Labs), unpinned installs mean the resolved artifact is whatever is current at install time, which is a minor supply-chain exposure. No typosquatting or untrusted GitHub sources are used.
-  > **Remediation:** Recommend pinned versions consistent with the documented tested release (e.g., `uv pip install "datamol==0.12.5"`) and note that installation should be user-approved.
-
-- **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Broken/non-existent file references in extracted reference list
-  > The reference extraction lists several paths that do not exist in the package (assets/*.md, templates/*.md, sklearn.py, datamol.py). Inspection shows these are artifacts of pattern extraction: the six real reference documents exist under references/ and are present; `sklearn.py` and `datamol.py` originate from `import datamol as dm` / `from sklearn.ensemble import ...` code snippets, and the SKILL.md explicitly clarifies these are third-party PyPI packages, not bundled scripts. Impact is documentation hygiene only, but dangling references could later be satisfied by an attacker-dropped file of the same name in the skill directory.
-  > File: `references/core_api.md`
-  > **Remediation:** Keep all reference links limited to the actual references/ directory paths and avoid phrasing that causes import statements to be parsed as local file references.
 
 ### depmap — 🔵 LOW
 
@@ -333,12 +333,6 @@
   > SKILL.md references `references/workflows_examples.md` and the resolver also probed `templates/` and `assets/` variants of the reference documents that do not exist. Missing referenced files are a documentation/integrity defect rather than a security threat: the agent may attempt Read operations that fail, or fall back to inventing content. No malicious content was found in the files that do exist (`references/confidence_and_limitations.md`, `references/parameters_reference.md`, `assets/custom_inference_config.yaml`).
   > File: `references/confidence_and_limitations.md`
   > **Remediation:** Ship all referenced documents inside the skill package or remove the references so the agent does not attempt reads on non-existent paths.
-
-### immunogenicity — 🔵 LOW
-
-- **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Trigger keyword list in description
-  > The skill description includes an explicit list of activation keywords ('Also trigger on immunogenicity, anti-drug antibody, ADA, T-cell epitope, MHC class II, HLA-DRB1, NetMHCIIpan, NetMHCpan, deimmunisation, tregitope, or population coverage'). While all listed terms are tightly scoped to the skill's actual domain (MHC class II epitope prediction and ADA risk triage) and are not over-broad or brand-impersonating, this pattern is a mild discovery-optimisation technique worth noting.
-  > **Remediation:** Optional: describe capabilities in prose rather than enumerating trigger keywords. No action required given the keywords are domain-accurate and narrowly scoped.
 
 ### free-energy-perturbation — 🔵 LOW
 
@@ -381,6 +375,12 @@
   > File: `SKILL.md`
   > **Remediation:** Pin the version explicitly (e.g., `uv pip install glycoshield==<x.y.z>`), prefer a lockfile/hash-pinned requirements file, and note that installation should be confirmed by the user rather than executed automatically.
 
+### immunogenicity — 🔵 LOW
+
+- **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Trigger keyword list in description
+  > The skill description includes an explicit list of activation keywords ('Also trigger on immunogenicity, anti-drug antibody, ADA, T-cell epitope, MHC class II, HLA-DRB1, NetMHCIIpan, NetMHCpan, deimmunisation, tregitope, or population coverage'). While all listed terms are tightly scoped to the skill's actual domain (MHC class II epitope prediction and ADA risk triage) and are not over-broad or brand-impersonating, this pattern is a mild discovery-optimisation technique worth noting.
+  > **Remediation:** Optional: describe capabilities in prose rather than enumerating trigger keywords. No action required given the keywords are domain-accurate and narrowly scoped.
+
 ### medchem — 🔵 LOW
 
 - **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Activation-trigger keyword list embedded in description
@@ -398,13 +398,6 @@
   > File: `references/rules_catalog.md`
   > **Remediation:** Reference only files that ship with the package and use consistent relative paths so the agent does not attempt to resolve non-existent resources.
 
-### molfeat — 🔵 LOW
-
-- **🔵 LOW** `LLM_SUPPLY_CHAIN_ATTACK` — Instructions direct installation of external packages and download of third-party pretrained models
-  > The skill instructs the agent to run package installs (`uv pip install "molfeat==0.11.0"` and extras) and to download pretrained model weights from the HuggingFace Hub (`HFModel.from_pretrained("DeepChem/ChemBERTa-77M-MLM", ...)`), and references installing MAP4 from an external GitHub repository (reymond-group/map4). This is normal for a cheminformatics tooling skill and versions are explicitly pinned, but it does introduce third-party code/artifact execution on the user's machine. Downloaded store artifacts are noted as checksum-verified; HF Hub weights are not independently verified in the skill.
-  > File: `SKILL.md`
-  > **Remediation:** Keep explicit version pins (already done), and note that model weights and the external MAP4 repository are third-party artifacts that should be reviewed/verified (e.g., checksum or trusted mirror) before installation in sensitive environments.
-
 ### molecular-dynamics — 🔵 LOW
 
 - **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Keyword-dense description with explicit trigger list
@@ -419,6 +412,13 @@
   > The reference scan lists paths that are not present (assets/mdanalysis_analysis.md, templates/mdanalysis_analysis.md, plus module-name artifacts such as matplotlib.py, openmm.py, MDAnalysis.py, pdbfixer.py, openff.py that come from Python import statements rather than real files). The only genuinely referenced document, references/mdanalysis_analysis.md, exists and contains benign analysis documentation. Missing files are a documentation-hygiene issue, not evidence of malice, but broken references can lead an agent to search for or fabricate substitutes.
   > File: `references/mdanalysis_analysis.md`
   > **Remediation:** Ensure all referenced paths resolve within the package and remove or correct dangling references; import statements should not be interpreted as bundled file references.
+
+### molfeat — 🔵 LOW
+
+- **🔵 LOW** `LLM_SUPPLY_CHAIN_ATTACK` — Instructions direct installation of external packages and download of third-party pretrained models
+  > The skill instructs the agent to run package installs (`uv pip install "molfeat==0.11.0"` and extras) and to download pretrained model weights from the HuggingFace Hub (`HFModel.from_pretrained("DeepChem/ChemBERTa-77M-MLM", ...)`), and references installing MAP4 from an external GitHub repository (reymond-group/map4). This is normal for a cheminformatics tooling skill and versions are explicitly pinned, but it does introduce third-party code/artifact execution on the user's machine. Downloaded store artifacts are noted as checksum-verified; HF Hub weights are not independently verified in the skill.
+  > File: `SKILL.md`
+  > **Remediation:** Keep explicit version pins (already done), and note that model weights and the external MAP4 repository are third-party artifacts that should be reviewed/verified (e.g., checksum or trusted mirror) before installation in sensitive environments.
 
 ### ncats-arax — 🔵 LOW
 
@@ -464,6 +464,22 @@
   > File: `scripts/_common.py`
   > **Remediation:** Optionally validate that the resolved URL uses HTTPS and belongs to an allow-listed host (e.g. api.platform.opentargets.org), and log the effective endpoint when it differs from the default.
 
+### pkpd-translation — 🔵 LOW
+
+- **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Trigger-keyword list appended to skill description
+  > The YAML description ends with an explicit list of activation keywords ("Also trigger on non-compartmental analysis, AUC, clearance, volume of distribution, allometric scaling, human equivalent dose, first-in-human, NOAEL, therapeutic index, or exposure margin"). This is keyword-baiting that broadens discovery/activation surface. In this case all keywords are tightly scoped to the skill's genuine pharmacokinetic functionality, so the risk of inappropriate activation or capability inflation is minimal — informational only.
+  > **Remediation:** Optionally trim the explicit keyword enumeration and rely on a concise natural-language description of the skill's purpose.
+
+- **🔵 LOW** `LLM_HARMFUL_CONTENT` — Clinical dose-projection arithmetic could be misapplied without qualification
+  > The skill computes human-equivalent doses, first-in-human maximum recommended starting doses, and safety margins — outputs that, if taken as authoritative, could contribute to unsafe clinical decisions. The package mitigates this well: the manifest compatibility field, the SKILL.md body, the reference documents, and the scripts' stderr commentary all repeatedly state that results are planning arithmetic and not a regulatory submission, flag the TGN1412 precedent, warn about protein-binding errors, extrapolation limits, non-linear PK, and population variability, and direct users to PBPK/population-PK tooling when the assumptions break. No deceptive or misleading claims were identified; this is noted as informational context only.
+  > File: `SKILL.md`
+  > **Remediation:** No action required; the existing caveats are appropriate. Continue to surface the non-regulatory disclaimer in any summarized output.
+
+- **🔵 LOW** `LLM_SUPPLY_CHAIN_ATTACK` — Sibling-module import via sys.path manipulation
+  > exposure_margin.py inserts its own directory at the front of sys.path and imports pk_compartmental. This is a normal pattern for a self-contained skill bundle and only loads a file shipped inside the skill package, but prepending to sys.path[0] means a same-named module placed in the skill directory would take precedence over standard-library/site-packages modules. No untrusted or network-sourced code is loaded, and no packages are installed at runtime (standard library only, no pip/npm calls), so supply-chain exposure is negligible.
+  > File: `scripts/exposure_margin.py`
+  > **Remediation:** Prefer a relative/package import or append rather than insert at index 0 to avoid shadowing standard modules.
+
 ### primekg — 🔵 LOW
 
 - **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Description includes broad trigger-keyword list for activation
@@ -492,43 +508,6 @@
   > File: `references/bindcraft-and-rfdiffusion.md`
   > **Remediation:** Reference only files bundled in the package (references/*.md) and remove or ship the missing templates/assets paths.
 
-### pkpd-translation — 🔵 LOW
-
-- **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Trigger-keyword list appended to skill description
-  > The YAML description ends with an explicit list of activation keywords ("Also trigger on non-compartmental analysis, AUC, clearance, volume of distribution, allometric scaling, human equivalent dose, first-in-human, NOAEL, therapeutic index, or exposure margin"). This is keyword-baiting that broadens discovery/activation surface. In this case all keywords are tightly scoped to the skill's genuine pharmacokinetic functionality, so the risk of inappropriate activation or capability inflation is minimal — informational only.
-  > **Remediation:** Optionally trim the explicit keyword enumeration and rely on a concise natural-language description of the skill's purpose.
-
-- **🔵 LOW** `LLM_HARMFUL_CONTENT` — Clinical dose-projection arithmetic could be misapplied without qualification
-  > The skill computes human-equivalent doses, first-in-human maximum recommended starting doses, and safety margins — outputs that, if taken as authoritative, could contribute to unsafe clinical decisions. The package mitigates this well: the manifest compatibility field, the SKILL.md body, the reference documents, and the scripts' stderr commentary all repeatedly state that results are planning arithmetic and not a regulatory submission, flag the TGN1412 precedent, warn about protein-binding errors, extrapolation limits, non-linear PK, and population variability, and direct users to PBPK/population-PK tooling when the assumptions break. No deceptive or misleading claims were identified; this is noted as informational context only.
-  > File: `SKILL.md`
-  > **Remediation:** No action required; the existing caveats are appropriate. Continue to surface the non-regulatory disclaimer in any summarized output.
-
-- **🔵 LOW** `LLM_SUPPLY_CHAIN_ATTACK` — Sibling-module import via sys.path manipulation
-  > exposure_margin.py inserts its own directory at the front of sys.path and imports pk_compartmental. This is a normal pattern for a self-contained skill bundle and only loads a file shipped inside the skill package, but prepending to sys.path[0] means a same-named module placed in the skill directory would take precedence over standard-library/site-packages modules. No untrusted or network-sourced code is loaded, and no packages are installed at runtime (standard library only, no pip/npm calls), so supply-chain exposure is negligible.
-  > File: `scripts/exposure_margin.py`
-  > **Remediation:** Prefer a relative/package import or append rather than insert at index 0 to avoid shadowing standard modules.
-
-### rdkit — 🔵 LOW
-
-- **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Description includes explicit activation trigger keyword list
-  > The YAML description ends with an explicit instruction to the agent's discovery mechanism: "Also trigger on rdkit, Chem.MolFromSmiles, rdFingerprintGenerator, SDMolSupplier, SMARTS query, ETKDG, or FilterCatalog." This is keyword baiting to increase activation likelihood. In this case the keywords are all narrowly and accurately scoped to RDKit cheminformatics functionality (no brand impersonation, no over-broad 'general assistant' claims), so the practical risk of unwanted activation or capability inflation is minimal. Noted for completeness only.
-  > **Remediation:** Optional: describe capabilities declaratively rather than instructing the discovery layer to 'trigger on' specific tokens. No change strictly required since the terms match the actual scope.
-
-- **🔵 LOW** `LLM_HARMFUL_CONTENT` — Several referenced documentation paths do not resolve (templates/, assets/)
-  > The dependency scan lists reference paths under templates/ and assets/ (e.g. templates/api_reference.md, assets/core_capabilities.md) that do not exist in the package. The SKILL.md body itself only links the five files under references/, all of which exist and are benign; the unresolved paths appear to be inferred alternates rather than authored links. No external URLs or network-sourced instruction files are referenced, so there is no indirect prompt injection surface. Informational documentation hygiene issue only.
-  > File: `references/core_capabilities.md`
-  > **Remediation:** Ensure the bundled resource list matches the actual on-disk layout (references/ only) so integrity checks do not report phantom dependencies.
-
-### rowan — 🔵 LOW
-
-- **🔵 LOW** `LLM_DATA_EXFILTRATION` — Documentation examples hardcode API key assignment in source
-  > Multiple code examples instruct setting `rowan.api_key = "your_api_key_here"` / `rowan.api_key = "..."` directly in Python code rather than exclusively via the ROWAN_API_KEY environment variable. No real secret is present, and the skill does recommend the env-var approach first, so this is only a minor secure-coding hygiene issue that could encourage users/agents to commit credentials.
-  > **Remediation:** Standardize examples on reading the key from the ROWAN_API_KEY environment variable and remove inline literal-assignment examples.
-
-- **🔵 LOW** `LLM_RESOURCE_ABUSE` — Metered cloud compute spend with no explicit user-confirmation gate for batch jobs
-  > The skill orchestrates a commercial, credit-metered cloud service and encourages batch submission loops and 50+ workflow campaigns. While the manifest transparently discloses that compute is billed and that large batches have real cost, and the guidance actively recommends pre-filtering to save credits, there is no instruction requiring explicit user confirmation before submitting large batches. An agent acting autonomously could incur unintended financial cost. No unbounded loops or local resource exhaustion patterns are present.
-  > **Remediation:** Add an explicit instruction to estimate credit cost and obtain user confirmation before submitting batches above a small threshold (e.g., >5 workflows).
-
 ### pytdc — 🔵 LOW
 
 - **🔵 LOW** `LLM_HARMFUL_CONTENT` — Instruction body references files that are not present in the package
@@ -540,6 +519,17 @@
   > The oracle workflow (scripts/molecular_generation.py, execute_scores) constructs `tdc.Oracle(...)` for DRD2/GSK3B/JNK3/CYP3A4_Veith/LogP/SA, which upstream PyTDC downloads from Harvard Dataverse and deserializes as model artifacts. Similarly, benchmark_evaluation.py constructs BenchmarkGroup classes that download and extract remote archives. Loading serialized model artifacts from a remote host is an inherent supply-chain/deserialization risk. Mitigations are strong: the behavior is default-off and requires explicit `--execute` plus `--download` flags, is written into a validated relative workspace directory via a chdir sandbox, and references/oracles.md explicitly warns the operator to review artifact origin and trust boundary. No checksum verification is performed (PyTDC provides none), which is documented as an upstream gap.
   > File: `scripts/molecular_generation.py`
   > **Remediation:** Where feasible, record and verify checksums/sizes of downloaded checkpoints and archives, and surface the resolved download URL to the user in the plan output before `--download` is granted.
+
+### rdkit — 🔵 LOW
+
+- **🔵 LOW** `LLM_SKILL_DISCOVERY_ABUSE` — Description includes explicit activation trigger keyword list
+  > The YAML description ends with an explicit instruction to the agent's discovery mechanism: "Also trigger on rdkit, Chem.MolFromSmiles, rdFingerprintGenerator, SDMolSupplier, SMARTS query, ETKDG, or FilterCatalog." This is keyword baiting to increase activation likelihood. In this case the keywords are all narrowly and accurately scoped to RDKit cheminformatics functionality (no brand impersonation, no over-broad 'general assistant' claims), so the practical risk of unwanted activation or capability inflation is minimal. Noted for completeness only.
+  > **Remediation:** Optional: describe capabilities declaratively rather than instructing the discovery layer to 'trigger on' specific tokens. No change strictly required since the terms match the actual scope.
+
+- **🔵 LOW** `LLM_HARMFUL_CONTENT` — Several referenced documentation paths do not resolve (templates/, assets/)
+  > The dependency scan lists reference paths under templates/ and assets/ (e.g. templates/api_reference.md, assets/core_capabilities.md) that do not exist in the package. The SKILL.md body itself only links the five files under references/, all of which exist and are benign; the unresolved paths appear to be inferred alternates rather than authored links. No external URLs or network-sourced instruction files are referenced, so there is no indirect prompt injection surface. Informational documentation hygiene issue only.
+  > File: `references/core_capabilities.md`
+  > **Remediation:** Ensure the bundled resource list matches the actual on-disk layout (references/ only) so integrity checks do not report phantom dependencies.
 
 ### retrosynthesis — 🔵 LOW
 
@@ -578,3 +568,13 @@
   > fetch_structure.py builds download URLs by interpolating user-supplied PDB ids, assembly numbers, accessions, and component ids directly into f-strings without validating character sets (e.g. f"{RCSB_FILES}/{pdb_id}.{suffix}"). Because the host prefix is a hardcoded constant, a crafted identifier containing '../' or '@' could at most redirect the request to another path on files.rcsb.org, and the AlphaFold branch fetches URLs returned by the AlphaFold API (server-controlled) and writes them to a local file whose name comes from the remote URL basename. No credentials, environment variables, or local sensitive files are read, and no data is sent outward, so real-world risk is low.
   > File: `scripts/fetch_structure.py`
   > **Remediation:** Validate identifiers against strict regexes (e.g. ^[0-9A-Za-z]{4}$ for PDB ids, ^[A-Z0-9]{1,5}$ for CCD codes, ^[A-Z0-9]+$ for accessions) and confirm AlphaFold-returned URLs match an allowlisted host before downloading.
+
+### rowan — 🔵 LOW
+
+- **🔵 LOW** `LLM_DATA_EXFILTRATION` — Documentation examples encourage hardcoding API keys in source
+  > Multiple code examples set the API key inline (e.g., `rowan.api_key = "your_api_key_here"`, `rowan.api_key = "..."`). While placeholders and clearly illustrative, and the skill does recommend the ROWAN_API_KEY environment variable as preferred, the pattern can lead users/agents to write literal secrets into scripts that get committed or logged. No actual secret is present in the package.
+  > **Remediation:** Prefer environment-variable-only examples (e.g., os.environ["ROWAN_API_KEY"]) and explicitly warn against committing keys to source control.
+
+- **🔵 LOW** `LLM_RESOURCE_ABUSE` — Batch cloud workflow submission can incur metered compute cost
+  > The skill promotes batch submission loops over compound libraries against a metered, billed cloud service (credits per CPU/GPU minute). Unbounded or accidental large batches could consume significant paid credits. The skill does partially mitigate this by disclosing pricing, credit consumption, and advising pre-filtering to avoid wasting credits, and no code auto-executes without agent/user action.
+  > **Remediation:** Add explicit guidance to confirm with the user before submitting batches above a small threshold and to check remaining credits (rowan.whoami()) prior to bulk submission.

@@ -1,12 +1,12 @@
 {
-  "generated": "2026-08-17T00:35:27+00:00",
+  "generated": "2026-08-17T09:18:45+00:00",
   "run": {
     "scanner_version": "2.0.13",
     "model": "claude-opus-5",
-    "workers": 6,
-    "skills_rescanned": 37,
-    "skills_reused": 0,
-    "wall_seconds": 165.2,
+    "workers": 8,
+    "skills_rescanned": 1,
+    "skills_reused": 36,
+    "wall_seconds": 18.1,
     "full_scan": false,
     "cache_invalidated_because": null,
     "last_full_scan": "2026-08-16T16:33:22+00:00"
@@ -24,7 +24,7 @@
   "skills_skipped": [],
   "cross_skill_findings": [
     {
-      "id": "CROSS_SKILL_RELAY_f629afb1",
+      "id": "CROSS_SKILL_RELAY_3f5298e3",
       "rule_id": "CROSS_SKILL_DATA_RELAY",
       "severity": "MEDIUM",
       "category": "data_exfiltration",
@@ -80,7 +80,7 @@
       }
     },
     {
-      "id": "CROSS_SKILL_URL_73b792fe",
+      "id": "CROSS_SKILL_URL_bece32d0",
       "rule_id": "CROSS_SKILL_SHARED_URL",
       "severity": "MEDIUM",
       "category": "data_exfiltration",
@@ -100,7 +100,7 @@
       }
     },
     {
-      "id": "CROSS_SKILL_URL_e718f7ba",
+      "id": "CROSS_SKILL_URL_d554e39f",
       "rule_id": "CROSS_SKILL_SHARED_URL",
       "severity": "MEDIUM",
       "category": "data_exfiltration",
@@ -120,7 +120,7 @@
       }
     },
     {
-      "id": "CROSS_SKILL_URL_e7dc580c",
+      "id": "CROSS_SKILL_URL_60deeb47",
       "rule_id": "CROSS_SKILL_SHARED_URL",
       "severity": "MEDIUM",
       "category": "data_exfiltration",
@@ -140,12 +140,12 @@
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_aff0871b",
+      "id": "CROSS_SKILL_COMPLEMENTARY_add29749",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'admet-prediction' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: skill, protein, use, also, trigger, this, binding. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'admet-prediction' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, binding, protein, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -155,23 +155,23 @@
         "collector": "admet-prediction",
         "sender": "adaptyv",
         "shared_context": [
-          "skill",
-          "protein",
-          "use",
-          "also",
-          "trigger",
           "this",
-          "binding"
+          "trigger",
+          "use",
+          "binding",
+          "protein",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_aadce38d",
+      "id": "CROSS_SKILL_COMPLEMENTARY_56f62e05",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'admet-prediction' (collector) and 'openfda' (sender) have complementary descriptions with shared context: skill, its, use, this, on, also, trigger, approved. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'admet-prediction' (collector) and 'openfda' (sender) have complementary descriptions with shared context: approved, this, trigger, use, on, its, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -181,24 +181,24 @@
         "collector": "admet-prediction",
         "sender": "openfda",
         "shared_context": [
-          "skill",
-          "its",
-          "use",
+          "approved",
           "this",
-          "on",
-          "also",
           "trigger",
-          "approved"
+          "use",
+          "on",
+          "its",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_8288d16c",
+      "id": "CROSS_SKILL_COMPLEMENTARY_0e27b165",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'admet-prediction' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: developability, protein, of, prediction, use, its, on, run, binding. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'admet-prediction' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: prediction, of, its, use, binding, run, protein, on, developability. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -208,25 +208,25 @@
         "collector": "admet-prediction",
         "sender": "tamarind",
         "shared_context": [
-          "developability",
-          "protein",
-          "of",
           "prediction",
-          "use",
+          "of",
           "its",
-          "on",
+          "use",
+          "binding",
           "run",
-          "binding"
+          "protein",
+          "on",
+          "developability"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_4d7a3f93",
+      "id": "CROSS_SKILL_COMPLEMENTARY_1ae8efef",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'antibody-engineering' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: skill, use, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'antibody-engineering' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -236,21 +236,21 @@
         "collector": "antibody-engineering",
         "sender": "adaptyv",
         "shared_context": [
-          "skill",
-          "use",
-          "also",
+          "this",
           "trigger",
-          "this"
+          "use",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_4c7dafa3",
+      "id": "CROSS_SKILL_COMPLEMENTARY_fd7b78b2",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'antibody-engineering' (collector) and 'openfda' (sender) have complementary descriptions with shared context: skill, use, also, on, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'antibody-engineering' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, trigger, use, on, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -260,22 +260,22 @@
         "collector": "antibody-engineering",
         "sender": "openfda",
         "shared_context": [
-          "skill",
-          "use",
-          "also",
-          "on",
+          "this",
           "trigger",
-          "this"
+          "use",
+          "on",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_28d85401",
+      "id": "CROSS_SKILL_COMPLEMENTARY_d8349905",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'antibody-engineering' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: developability, nanobody, use, on, antibody. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'antibody-engineering' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: use, on, nanobody, developability, antibody. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -285,21 +285,21 @@
         "collector": "antibody-engineering",
         "sender": "tamarind",
         "shared_context": [
-          "developability",
-          "nanobody",
           "use",
           "on",
+          "nanobody",
+          "developability",
           "antibody"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_cba0abbb",
+      "id": "CROSS_SKILL_COMPLEMENTARY_c640e4f6",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'binding-site-analysis' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: trigger, skill, protein, use, also, design, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'binding-site-analysis' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: design, this, trigger, use, protein, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -309,23 +309,23 @@
         "collector": "binding-site-analysis",
         "sender": "adaptyv",
         "shared_context": [
-          "trigger",
-          "skill",
-          "protein",
-          "use",
-          "also",
           "design",
-          "this"
+          "this",
+          "trigger",
+          "use",
+          "protein",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_602e8b7b",
+      "id": "CROSS_SKILL_COMPLEMENTARY_f257c675",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'binding-site-analysis' (collector) and 'openfda' (sender) have complementary descriptions with shared context: score, skill, has, use, on, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'binding-site-analysis' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, has, trigger, use, on, score, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -335,24 +335,24 @@
         "collector": "binding-site-analysis",
         "sender": "openfda",
         "shared_context": [
+          "this",
+          "has",
+          "trigger",
+          "use",
+          "on",
           "score",
           "skill",
-          "has",
-          "use",
-          "on",
-          "also",
-          "trigger",
-          "this"
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_be59f552",
+      "id": "CROSS_SKILL_COMPLEMENTARY_05339a74",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'binding-site-analysis' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: docking, protein, use, on, open, design, run, needs. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'binding-site-analysis' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: design, open, needs, docking, use, run, protein, on. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -362,179 +362,179 @@
         "collector": "binding-site-analysis",
         "sender": "tamarind",
         "shared_context": [
-          "docking",
-          "protein",
-          "use",
-          "on",
-          "open",
           "design",
+          "open",
+          "needs",
+          "docking",
+          "use",
           "run",
-          "needs"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_cbbd933d",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'chemical-space' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: skill, use, screening, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "chemical-space",
-        "sender": "adaptyv",
-        "shared_context": [
-          "skill",
-          "use",
-          "screening",
-          "also",
-          "trigger",
-          "this"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_1edcb279",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'chemical-space' (collector) and 'openfda' (sender) have complementary descriptions with shared context: skill, use, also, on, count, trigger, this. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "chemical-space",
-        "sender": "openfda",
-        "shared_context": [
-          "skill",
-          "use",
-          "also",
-          "on",
-          "count",
-          "trigger",
-          "this"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_1c93dba3",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'chemical-space' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: structure, on, use. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "chemical-space",
-        "sender": "tamarind",
-        "shared_context": [
-          "structure",
-          "on",
-          "use"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_a4c64928",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'clinicaltrials' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: skill, results, api, use, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "clinicaltrials",
-        "sender": "adaptyv",
-        "shared_context": [
-          "skill",
-          "results",
-          "api",
-          "use",
-          "also",
-          "trigger",
-          "this"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_f488a2df",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'clinicaltrials' (collector) and 'openfda' (sender) have complementary descriptions with shared context: s, skill, api, date, use, its, indication, on, also, trigger, this, what, gov. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "clinicaltrials",
-        "sender": "openfda",
-        "shared_context": [
-          "s",
-          "skill",
-          "api",
-          "date",
-          "use",
-          "its",
-          "indication",
-          "on",
-          "also",
-          "trigger",
-          "this",
-          "what",
-          "gov"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_ecee3e78",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'clinicaltrials' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: rest, api, its, use, on. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "clinicaltrials",
-        "sender": "tamarind",
-        "shared_context": [
-          "rest",
-          "api",
-          "its",
-          "use",
+          "protein",
           "on"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_f173df7b",
+      "id": "CROSS_SKILL_COMPLEMENTARY_0b2af681",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'esm' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: python, sdk, skill, protein, use, also, sequences, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'chemical-space' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, screening, skill, also. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "chemical-space",
+        "sender": "adaptyv",
+        "shared_context": [
+          "this",
+          "trigger",
+          "use",
+          "screening",
+          "skill",
+          "also"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_f887d772",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'chemical-space' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, count, trigger, use, on, skill, also. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "chemical-space",
+        "sender": "openfda",
+        "shared_context": [
+          "this",
+          "count",
+          "trigger",
+          "use",
+          "on",
+          "skill",
+          "also"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_7a04defc",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'chemical-space' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: use, structure, on. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "chemical-space",
+        "sender": "tamarind",
+        "shared_context": [
+          "use",
+          "structure",
+          "on"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_986c6c76",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'clinicaltrials' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, results, use, also, skill, api. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "clinicaltrials",
+        "sender": "adaptyv",
+        "shared_context": [
+          "this",
+          "trigger",
+          "results",
+          "use",
+          "also",
+          "skill",
+          "api"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_38f58616",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'clinicaltrials' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, s, trigger, api, use, gov, date, indication, on, what, its, skill, also. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "clinicaltrials",
+        "sender": "openfda",
+        "shared_context": [
+          "this",
+          "s",
+          "trigger",
+          "api",
+          "use",
+          "gov",
+          "date",
+          "indication",
+          "on",
+          "what",
+          "its",
+          "skill",
+          "also"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_9e816bce",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'clinicaltrials' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: use, rest, on, its, api. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "clinicaltrials",
+        "sender": "tamarind",
+        "shared_context": [
+          "use",
+          "rest",
+          "on",
+          "its",
+          "api"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_222e1c30",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'esm' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, python, sequences, protein, sdk, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -544,25 +544,25 @@
         "collector": "esm",
         "sender": "adaptyv",
         "shared_context": [
+          "this",
+          "trigger",
+          "use",
           "python",
+          "sequences",
+          "protein",
           "sdk",
           "skill",
-          "protein",
-          "use",
-          "also",
-          "sequences",
-          "trigger",
-          "this"
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_0a0746db",
+      "id": "CROSS_SKILL_COMPLEMENTARY_54dcb74c",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'esm' (collector) and 'openfda' (sender) have complementary descriptions with shared context: skill, use, also, on, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'esm' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, trigger, use, on, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -572,22 +572,22 @@
         "collector": "esm",
         "sender": "openfda",
         "shared_context": [
-          "skill",
-          "use",
-          "also",
-          "on",
+          "this",
           "trigger",
-          "this"
+          "use",
+          "on",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_878236da",
+      "id": "CROSS_SKILL_COMPLEMENTARY_d1954c5f",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'esm' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: protein, models, prediction, use, on, sequences, generation, structure, run. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'esm' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: prediction, structure, use, models, run, sequences, protein, on, generation. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -597,103 +597,103 @@
         "collector": "esm",
         "sender": "tamarind",
         "shared_context": [
-          "protein",
-          "models",
           "prediction",
-          "use",
-          "on",
-          "sequences",
-          "generation",
           "structure",
-          "run"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_e97dd6f7",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'generative-design' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: trigger, skill, use, also, design, this. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "generative-design",
-        "sender": "adaptyv",
-        "shared_context": [
-          "trigger",
-          "skill",
           "use",
-          "also",
-          "design",
-          "this"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_03ddc095",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'generative-design' (collector) and 'openfda' (sender) have complementary descriptions with shared context: molecule, skill, use, also, on, trigger, this. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "generative-design",
-        "sender": "openfda",
-        "shared_context": [
-          "molecule",
-          "skill",
-          "use",
-          "also",
-          "on",
-          "trigger",
-          "this"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_646511ad",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'generative-design' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: de, docking, models, use, on, design, generation, novo. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "generative-design",
-        "sender": "tamarind",
-        "shared_context": [
-          "de",
-          "docking",
           "models",
-          "use",
+          "run",
+          "sequences",
+          "protein",
           "on",
-          "design",
-          "generation",
-          "novo"
+          "generation"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_8f6dfb27",
+      "id": "CROSS_SKILL_COMPLEMENTARY_3a1cfec8",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'glycoengineering' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: trigger, skill, protein, use, also, sequences, design, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'generative-design' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: design, this, trigger, use, skill, also. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "generative-design",
+        "sender": "adaptyv",
+        "shared_context": [
+          "design",
+          "this",
+          "trigger",
+          "use",
+          "skill",
+          "also"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_0fe787ce",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'generative-design' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, trigger, use, molecule, on, skill, also. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "generative-design",
+        "sender": "openfda",
+        "shared_context": [
+          "this",
+          "trigger",
+          "use",
+          "molecule",
+          "on",
+          "skill",
+          "also"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_e0edad42",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'generative-design' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: design, docking, de, novo, use, models, on, generation. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "generative-design",
+        "sender": "tamarind",
+        "shared_context": [
+          "design",
+          "docking",
+          "de",
+          "novo",
+          "use",
+          "models",
+          "on",
+          "generation"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_2843e1e3",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'glycoengineering' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: design, this, trigger, use, sequences, protein, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -703,24 +703,24 @@
         "collector": "glycoengineering",
         "sender": "adaptyv",
         "shared_context": [
-          "trigger",
-          "skill",
-          "protein",
-          "use",
-          "also",
-          "sequences",
           "design",
-          "this"
+          "this",
+          "trigger",
+          "use",
+          "sequences",
+          "protein",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_2d80122e",
+      "id": "CROSS_SKILL_COMPLEMENTARY_154fc8de",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'glycoengineering' (collector) and 'openfda' (sender) have complementary descriptions with shared context: s, skill, use, including, on, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'glycoengineering' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, trigger, s, including, use, on, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -730,24 +730,24 @@
         "collector": "glycoengineering",
         "sender": "openfda",
         "shared_context": [
-          "s",
-          "skill",
-          "use",
-          "including",
-          "on",
-          "also",
+          "this",
           "trigger",
-          "this"
+          "s",
+          "including",
+          "use",
+          "on",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_486f912f",
+      "id": "CROSS_SKILL_COMPLEMENTARY_db656038",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'glycoengineering' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: protein, use, on, sequences, design, x, antibody. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'glycoengineering' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: design, use, sequences, protein, on, x, antibody. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -757,23 +757,23 @@
         "collector": "glycoengineering",
         "sender": "tamarind",
         "shared_context": [
-          "protein",
-          "use",
-          "on",
-          "sequences",
           "design",
+          "use",
+          "sequences",
+          "protein",
+          "on",
           "x",
           "antibody"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_3d26332b",
+      "id": "CROSS_SKILL_COMPLEMENTARY_98a7f441",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'oligonucleotides' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: trigger, skill, use, also, sequences, design, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'oligonucleotides' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: design, this, trigger, use, sequences, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -783,23 +783,23 @@
         "collector": "oligonucleotides",
         "sender": "adaptyv",
         "shared_context": [
-          "trigger",
-          "skill",
-          "use",
-          "also",
-          "sequences",
           "design",
-          "this"
+          "this",
+          "trigger",
+          "use",
+          "sequences",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_d9bb6fd2",
+      "id": "CROSS_SKILL_COMPLEMENTARY_027401fe",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'oligonucleotides' (collector) and 'openfda' (sender) have complementary descriptions with shared context: skill, use, including, also, on, drugs, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'oligonucleotides' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, trigger, including, use, drugs, on, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -809,24 +809,24 @@
         "collector": "oligonucleotides",
         "sender": "openfda",
         "shared_context": [
-          "skill",
-          "use",
-          "including",
-          "also",
-          "on",
-          "drugs",
+          "this",
           "trigger",
-          "this"
+          "including",
+          "use",
+          "drugs",
+          "on",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_cf723108",
+      "id": "CROSS_SKILL_COMPLEMENTARY_b6e68556",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'oligonucleotides' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: design, sequences, on, use. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'oligonucleotides' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: sequences, design, use, on. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -836,20 +836,20 @@
         "collector": "oligonucleotides",
         "sender": "tamarind",
         "shared_context": [
-          "design",
           "sequences",
-          "on",
-          "use"
+          "design",
+          "use",
+          "on"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_4f518601",
+      "id": "CROSS_SKILL_COMPLEMENTARY_87f9aadc",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'openfda' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: skill, api, use, public, also, submission, trigger, this, code. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'openfda' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, public, also, code, submission, skill, api. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -859,25 +859,25 @@
         "collector": "openfda",
         "sender": "adaptyv",
         "shared_context": [
-          "skill",
-          "api",
+          "this",
+          "trigger",
           "use",
           "public",
           "also",
+          "code",
           "submission",
-          "trigger",
-          "this",
-          "code"
+          "skill",
+          "api"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_1317941d",
+      "id": "CROSS_SKILL_COMPLEMENTARY_a1b2e06e",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'openfda' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: its, api, on, use. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'openfda' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: its, api, use, on. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -889,18 +889,18 @@
         "shared_context": [
           "its",
           "api",
-          "on",
-          "use"
+          "use",
+          "on"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_efaae0d6",
+      "id": "CROSS_SKILL_COMPLEMENTARY_4ba146fa",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'patent-landscape' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: skill, use, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'patent-landscape' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -910,21 +910,21 @@
         "collector": "patent-landscape",
         "sender": "adaptyv",
         "shared_context": [
-          "skill",
-          "use",
-          "also",
+          "this",
           "trigger",
-          "this"
+          "use",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_63c72a66",
+      "id": "CROSS_SKILL_COMPLEMENTARY_e87bee1c",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'patent-landscape' (collector) and 'openfda' (sender) have complementary descriptions with shared context: s, skill, date, use, already, history, on, also, trigger, this, what. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'patent-landscape' (collector) and 'openfda' (sender) have complementary descriptions with shared context: history, this, trigger, s, already, use, on, what, also, skill, date. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -934,27 +934,27 @@
         "collector": "patent-landscape",
         "sender": "openfda",
         "shared_context": [
-          "s",
-          "skill",
-          "date",
-          "use",
-          "already",
           "history",
-          "on",
-          "also",
-          "trigger",
           "this",
-          "what"
+          "trigger",
+          "s",
+          "already",
+          "use",
+          "on",
+          "what",
+          "also",
+          "skill",
+          "date"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_a592727c",
+      "id": "CROSS_SKILL_COMPLEMENTARY_c53a0cf2",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'patent-landscape' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: of, use, on, structure, key. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'patent-landscape' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: structure, of, key, use, on. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -964,21 +964,21 @@
         "collector": "patent-landscape",
         "sender": "tamarind",
         "shared_context": [
-          "of",
-          "use",
-          "on",
           "structure",
-          "key"
+          "of",
+          "key",
+          "use",
+          "on"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_9ca7b267",
+      "id": "CROSS_SKILL_COMPLEMENTARY_deeb83b7",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'primekg' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: skill, use, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'primekg' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -988,21 +988,21 @@
         "collector": "primekg",
         "sender": "adaptyv",
         "shared_context": [
-          "skill",
-          "use",
-          "also",
+          "this",
           "trigger",
-          "this"
+          "use",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_95619973",
+      "id": "CROSS_SKILL_COMPLEMENTARY_1b1dc3e4",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'primekg' (collector) and 'openfda' (sender) have complementary descriptions with shared context: drug, skill, use, indication, query, on, also, trigger, this, drugs. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'primekg' (collector) and 'openfda' (sender) have complementary descriptions with shared context: drug, this, trigger, use, drugs, indication, on, query, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -1013,25 +1013,25 @@
         "sender": "openfda",
         "shared_context": [
           "drug",
-          "skill",
-          "use",
-          "indication",
-          "query",
-          "on",
-          "also",
-          "trigger",
           "this",
-          "drugs"
+          "trigger",
+          "use",
+          "drugs",
+          "indication",
+          "on",
+          "query",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_967a3fde",
+      "id": "CROSS_SKILL_COMPLEMENTARY_a1456963",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'primekg' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: local, on, use. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'primekg' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: use, on, local. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -1041,19 +1041,19 @@
         "collector": "primekg",
         "sender": "tamarind",
         "shared_context": [
-          "local",
+          "use",
           "on",
-          "use"
+          "local"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_eb937fc3",
+      "id": "CROSS_SKILL_COMPLEMENTARY_55a65159",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'pytdc' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: python, skill, use, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'pytdc' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, python, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -1063,22 +1063,22 @@
         "collector": "pytdc",
         "sender": "adaptyv",
         "shared_context": [
+          "this",
+          "trigger",
+          "use",
           "python",
           "skill",
-          "use",
-          "also",
-          "trigger",
-          "this"
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_9c1c24ab",
+      "id": "CROSS_SKILL_COMPLEMENTARY_3261ceb3",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'pytdc' (collector) and 'openfda' (sender) have complementary descriptions with shared context: data, score, s, skill, use, approved, on, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'pytdc' (collector) and 'openfda' (sender) have complementary descriptions with shared context: approved, this, trigger, s, use, data, on, score, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -1088,26 +1088,26 @@
         "collector": "pytdc",
         "sender": "openfda",
         "shared_context": [
-          "data",
-          "score",
-          "s",
-          "skill",
-          "use",
           "approved",
-          "on",
-          "also",
+          "this",
           "trigger",
-          "this"
+          "s",
+          "use",
+          "data",
+          "on",
+          "score",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_93398c13",
+      "id": "CROSS_SKILL_COMPLEMENTARY_f5b94afe",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'pytdc' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: use, on, access, run, molecular. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'pytdc' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: access, use, run, molecular, on. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -1117,71 +1117,71 @@
         "collector": "pytdc",
         "sender": "tamarind",
         "shared_context": [
-          "use",
-          "on",
           "access",
+          "use",
           "run",
-          "molecular"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_53b6c3b0",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'rdkit' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: trigger, also, use, skill. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "rdkit",
-        "sender": "adaptyv",
-        "shared_context": [
-          "trigger",
-          "also",
-          "use",
-          "skill"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_1b5f4729",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'rdkit' (collector) and 'openfda' (sender) have complementary descriptions with shared context: score, skill, use, query, also, pair, trigger, on. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "rdkit",
-        "sender": "openfda",
-        "shared_context": [
-          "score",
-          "skill",
-          "use",
-          "query",
-          "also",
-          "pair",
-          "trigger",
+          "molecular",
           "on"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_9b8152ad",
+      "id": "CROSS_SKILL_COMPLEMENTARY_87c56590",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'rdkit' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: run, molecular, on, use. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'rdkit' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: use, skill, also, trigger. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "rdkit",
+        "sender": "adaptyv",
+        "shared_context": [
+          "use",
+          "skill",
+          "also",
+          "trigger"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_0ea73c38",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'rdkit' (collector) and 'openfda' (sender) have complementary descriptions with shared context: trigger, use, pair, on, score, query, skill, also. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "rdkit",
+        "sender": "openfda",
+        "shared_context": [
+          "trigger",
+          "use",
+          "pair",
+          "on",
+          "score",
+          "query",
+          "skill",
+          "also"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_0180d340",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'rdkit' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: molecular, use, on, run. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -1191,20 +1191,20 @@
         "collector": "rdkit",
         "sender": "tamarind",
         "shared_context": [
-          "run",
           "molecular",
+          "use",
           "on",
-          "use"
+          "run"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_1dc477e1",
+      "id": "CROSS_SKILL_COMPLEMENTARY_8312db58",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'retrosynthesis' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: skill, use, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'retrosynthesis' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -1214,170 +1214,170 @@
         "collector": "retrosynthesis",
         "sender": "adaptyv",
         "shared_context": [
-          "skill",
-          "use",
-          "also",
-          "trigger",
-          "this"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_ab64a313",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'retrosynthesis' (collector) and 'openfda' (sender) have complementary descriptions with shared context: molecule, s, skill, use, on, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "retrosynthesis",
-        "sender": "openfda",
-        "shared_context": [
-          "molecule",
-          "s",
-          "skill",
-          "use",
-          "on",
-          "also",
-          "trigger",
-          "this"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_09abc51c",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'retrosynthesis' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: run, on, use. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "retrosynthesis",
-        "sender": "tamarind",
-        "shared_context": [
-          "run",
-          "on",
-          "use"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_cf71e494",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'target-safety' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: skill, use, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "target-safety",
-        "sender": "adaptyv",
-        "shared_context": [
-          "skill",
-          "use",
-          "also",
-          "trigger",
-          "this"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_bd362c46",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'target-safety' (collector) and 'openfda' (sender) have complementary descriptions with shared context: class, safety, skill, use, on, also, trigger, this. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "target-safety",
-        "sender": "openfda",
-        "shared_context": [
-          "class",
-          "safety",
-          "skill",
-          "use",
-          "on",
-          "also",
-          "trigger",
-          "this"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_0e730e48",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'target-safety' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: on, of, use. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "target-safety",
-        "sender": "tamarind",
-        "shared_context": [
-          "on",
-          "of",
-          "use"
-        ]
-      }
-    },
-    {
-      "id": "CROSS_SKILL_COMPLEMENTARY_ade7e52c",
-      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
-      "severity": "LOW",
-      "category": "social_engineering",
-      "title": "Skills have complementary descriptions",
-      "description": "Skill 'uniprot-rcsb' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: skill, protein, use, also, sequences, trigger, this, binding. This may be intentional design or could indicate coordinated behavior.",
-      "file_path": "(cross-skill analysis)",
-      "line_number": null,
-      "snippet": null,
-      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
-      "analyzer": "cross_skill",
-      "metadata": {
-        "collector": "uniprot-rcsb",
-        "sender": "adaptyv",
-        "shared_context": [
-          "skill",
-          "protein",
-          "use",
-          "also",
-          "sequences",
-          "trigger",
           "this",
-          "binding"
+          "trigger",
+          "use",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_c849623c",
+      "id": "CROSS_SKILL_COMPLEMENTARY_40ca55d2",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'uniprot-rcsb' (collector) and 'openfda' (sender) have complementary descriptions with shared context: skill, check, use, also, on, trigger, this. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'retrosynthesis' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, trigger, s, use, molecule, on, skill, also. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "retrosynthesis",
+        "sender": "openfda",
+        "shared_context": [
+          "this",
+          "trigger",
+          "s",
+          "use",
+          "molecule",
+          "on",
+          "skill",
+          "also"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_78e63399",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'retrosynthesis' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: use, on, run. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "retrosynthesis",
+        "sender": "tamarind",
+        "shared_context": [
+          "use",
+          "on",
+          "run"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_cbf77ec1",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'target-safety' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, skill, also. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "target-safety",
+        "sender": "adaptyv",
+        "shared_context": [
+          "this",
+          "trigger",
+          "use",
+          "skill",
+          "also"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_8671f57d",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'target-safety' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, safety, trigger, use, on, class, skill, also. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "target-safety",
+        "sender": "openfda",
+        "shared_context": [
+          "this",
+          "safety",
+          "trigger",
+          "use",
+          "on",
+          "class",
+          "skill",
+          "also"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_18fa60b4",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'target-safety' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: of, use, on. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "target-safety",
+        "sender": "tamarind",
+        "shared_context": [
+          "of",
+          "use",
+          "on"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_2fa638f9",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'uniprot-rcsb' (collector) and 'adaptyv' (sender) have complementary descriptions with shared context: this, trigger, use, binding, sequences, protein, skill, also. This may be intentional design or could indicate coordinated behavior.",
+      "file_path": "(cross-skill analysis)",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Review these skills to ensure they are not designed to work together maliciously",
+      "analyzer": "cross_skill",
+      "metadata": {
+        "collector": "uniprot-rcsb",
+        "sender": "adaptyv",
+        "shared_context": [
+          "this",
+          "trigger",
+          "use",
+          "binding",
+          "sequences",
+          "protein",
+          "skill",
+          "also"
+        ]
+      }
+    },
+    {
+      "id": "CROSS_SKILL_COMPLEMENTARY_4bb7ae69",
+      "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
+      "severity": "LOW",
+      "category": "social_engineering",
+      "title": "Skills have complementary descriptions",
+      "description": "Skill 'uniprot-rcsb' (collector) and 'openfda' (sender) have complementary descriptions with shared context: this, trigger, use, check, on, skill, also. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -1387,23 +1387,23 @@
         "collector": "uniprot-rcsb",
         "sender": "openfda",
         "shared_context": [
-          "skill",
-          "check",
-          "use",
-          "also",
-          "on",
+          "this",
           "trigger",
-          "this"
+          "use",
+          "check",
+          "on",
+          "skill",
+          "also"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_COMPLEMENTARY_d488fa2f",
+      "id": "CROSS_SKILL_COMPLEMENTARY_2c35d196",
       "rule_id": "CROSS_SKILL_COMPLEMENTARY_TRIGGERS",
       "severity": "LOW",
       "category": "social_engineering",
       "title": "Skills have complementary descriptions",
-      "description": "Skill 'uniprot-rcsb' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: rest, docking, protein, alphafold, models, use, ligand, on, sequences, structure, binding. This may be intentional design or could indicate coordinated behavior.",
+      "description": "Skill 'uniprot-rcsb' (collector) and 'tamarind' (sender) have complementary descriptions with shared context: docking, structure, use, binding, models, sequences, rest, protein, on, alphafold, ligand. This may be intentional design or could indicate coordinated behavior.",
       "file_path": "(cross-skill analysis)",
       "line_number": null,
       "snippet": null,
@@ -1413,22 +1413,22 @@
         "collector": "uniprot-rcsb",
         "sender": "tamarind",
         "shared_context": [
-          "rest",
           "docking",
-          "protein",
-          "alphafold",
-          "models",
-          "use",
-          "ligand",
-          "on",
-          "sequences",
           "structure",
-          "binding"
+          "use",
+          "binding",
+          "models",
+          "sequences",
+          "rest",
+          "protein",
+          "on",
+          "alphafold",
+          "ligand"
         ]
       }
     },
     {
-      "id": "CROSS_SKILL_PATTERN_b796f376",
+      "id": "CROSS_SKILL_PATTERN_8c324a11",
       "rule_id": "CROSS_SKILL_SHARED_PATTERN",
       "severity": "MEDIUM",
       "category": "obfuscation",
@@ -1457,7 +1457,7 @@
       "scan_duration_seconds": 34.02,
       "content_hash": "462b2dd64c6b7435f277cebca9a21d099e386ee685bf74f0108de6e804450fe7",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -1597,7 +1597,7 @@
       "scan_duration_seconds": 17.33,
       "content_hash": "7390c3a73c4987e7a008827aa5fa8d20e5b6da23caaf0aea5032bb8233d8e938",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -1682,7 +1682,7 @@
       "scan_duration_seconds": 23.36,
       "content_hash": "b37b36a87e14a034d76a36f9f0fc4bbf2440dc02e2c2448a257e891307a99aa7",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -1767,7 +1767,7 @@
       "scan_duration_seconds": 23.75,
       "content_hash": "15a1fafc4a015ba43fd314016b9f3afbd4722bfec4d3d4b162f4a52fc40e1901",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -1852,7 +1852,7 @@
       "scan_duration_seconds": 8.49,
       "content_hash": "c76096b9cbea1e25313baf16c922d94b9b544993932a69c25b3d3345c9e58692",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -1886,7 +1886,7 @@
       "scan_duration_seconds": 21.92,
       "content_hash": "b91cfde4d8035f2581dc175ae3e19db83948cb7b9fd604b7ffa3ec73d14b0174",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -1971,7 +1971,7 @@
       "scan_duration_seconds": 22.94,
       "content_hash": "e45d08d3d67d8e380f3bb728361982f6e37be44f1878b41bd98aab2aa2e4805b",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -2066,7 +2066,7 @@
       "scan_duration_seconds": 22.29,
       "content_hash": "28cf069d7f850b3509d412d3b135f2b091037e4589201c029db33eb60d6642f8",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -2176,7 +2176,7 @@
       "scan_duration_seconds": 24.7,
       "content_hash": "5f028be2452de1f03a3f8435d9aa93b3f098f179794ec9852f0e603fc65a8b75",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -2286,7 +2286,7 @@
       "scan_duration_seconds": 30.77,
       "content_hash": "a8e6610ab0ddf78ac1a5552bd2a31824f442718a120929ea5c992892b9510f46",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -2396,7 +2396,7 @@
       "scan_duration_seconds": 28.41,
       "content_hash": "57c82d90e6b3ec698b01a05945813385c1838b75b7a8da0cfc8edfca6a833f2b",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -2510,7 +2510,7 @@
       "scan_duration_seconds": 14.96,
       "content_hash": "91933b2f15fc61ec05ba36e24c72fbd7ae9d062eaaab475762cf4751b547a06e",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -2544,7 +2544,7 @@
       "scan_duration_seconds": 23.85,
       "content_hash": "d2bcf9999dd3ea007cc1f53b62b5889845d7288528cc7a0c98ae41de337c2c48",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -2629,7 +2629,7 @@
       "scan_duration_seconds": 26.08,
       "content_hash": "6b0cfa1e348db8f4b1959086c754c620de8d7f3ba54a6ce592a9b9829fb19a50",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -2714,7 +2714,7 @@
       "scan_duration_seconds": 46.57,
       "content_hash": "7ca8f60773452386e5ce1c511c6d2013c87f9dc01969b729b4564986e4c00fd1",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -2879,7 +2879,7 @@
       "scan_duration_seconds": 28.62,
       "content_hash": "ae04defcbc92dd7fee42edf178b6b1f3f20ebe7dc3de7c2389ccfa59e52088a7",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -2964,7 +2964,7 @@
       "scan_duration_seconds": 24.08,
       "content_hash": "f1746e1b5b582647221b36086b57aabe0754fea04ea87461ee82e9c7e75eb7c1",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -3049,7 +3049,7 @@
       "scan_duration_seconds": 30.75,
       "content_hash": "dddb174392969bd91e6e58cb12981a9dd7a7772d30e7374b189e4dcb7a68c11a",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -3199,7 +3199,7 @@
       "scan_duration_seconds": 16.2,
       "content_hash": "969988da1387ed1c31ace620207d9b0ac11fe8a222c5283b2f5588035632c633",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -3259,7 +3259,7 @@
       "scan_duration_seconds": 26.91,
       "content_hash": "a6b05a469dc25235d54a9a534a44a6599a27c449a928fbfb2f69e472d5578737",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -3379,7 +3379,7 @@
       "scan_duration_seconds": 26.44,
       "content_hash": "a332d4027818795891089f4b285559438ca5cd98e37369400de067cdbe010f6b",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -3489,7 +3489,7 @@
       "scan_duration_seconds": 18.28,
       "content_hash": "6fdbdda28776caf18097d078a590756fbf116e191b52e84738c9318978282500",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -3549,7 +3549,7 @@
       "scan_duration_seconds": 28.77,
       "content_hash": "f64ca4674123c895d298394c3a003fb337574b2abfc41fef281679a0d313416c",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -3688,7 +3688,7 @@
       "scan_duration_seconds": 23.14,
       "content_hash": "4e6aa9518a95465ce6e970743328b229106f025fdc646834bd51a7b3f7b0a10c",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -3773,7 +3773,7 @@
       "scan_duration_seconds": 23.05,
       "content_hash": "5b93058b3ba20b8f1c6ade1595a8c3dbe973c174312683c24ee44b3b184e1f64",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -3858,7 +3858,7 @@
       "scan_duration_seconds": 31.93,
       "content_hash": "c80155a64f27ab02f8187bd8305b66813f98d76e0615ca3a5055d6913b3020d6",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -3987,7 +3987,7 @@
       "scan_duration_seconds": 23.43,
       "content_hash": "3e80316182e1b6622cf0c950e45a1862a94f4e7ab4d86217981d6594b445508e",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -4091,7 +4091,7 @@
       "scan_duration_seconds": 31.79,
       "content_hash": "8010017735083cae55158dc5f5977a43c091c2a17837ae1027e7e8a22658aebf",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -4201,7 +4201,7 @@
       "scan_duration_seconds": 17.56,
       "content_hash": "7805ec4bebc272032410660f59b712a5ac03377a9aa83dbd3717cd303e2045fc",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -4286,7 +4286,7 @@
       "scan_duration_seconds": 23.92,
       "content_hash": "6583ccdc28d20ca3c1babe46c9a97d93004ee4a7bffef3e59e0605bf40047c32",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -4406,7 +4406,7 @@
       "scan_duration_seconds": 30.43,
       "content_hash": "64a6693db3a2e2e4c5f2e0f198ef03497b184f658d46970cdca78153eef14f0b",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -4491,7 +4491,7 @@
       "scan_duration_seconds": 26.29,
       "content_hash": "421520b0fbec784444c34e88b29bd78eeec05f984b29af9c8cec1ad4df6d1847",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -4576,7 +4576,7 @@
       "scan_duration_seconds": 24.42,
       "content_hash": "83fff67d695f3830e22cad78eed378bf63d4f8d0ef1c6d5e9d3eae5d405d93c0",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -4680,12 +4680,12 @@
     },
     {
       "name": "rowan",
-      "directory": "/Users/timothy/Documents/Code/drug-discovery-agent-skills/skills/rowan",
+      "directory": "/home/runner/work/drug-discovery-agent-skills/drug-discovery-agent-skills/skills/rowan",
       "is_safe": true,
       "max_severity": "LOW",
-      "scan_duration_seconds": 18.94,
-      "content_hash": "592271cf26d9fd439f66edf1795a6c9d78fc70dcefde4cd5fc6e2c058775a7d0",
-      "last_scanned": "2026-08-17T00:32:41+00:00",
+      "scan_duration_seconds": 17.89,
+      "content_hash": "9032424a5947300def951f179b7b999fad992c37d808b76993face1cfaebb059",
+      "last_scanned": "2026-08-17T09:18:26+00:00",
       "reused_from_previous_report": false,
       "analyzers_used": [
         "behavioral_analyzer",
@@ -4699,7 +4699,7 @@
         "policy_version": "1.0",
         "policy_preset_base": "balanced",
         "policy_fingerprint_sha256": "27f504182088ab33a7bf202b10d2ca0d1e02c7be4fc281a31fe37b2073c02c73",
-        "llm_overall_assessment": "This is a documentation-only skill for the Rowan hosted computational-chemistry platform. It contains no executable script files; all code is illustrative usage of the official `rowan-python` SDK. No prompt injection, instruction-override, concealment, or role-redefinition language was found in the SKILL.md body or any reference file (checked language-agnostically). There is no data exfiltration: the only network egress is to Rowan's own API via the SDK and to user-specified webhook URLs, and the webhook guidance actually promotes good security practice (HMAC-SHA256 signature verification, secret rotation, idempotency). No credential harvesting (~/.aws, ~/.ssh), no eval/exec/os.system, no base64 or other obfuscation, no environment scraping beyond the single declared ROWAN_API_KEY. The declared allowed-tools (Read, Write, Edit, Bash) are consistent with observed behavior (pip install, reading/writing PDB and JSON result files). The description and trigger-keywords are domain-specific and proportionate to the stated purpose \u2014 not over-broad capability inflation or keyword baiting. All referenced content files resolve within the skill package (several 'not found' entries are scanner path-permutation artifacts and an incidental mention of module names like rowan.py/rdkit.py, not external URLs). One minor code defect exists in references/end_to_end_example.md (an undefined `top_compound` variable in an f-string) which is a correctness bug, not a security issue. Overall risk: LOW.",
+        "llm_overall_assessment": "The 'rowan' skill is documentation-only: it contains SKILL.md plus four reference markdown files describing the legitimate rowan-python cloud chemistry API. No executable scripts are bundled. No prompt injection, instruction override, concealment directives, role redefinition, obfuscation, or data-exfiltration patterns were found. All network activity described is to the vendor's own API (or a user-specified webhook URL), consistent with the stated purpose and the declared compatibility note about being a hosted commercial service. Declared allowed-tools (Read, Write, Edit, Bash) are consistent with the documented behavior (installing the package via uv pip, writing PDB/JSON outputs). Several referenced file paths (assets/*, templates/*, rowan.py, rdkit.py) are not present, but the actual instruction links point to the existing references/ files \u2014 the missing entries appear to be resolver artifacts/module-name mentions rather than dangling malicious dependencies. Description and trigger keywords are domain-scoped and proportional, with no capability inflation or brand impersonation. Residual concerns are minor: doc examples that hardcode placeholder API keys, and metered-cost batch submission patterns. Overall risk: LOW.",
         "llm_primary_threats": []
       },
       "analyzability_details": {
@@ -4716,12 +4716,12 @@
           "rule_id": "LLM_DATA_EXFILTRATION",
           "severity": "LOW",
           "category": "data_exfiltration",
-          "title": "Documentation examples hardcode API key assignment in source",
-          "description": "Multiple code examples instruct setting `rowan.api_key = \"your_api_key_here\"` / `rowan.api_key = \"...\"` directly in Python code rather than exclusively via the ROWAN_API_KEY environment variable. No real secret is present, and the skill does recommend the env-var approach first, so this is only a minor secure-coding hygiene issue that could encourage users/agents to commit credentials.",
+          "title": "Documentation examples encourage hardcoding API keys in source",
+          "description": "Multiple code examples set the API key inline (e.g., `rowan.api_key = \"your_api_key_here\"`, `rowan.api_key = \"...\"`). While placeholders and clearly illustrative, and the skill does recommend the ROWAN_API_KEY environment variable as preferred, the pattern can lead users/agents to write literal secrets into scripts that get committed or logged. No actual secret is present in the package.",
           "file_path": null,
           "line_number": null,
           "snippet": "rowan.api_key = \"your_api_key_here\"  # or set ROWAN_API_KEY env var",
-          "remediation": "Standardize examples on reading the key from the ROWAN_API_KEY environment variable and remove inline literal-assignment examples.",
+          "remediation": "Prefer environment-variable-only examples (e.g., os.environ[\"ROWAN_API_KEY\"]) and explicitly warn against committing keys to source control.",
           "analyzer": "llm",
           "metadata": {
             "model": "claude-opus-5",
@@ -4741,12 +4741,12 @@
           "rule_id": "LLM_RESOURCE_ABUSE",
           "severity": "LOW",
           "category": "resource_abuse",
-          "title": "Metered cloud compute spend with no explicit user-confirmation gate for batch jobs",
-          "description": "The skill orchestrates a commercial, credit-metered cloud service and encourages batch submission loops and 50+ workflow campaigns. While the manifest transparently discloses that compute is billed and that large batches have real cost, and the guidance actively recommends pre-filtering to save credits, there is no instruction requiring explicit user confirmation before submitting large batches. An agent acting autonomously could incur unintended financial cost. No unbounded loops or local resource exhaustion patterns are present.",
+          "title": "Batch cloud workflow submission can incur metered compute cost",
+          "description": "The skill promotes batch submission loops over compound libraries against a metered, billed cloud service (credits per CPU/GPU minute). Unbounded or accidental large batches could consume significant paid credits. The skill does partially mitigate this by disclosing pricing, credit consumption, and advising pre-filtering to avoid wasting credits, and no code auto-executes without agent/user action.",
           "file_path": null,
           "line_number": null,
-          "snippet": "workflows = [rowan.submit_descriptors_workflow(smi, name=name) for smi, name in zip(smileses, names)]  ... **Use batch submission** for compound libraries or analogue series",
-          "remediation": "Add an explicit instruction to estimate credit cost and obtain user confirmation before submitting batches above a small threshold (e.g., >5 workflows).",
+          "snippet": "workflows = [rowan.submit_descriptors_workflow(smi, name=name) for smi, name in zip(smileses, names)]",
+          "remediation": "Add explicit guidance to confirm with the user before submitting batches above a small threshold and to check remaining credits (rowan.whoami()) prior to bulk submission.",
           "analyzer": "llm",
           "metadata": {
             "model": "claude-opus-5",
@@ -4771,7 +4771,7 @@
       "scan_duration_seconds": 32.95,
       "content_hash": "9cedb92808a2137917433f0a79525eb03ec7a5a6402aed4784be28a4b30842a8",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -5089,7 +5089,7 @@
       "scan_duration_seconds": 21.97,
       "content_hash": "dc875d007c868039b954644bd505a674ea6089385ac2ba8046ab67f9c49a4d0a",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
@@ -5174,7 +5174,7 @@
       "scan_duration_seconds": 21.05,
       "content_hash": "05d4a938095923bdcad2bcaf29862ae73342f8f7d54adff2b67e3e3a08f053cf",
       "last_scanned": "2026-08-17T00:32:41+00:00",
-      "reused_from_previous_report": false,
+      "reused_from_previous_report": true,
       "analyzers_used": [
         "behavioral_analyzer",
         "trigger_analyzer",
