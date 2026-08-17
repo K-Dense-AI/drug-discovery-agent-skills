@@ -2,9 +2,10 @@
 name: tamarind
 description: Access a collection of open-source molecular design and structural biology tools on the Tamarind Bio platform, via its REST API or MCP server — no local GPUs required. Tamarind bundles popular open-source models for structure prediction (AlphaFold, Boltz, Chai, ESMFold), protein, binder, and de novo design (RFdiffusion, ProteinMPNN, BoltzGen), antibody and nanobody design and developability, protein-ligand docking (DiffDock, Autodock Vina), binding-affinity prediction, MSA generation, and molecular dynamics. Use when the user mentions Tamarind or tamarind.bio, wants to run any of these open-source tools in the cloud, references app.tamarind.bio/api or the x-api-key header, or needs to submit batches of sequences for structural or biophysical characterization.
 license: MIT
+allowed-tools: Read Write Edit Bash
 compatibility: Requires Python 3.10+, a Tamarind Bio account, and an API key from app.tamarind.bio. Uses the `requests` library against the public REST API (no dedicated Python SDK exists). Network access required. Optional MCP server at mcp.tamarind.bio/mcp for agent hosts.
 metadata:
-  version: "1.1"
+  version: "1.2"
   skill-author: Tamarind Bio
   trigger-keywords: protein structure prediction, AlphaFold, Boltz, Chai, ESMFold, protein design, binder design, de novo design, antibody design, nanobody, protein-ligand docking, DiffDock, Autodock Vina, binding affinity, MSA generation, inverse folding, ProteinMPNN, RFdiffusion, BoltzGen, cloud GPU biology, structure prediction API, x-api-key, developability, adme, enzyme, peptide, protein language models, molecular design
   openclaw:
@@ -283,3 +284,22 @@ The `openapi.yaml` spec is the source of truth for endpoint shapes; these files 
 - `references/api_reference.md` — endpoint quick-reference + the non-obvious shapes: `/jobs` by-name returns a bare row (not `{jobs:[...]}`), `/result` is a two-step download, batch parents poll on `batchStatus`, `/files` is a flat name list, the `settings` field-handling rules.
 - `references/tool_catalog.md` — category/tag map, how to read tool + parameter metadata, common tool families.
 - `references/workflows.md` — end-to-end recipes: fold a sequence, validate-before-submit, upload + reference a file, design→fold chaining, batch screen with aggregation polling, usage stats, pagination, and the non-blocking submit-now/check-later pattern for long jobs.
+
+## Composing with the rest of the bundle
+
+Tamarind hosts many of the same tools this bundle documents locally. Use the local skill to decide
+*what to run and how to read it*, and Tamarind to actually run it without a GPU.
+
+- `boltz` / `diffdock` / `autodock-vina` / `protein-binder-design` → these skills carry the
+  parameter choices, confidence interpretation, and failure modes for the tools Tamarind serves.
+  Reading a Tamarind AlphaFold or Boltz result is the same problem as reading a local one.
+- `uniprot-rcsb` → before: sequences and structures to submit.
+- `antibody-engineering` / `immunogenicity` / `glycoengineering` → after: developability triage on
+  designs that came back, which Tamarind's tools do not all cover.
+- `esm` → alongside: embeddings and likelihoods, locally or hosted.
+- `adaptyv` → after: cloud prediction is still prediction. Adaptyv is where designs get expressed
+  and measured.
+- `rowan` → alongside: overlapping hosted compute, stronger on small-molecule quantum and ADME.
+
+**Budget is a real constraint here.** Jobs are metered; `validateJob` before submitting a batch,
+and prefer one batch submission to a loop of single jobs.

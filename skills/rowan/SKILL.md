@@ -1,10 +1,11 @@
 ---
 name: rowan
 description: Rowan is a cloud-native molecular modeling and medicinal-chemistry workflow platform with a Python API. Use for pKa and macropKa prediction, conformer and tautomer ensembles, docking and analogue docking, protein-ligand cofolding, MSA generation, molecular dynamics, permeability, descriptor workflows, and related small-molecule or protein modeling tasks. Ideal for programmatic batch screening, multi-step chemistry pipelines, and workflows that would otherwise require maintaining local HPC/GPU infrastructure.
-license: Proprietary (API key required)
-compatibility: Python 3.12+, API key required
+license: MIT
+allowed-tools: Read Write Edit Bash
+compatibility: Requires Python 3.12+ and a ROWAN_API_KEY. Rowan is a commercial hosted service — compute is metered and billed, so a large batch has a real cost. No local GPU or HPC needed.
 metadata:
-  version: "1.4"
+  version: "1.5"
   skill-author: Rowan Science
   trigger-keywords: pKa prediction, molecular docking, conformer search, chemistry workflow, drug discovery, SMILES, protein structure, batch molecular modeling, cloud chemistry
   openclaw:
@@ -379,3 +380,19 @@ Common errors with their fixes, and debugging tips, are in
 Use Rowan when your workflow requires cloud execution for molecular-design tasks, especially when you want one unified API and consistent result handling across small-molecule modeling, proteins, docking, ADME prediction, and ML structure generation.
 
 Rowan is a molecular-design workflow platform, not just a remote chemistry engine. It handles infrastructure scaling, result persistence, and multi-step pipeline orchestration so you can focus on science.
+
+## Composing with the rest of the bundle
+
+- `rdkit` / `datamol` → before: standardise and desalt. You are paying per molecule, so do not
+  spend credits computing pKa for a counterion.
+- `medchem` → before: triage first. Filtering after the cloud run is money already spent.
+- `free-energy-perturbation` → alongside: Rowan removes the local-GPU requirement for FEP-scale
+  work; the network-design and cycle-closure discipline in that skill still applies to the results.
+- `autodock-vina` / `diffdock` → instead, when local: Rowan's docking is the same class of
+  question without infrastructure. Choose on cost and scale, not on quality.
+- `pkpd-translation` → after: predicted permeability and pKa feed dose projection.
+- `tamarind` → alongside: overlapping hosted-compute coverage, stronger on protein and structure
+  tools where Rowan is stronger on small-molecule quantum and ADME workflows.
+
+**Licence note:** this skill's text is MIT, like the rest of the bundle. The Rowan platform itself
+is a commercial service and its terms are Rowan's.

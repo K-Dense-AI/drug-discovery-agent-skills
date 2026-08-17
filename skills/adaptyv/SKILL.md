@@ -2,9 +2,10 @@
 name: adaptyv
 description: "How to use the Adaptyv Bio Foundry API and Python SDK for protein experiment design, submission, and results retrieval. Use this skill whenever the user mentions Adaptyv, Foundry API, protein binding assays, protein screening experiments, BLI/SPR assays, thermostability assays, or wants to submit protein sequences for experimental characterization. Also trigger when code imports `adaptyv`, `adaptyv_sdk`, or `FoundryClient`, or references `foundry-api-public.adaptyvbio.com`."
 license: MIT
+allowed-tools: Read Write Edit Bash
 compatibility: Requires Python 3.10+, an Adaptyv Foundry account, and an API key from foundry.adaptyvbio.com. Install adaptyv-sdk from GitHub with uv pip install.
 metadata:
-  version: "1.2"
+  version: "1.3"
   skill-author: K-Dense Inc.
 ---
 
@@ -238,3 +239,21 @@ Tokens use Biscuit-based cryptographic attenuation. You can create restricted to
 ## Detailed API Reference
 
 For the full list of all 32 endpoints with request/response schemas, read `references/api-endpoints.md`.
+
+## Composing with the rest of the bundle
+
+Adaptyv is where computational designs stop being hypotheses. Everything upstream produces
+candidates; this produces measurements.
+
+- `protein-binder-design` → before: BindCraft or RFdiffusion designs, already filtered on interface
+  metrics. Submitting an unfiltered design set wastes the assay.
+- `esm` → before: embeddings, likelihoods and generated sequences. **Model likelihood is not
+  binding** — that is precisely what a BLI/SPR run settles.
+- `antibody-engineering` / `immunogenicity` / `glycoengineering` → before: sequence liabilities,
+  T-cell epitopes and sequons are cheaper to fix in silico than to discover in an expression run.
+- `boltz` / `tamarind` → before: a predicted complex is a reason to order the experiment, not a
+  substitute for it.
+- `uniprot-rcsb` → before: the target construct and its boundaries.
+
+**Report measured values as measured and predicted values as predicted**, and keep the design
+provenance with the result — an assay is only worth its traceability back to which design it tested.
