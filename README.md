@@ -24,6 +24,8 @@ repository is a portable [Agent Plugins](https://agent-plugins.org/) 1.0.0 packa
 (`plugin.json` + `skills/`). Works with **Claude Code, Cursor, Codex, Google Antigravity, and more**.
 Created by [K-Dense](https://www.k-dense.ai).
 
+> 🎬 **New to Agent Skills?** Watch [Getting Started with Scientific Agent Skills](https://youtu.be/ZxbnDaD_FVg) for a walkthrough of how these skills plug into your coding agent.
+
 ## What you can ask your agent
 
 The skills compose — a single request usually pulls in two or three:
