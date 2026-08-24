@@ -1,12 +1,12 @@
 # Security Scan Report
 
-**Generated:** 2026-08-17 09:18 UTC  
+**Generated:** 2026-08-24 09:20 UTC  
 **Skills scanned:** 37  
 **Total findings:** 154  
 **Critical:** 0 | **High:** 0 | **Safe skills:** 37/37
 
 **Scanner:** cisco-ai-skill-scanner 2.0.13 · **Model:** claude-opus-5  
-**This run:** 1 skill(s) rescanned; 36 unchanged since the last scan and carried forward unmodified. Per-skill scan dates are in [`security-report.json`](security-report.json) (`last_scanned`).  
+**This run:** 0 skill(s) rescanned; 37 unchanged since the last scan and carried forward unmodified. Per-skill scan dates are in [`security-report.json`](security-report.json) (`last_scanned`).  
 
 ## Summary
 
@@ -44,9 +44,9 @@
 | pytdc | 🔵 LOW | 2 | ✅ | 30.4s |
 | rdkit | 🔵 LOW | 2 | ✅ | 26.3s |
 | retrosynthesis | 🔵 LOW | 3 | ✅ | 24.4s |
+| rowan | 🔵 LOW | 2 | ✅ | 17.9s |
 | target-safety | 🔵 LOW | 2 | ✅ | 22.0s |
 | uniprot-rcsb | 🔵 LOW | 2 | ✅ | 21.1s |
-| rowan | 🔵 LOW | 2 | ✅ | 17.9s |
 | binding-site-analysis | 🟢 SAFE | 0 | ✅ | 8.5s |
 | degraders | 🟢 SAFE | 0 | ✅ | 15.0s |
 
@@ -548,6 +548,16 @@
   > File: `references/synthesizability-scores.md`
   > **Remediation:** Ensure all referenced documentation resolves to files bundled inside the skill directory and remove stale path references.
 
+### rowan — 🔵 LOW
+
+- **🔵 LOW** `LLM_DATA_EXFILTRATION` — Documentation examples encourage hardcoding API keys in source
+  > Multiple code examples set the API key inline (e.g., `rowan.api_key = "your_api_key_here"`, `rowan.api_key = "..."`). While placeholders and clearly illustrative, and the skill does recommend the ROWAN_API_KEY environment variable as preferred, the pattern can lead users/agents to write literal secrets into scripts that get committed or logged. No actual secret is present in the package.
+  > **Remediation:** Prefer environment-variable-only examples (e.g., os.environ["ROWAN_API_KEY"]) and explicitly warn against committing keys to source control.
+
+- **🔵 LOW** `LLM_RESOURCE_ABUSE` — Batch cloud workflow submission can incur metered compute cost
+  > The skill promotes batch submission loops over compound libraries against a metered, billed cloud service (credits per CPU/GPU minute). Unbounded or accidental large batches could consume significant paid credits. The skill does partially mitigate this by disclosing pricing, credit consumption, and advising pre-filtering to avoid wasting credits, and no code auto-executes without agent/user action.
+  > **Remediation:** Add explicit guidance to confirm with the user before submitting batches above a small threshold and to check remaining credits (rowan.whoami()) prior to bulk submission.
+
 ### target-safety — 🔵 LOW
 
 - **🔵 LOW** `LLM_DATA_EXFILTRATION` — API endpoints overridable via environment variables and CLI flags
@@ -568,13 +578,3 @@
   > fetch_structure.py builds download URLs by interpolating user-supplied PDB ids, assembly numbers, accessions, and component ids directly into f-strings without validating character sets (e.g. f"{RCSB_FILES}/{pdb_id}.{suffix}"). Because the host prefix is a hardcoded constant, a crafted identifier containing '../' or '@' could at most redirect the request to another path on files.rcsb.org, and the AlphaFold branch fetches URLs returned by the AlphaFold API (server-controlled) and writes them to a local file whose name comes from the remote URL basename. No credentials, environment variables, or local sensitive files are read, and no data is sent outward, so real-world risk is low.
   > File: `scripts/fetch_structure.py`
   > **Remediation:** Validate identifiers against strict regexes (e.g. ^[0-9A-Za-z]{4}$ for PDB ids, ^[A-Z0-9]{1,5}$ for CCD codes, ^[A-Z0-9]+$ for accessions) and confirm AlphaFold-returned URLs match an allowlisted host before downloading.
-
-### rowan — 🔵 LOW
-
-- **🔵 LOW** `LLM_DATA_EXFILTRATION` — Documentation examples encourage hardcoding API keys in source
-  > Multiple code examples set the API key inline (e.g., `rowan.api_key = "your_api_key_here"`, `rowan.api_key = "..."`). While placeholders and clearly illustrative, and the skill does recommend the ROWAN_API_KEY environment variable as preferred, the pattern can lead users/agents to write literal secrets into scripts that get committed or logged. No actual secret is present in the package.
-  > **Remediation:** Prefer environment-variable-only examples (e.g., os.environ["ROWAN_API_KEY"]) and explicitly warn against committing keys to source control.
-
-- **🔵 LOW** `LLM_RESOURCE_ABUSE` — Batch cloud workflow submission can incur metered compute cost
-  > The skill promotes batch submission loops over compound libraries against a metered, billed cloud service (credits per CPU/GPU minute). Unbounded or accidental large batches could consume significant paid credits. The skill does partially mitigate this by disclosing pricing, credit consumption, and advising pre-filtering to avoid wasting credits, and no code auto-executes without agent/user action.
-  > **Remediation:** Add explicit guidance to confirm with the user before submitting batches above a small threshold and to check remaining credits (rowan.whoami()) prior to bulk submission.
